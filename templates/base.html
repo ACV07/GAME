@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Round 2 Challenge Arena{% endblock %}</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/drag_drop.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+  <nav class="navbar">
+    <a href="/" class="brand-logo">
+      <span class="brand-mark">R2</span>
+      <span class="brand-badge">Challenge Arena</span>
+    </a>
+
+    <div class="nav-status">
+      <div id="contestant-timer-widget" class="timer-chip" style="display: none;">
+        <span id="contestant-timer-clock">00:00</span>
+      </div>
+
+      {% if session.get('team_name') %}
+        <div class="team-badge">{{ session.get('team_name') }}</div>
+        <a href="{{ url_for('auth.logout') }}" class="btn-secondary btn-nav">Logout</a>
+      {% elif session.get('is_admin') %}
+        <span class="badge-status status-active">Organizer</span>
+        <a href="{{ url_for('admin.control_center') }}" class="btn-secondary btn-nav">Control</a>
+        <a href="{{ url_for('admin.dashboard') }}" class="btn-secondary btn-nav">Teams</a>
+        <a href="{{ url_for('leaderboard.view_leaderboard') }}" class="btn-secondary btn-nav">Leaderboard</a>
+        <a href="{{ url_for('auth.logout') }}" class="btn-secondary btn-nav">Logout</a>
+      {% else %}
+        <a href="{{ url_for('auth.admin_login') }}" class="btn-secondary btn-nav">Admin</a>
+      {% endif %}
+    </div>
+  </nav>
+
+  {% set is_admin_route = request.path.startswith('/admin') or session.get('is_admin') %}
+  {% set is_auth_route = request.path in ['/', '/login', '/admin/login'] %}
+  {% set show_player_lock = not is_admin_route and not is_auth_route %}
+
+  {% if show_player_lock %}
+    <div id="game-stopped-overlay" class="game-lock-overlay{% if round_status and round_status != 'ACTIVE' %} is-visible{% endif %}" aria-live="assertive">
+      <div id="overlay-card" class="game-lock-card state-{{ (round_status or 'NOT_STARTED')|lower }}">
+        <p class="game-lock-kicker">Administrator control</p>
+        <h1 id="overlay-title-text" class="game-lock-word">
+          {% if round_status == 'ENDED' %}ENDED{% elif round_status == 'STOPPED' %}STOPPED{% elif round_status == 'PAUSED' %}PAUSED{% else %}STANDBY{% endif %}
+        </h1>
+        <p id="game-stopped-subtitle" class="game-lock-copy">
+          {% if round_status == 'ENDED' %}
+            The round is closed. Submissions are locked.
+          {% elif round_status == 'STOPPED' %}
+            Play is stopped. Your progress is saved and will return when the round resumes.
+          {% elif round_status == 'PAUSED' %}
+            Play is paused. Your progress is saved and will return when the round resumes.
+          {% else %}
+            Standby — waiting for the organizer to start the round.
+          {% endif %}
+        </p>
+      </div>
+    </div>
+  {% endif %}
+
+  <div class="main-container flash-wrap">
+    <div id="live-broadcast-banner" class="alert-banner alert-warning" style="display: none;">
+      <span>Announcement</span> <span id="broadcast-message-text"></span>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert-banner alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+  </div>
+
+  <script>
+    window.isAdmin = {{ 'true' if session.get('is_admin') else 'false' }};
+    window.contestantRemainingSeconds = 0;
+    window.contestantRoundStatus = '{{ round_status or "NOT_STARTED" }}';
+
+    function setPlayerInputLocked(locked) {
+      document.body.classList.toggle('player-input-locked', locked);
+      document.body.style.overflow = locked ? 'hidden' : '';
+      document.documentElement.style.overflow = locked ? 'hidden' : '';
+    }
+
+    function blockLockedInput(event) {
+      const overlay = document.getElementById('game-stopped-overlay');
+      if (!overlay || !overlay.classList.contains('is-visible')) return;
+      event.preventDefault();
+      event.stopPropagation();
+    }
+
+    ['pointerdown', 'pointerup', 'click', 'touchstart', 'touchmove', 'keydown'].forEach((evt) => {
+      document.addEventListener(evt, blockLockedInput, { capture: true, passive: false });
+    });
+
+    function applyLockOverlay(status) {
+      const overlay = document.getElementById('game-stopped-overlay');
+      const currentPath = window.location.pathname;
+      const isNonPlayerPage = currentPath.startsWith('/admin') || ['/', '/login', '/admin/login'].includes(currentPath) || window.isAdmin;
+      if (!overlay || isNonPlayerPage) {
+        if (overlay) overlay.classList.remove('is-visible');
+        setPlayerInputLocked(false);
+        return;
+      }
+
+      const overlayCard = document.getElementById('overlay-card');
+      const overlayTitleText = document.getElementById('overlay-title-text');
+      const overlaySubtitle = document.getElementById('game-stopped-subtitle');
+      const locked = status && status !== 'ACTIVE';
+
+      if (locked) {
+        const copy = {
+          ENDED: ['ENDED', 'The round is closed. Submissions are locked.'],
+          STOPPED: ['STOPPED', 'Play is stopped. Your progress is saved and will return when the round resumes.'],
+          PAUSED: ['PAUSED', 'Play is paused. Your progress is saved and will return when the round resumes.'],
+          NOT_STARTED: ['STANDBY', 'Standby — waiting for the organizer to start the round.']
+        };
+        const pair = copy[status] || copy.NOT_STARTED;
+        if (overlayTitleText) overlayTitleText.textContent = pair[0];
+        if (overlaySubtitle) overlaySubtitle.textContent = pair[1];
+        if (overlayCard) overlayCard.className = 'game-lock-card state-' + String(status || 'NOT_STARTED').toLowerCase();
+        overlay.classList.add('is-visible');
+        setPlayerInputLocked(true);
+      } else {
+        overlay.classList.remove('is-visible');
+        setPlayerInputLocked(false);
+      }
+    }
+
+    window.checkBroadcast = async function() {
+      try {
+        const res = await fetch('/api/event-status');
+        const data = await res.json();
+
+        const banner = document.getElementById('live-broadcast-banner');
+        const textSpan = document.getElementById('broadcast-message-text');
+        if (data && data.announcement && data.announcement.trim() !== '') {
+          textSpan.textContent = data.announcement;
+          banner.style.display = 'flex';
+        } else if (banner) {
+          banner.style.display = 'none';
+        }
+
+        const timerWidget = document.getElementById('contestant-timer-widget');
+        if (data && data.timer_info && data.timer_info.has_timer) {
+          window.contestantRemainingSeconds = data.timer_info.remaining_seconds;
+          window.contestantRoundStatus = data.round_status;
+          if (timerWidget) timerWidget.style.display = 'inline-block';
+        } else if (timerWidget) {
+          timerWidget.style.display = 'none';
+        }
+
+        applyLockOverlay(data.round_status);
+      } catch (e) {}
+    }
+
+    function renderContestantTimerClock() {
+      const clockSpan = document.getElementById('contestant-timer-clock');
+      const timerWidget = document.getElementById('contestant-timer-widget');
+      if (!clockSpan) return;
+
+      const m = Math.floor(contestantRemainingSeconds / 60);
+      const s = contestantRemainingSeconds % 60;
+      const timeStr = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+
+      if (contestantRoundStatus === 'PAUSED') {
+        clockSpan.textContent = 'PAUSED ' + timeStr;
+        if (timerWidget) timerWidget.style.borderColor = '#f59e0b';
+      } else if (contestantRoundStatus === 'STOPPED') {
+        clockSpan.textContent = 'STOPPED ' + timeStr;
+        if (timerWidget) timerWidget.style.borderColor = '#ef4444';
+      } else if (contestantRoundStatus === 'NOT_STARTED') {
+        clockSpan.textContent = 'STANDBY ' + timeStr;
+        if (timerWidget) timerWidget.style.borderColor = 'var(--code-border)';
+      } else if (contestantRoundStatus === 'ENDED') {
+        clockSpan.textContent = 'ENDED';
+        if (timerWidget) timerWidget.style.borderColor = '#ef4444';
+      } else {
+        clockSpan.textContent = timeStr;
+        if (timerWidget) timerWidget.style.borderColor = 'var(--primary-gold)';
+      }
+    }
+
+    setInterval(() => {
+      if (contestantRoundStatus === 'ACTIVE' && contestantRemainingSeconds > 0) {
+        contestantRemainingSeconds--;
+      }
+      renderContestantTimerClock();
+    }, 1000);
+
+    applyLockOverlay(window.contestantRoundStatus);
+    checkBroadcast();
+    setInterval(checkBroadcast, 1200);
+  </script>
+
+  <main class="main-container">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer>
+    <p>Round 2 Challenge Arena · College Technical Championship</p>
+  </footer>
+
+  {% if session.get('session_token') %}
+    <script src="{{ url_for('static', filename='js/heartbeat.js') }}"></script>
+  {% endif %}
+  <script src="{{ url_for('static', filename='js/drafts.js') }}"></script>
+
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

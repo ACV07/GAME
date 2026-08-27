@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block title %}Round Completed! — Round 2 Challenge Arena{% endblock %}
+
+{% block content %}
+<div class="glass-card" style="max-width: 850px; margin: 2rem auto; text-align: center;">
+  
+  <div style="font-size: 4rem; margin-bottom: 1rem;">🏆</div>
+
+  <h1 style="font-size: 2.5rem; font-weight: 800; background: linear-gradient(135deg, var(--accent-green), var(--primary-cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+    ROUND 2 COMPLETED!
+  </h1>
+
+  <p style="color: var(--text-muted); font-size: 1.1rem; margin-top: 0.5rem;">
+    Great performance, <strong>{{ team.team_name }}</strong>! All 5 challenges have been evaluated and recorded.
+  </p>
+
+  <!-- Summary Stats Cards -->
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin: 2.5rem 0;">
+    <div style="background: rgba(18, 18, 18, 0.7); border: 1px solid rgba(16, 185, 129, 0.35); padding: 1.5rem; border-radius: var(--radius-md);">
+      <div style="color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase;">Challenges Completed</div>
+      <div style="font-size: 2.5rem; font-weight: 800; color: var(--accent-green); font-family: var(--font-code); margin-top: 0.25rem;">
+        5 / 5
+      </div>
+    </div>
+
+    <div style="background: rgba(18, 18, 18, 0.7); border: 1px solid rgba(255, 208, 0, 0.35); padding: 1.5rem; border-radius: var(--radius-md);">
+      <div style="color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase;">Total Completion Time</div>
+      <div style="font-size: 2.5rem; font-weight: 800; color: var(--primary-gold); font-family: var(--font-code); margin-top: 0.25rem;">
+        {{ formatted_time }}
+      </div>
+    </div>
+  </div>
+
+  <!-- Submissions Log -->
+  <div style="text-align: left; background: rgba(10, 10, 10, 0.8); border: 1px solid var(--code-border); border-radius: var(--radius-md); padding: 1.5rem; margin-bottom: 2.5rem;">
+    <h3 style="font-size: 1.1rem; color: #fff; margin-bottom: 1rem;">📊 Challenge Performance Breakdown</h3>
+    <table class="table-cyber" style="margin-top: 0;">
+      <thead>
+        <tr>
+          <th>Challenge</th>
+          <th>Status</th>
+          <th>Submitted At</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for sub in submissions %}
+          <tr>
+            <td><strong>{{ sub.challenge_title }}</strong></td>
+            <td><span class="badge-status status-completed">Passed</span></td>
+            <td style="color: var(--text-muted); font-size: 0.85rem;">{{ sub.submission_time }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div>
+    {% if session.get('is_admin') %}
+      <a href="{{ url_for('leaderboard.view_leaderboard') }}" class="btn-cyber" style="padding: 1rem 3rem; font-size: 1.1rem;">
+        🏆 View Live Event Leaderboard ➔
+      </a>
+    {% else %}
+      <a href="{{ url_for('auth.lobby') }}" class="btn-cyber" style="padding: 1rem 3rem; font-size: 1.1rem;">
+        🏠 Return to Team Lobby ➔
+      </a>
+    {% endif %}
+  </div>
+
+</div>
+{% endblock %}

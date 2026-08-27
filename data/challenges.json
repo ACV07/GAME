@@ -1,0 +1,87 @@
+[
+  {
+    "id": 1,
+    "title": "Complete the Code — Basic Syntax",
+    "type": "drag_drop",
+    "points": 10,
+    "description": "Drag the correct keywords into the blanks to make the Python program valid and output the greeting.",
+    "code": "def ________():\n    ________(\"Welcome to Round 2 Arena\")\n\nif __name__ == \"__main__\":\n    main()",
+    "data": {
+      "blanks": ["main", "print"],
+      "options": ["main", "print", "return", "class", "display", "console"],
+      "code_template": "def {0}():\n    {1}(\"Welcome to Round 2 Arena\")\n\nif __name__ == \"__main__\":\n    main()"
+    }
+  },
+  {
+    "id": 2,
+    "title": "Complete the Code — Blockchain Balance Guard",
+    "type": "drag_drop",
+    "points": 15,
+    "description": "Fill in the missing operators and control statements to complete the smart contract balance validation logic.",
+    "code": "def verify_transaction(balance, amount):\n    if balance ________ amount:\n        ________(\"Insufficient funds for transaction\")\n        return False\n    ________ balance - amount",
+    "data": {
+      "blanks": ["<", "print", "return"],
+      "options": [">", "<", "==", "print", "return", "raise", "break", "pass"],
+      "code_template": "def verify_transaction(balance, amount):\n    if balance {0} amount:\n        {1}(\"Insufficient funds for transaction\")\n        return False\n    {2} balance - amount"
+    }
+  },
+  {
+    "id": 3,
+    "title": "Find the Error — Data Hash Syntax Bug",
+    "type": "error_line",
+    "points": 20,
+    "description": "Review the code snippet below and click on the specific line number that contains the syntax error.",
+    "lines": [
+      "def calculate_hash(data):",
+      "    import hashlib",
+      "    encoded = data.encode('utf-8')",
+      "    result = hashlib.sha256(encoded).hexdigest()",
+      "    return result",
+      "print(calculate_hash(\"Round2\""
+    ],
+    "data": {
+      "correct_line": 6,
+      "explanation": "Line 6 is missing a closing parenthesis ')' at the end of print(calculate_hash(\"Round2\"))."
+    }
+  },
+  {
+    "id": 4,
+    "title": "Find the Error — Cryptographic Nonce Flaw",
+    "type": "error_line",
+    "points": 25,
+    "description": "Analyze this Proof-of-Work block validation function. Click on the line with the critical logical vulnerability.",
+    "lines": [
+      "def validate_block_nonce(block_header, nonce, target_difficulty):",
+      "    combined_payload = f\"{block_header}:{nonce}\"",
+      "    hash_digest = sha256(combined_payload.encode()).hexdigest()",
+      "    # Check if leading zeroes match target difficulty",
+      "    prefix = \"0\" * target_difficulty",
+      "    if hash_digest.endswith(prefix):",
+      "        return True",
+      "    return False"
+    ],
+    "data": {
+      "correct_line": 6,
+      "explanation": "Line 6 incorrectly uses .endswith(prefix) instead of checking leading zeroes with .startswith(prefix)."
+    }
+  },
+  {
+    "id": 5,
+    "title": "Problem Solving — Cryptographic Prime Checksum",
+    "type": "problem_solving",
+    "points": 30,
+    "description": "Calculate the block validator control checksum by completing the algorithmic scenario below.",
+    "problem_statement": "To verify block validity, the system requires a prime checksum value:\n\n1) Find all prime numbers in the range [10, 50] inclusive.\n2) Compute the sum of these prime numbers.\n3) Multiply the total sum by 3.\n\nEnter the final calculated integer checksum below.",
+    "sample_cases": [
+      {
+        "input": "Range [1, 10]",
+        "explanation": "Primes: 2, 3, 5, 7. Sum = 17. Result: 17 * 3 = 51"
+      }
+    ],
+    "data": {
+      "correct_answer": "933",
+      "acceptable_answers": ["933"],
+      "explanation": "Primes between 10 and 50 are: 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47. Sum = 311. 311 * 3 = 933."
+    }
+  }
+]

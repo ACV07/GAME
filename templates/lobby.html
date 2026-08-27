@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+
+{% block title %}Team Lobby — Round 2 Challenge Arena{% endblock %}
+
+{% block content %}
+<div class="glass-card" style="max-width: 800px; margin: 2rem auto;">
+  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem;">
+    <div>
+      {% if round_status == 'ACTIVE' %}
+        <span class="badge-status status-active">Round live</span>
+      {% elif round_status == 'PAUSED' %}
+        <span class="badge-status status-waiting">Paused</span>
+      {% elif round_status == 'STOPPED' %}
+        <span class="badge-status status-locked">Stopped</span>
+      {% else %}
+        <span class="badge-status status-waiting">Standby</span>
+      {% endif %}
+
+      <h1 style="font-size: 2.2rem; font-weight: 800; margin-top: 0.5rem; color: #fff;">
+        WELCOME, {{ team.team_name }}
+      </h1>
+      <div style="margin-top: 0.4rem; font-size: 0.9rem; color: var(--text-muted);">
+        🔑 Your Unique Team Passcode: <code style="color: var(--primary-gold); font-family: var(--font-code); font-weight: 700; font-size: 1.05rem; background: rgba(255,208,0,0.1); padding: 0.2rem 0.5rem; border-radius: 4px;">{{ team.team_code }}</code>
+      </div>
+    </div>
+    <div style="text-align: right;">
+      <div style="font-size: 0.85rem; color: var(--text-muted);">Current Progress</div>
+      <div style="font-size: 1.5rem; font-weight: 700; color: var(--primary-gold); font-family: var(--font-code);">
+        {% if team.current_challenge > 5 %}
+          5 / 5 (Completed)
+        {% else %}
+          Challenge {{ team.current_challenge }} of 5
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Admin Permission Standby Banner -->
+  <div id="standby-notice-banner" style="display: {% if round_status != 'ACTIVE' %}block{% else %}none{% endif %}; background: rgba(255, 208, 0, 0.08); border: 1px dashed var(--primary-gold); border-radius: var(--radius-md); padding: 1.25rem; margin-bottom: 1.5rem; text-align: center;">
+    <div style="font-size: 1.2rem; font-weight: 700; color: var(--primary-gold); margin-bottom: 0.3rem;">
+      {% if round_status == 'PAUSED' %}Paused{% elif round_status == 'STOPPED' %}Stopped{% elif round_status == 'ENDED' %}Ended{% else %}Standby{% endif %}
+    </div>
+    <div style="color: var(--text-muted); font-size: 0.9rem;">
+      Your completed challenges stay on record. When the organizer resumes, you continue from Challenge {{ team.current_challenge }}.
+    </div>
+  </div>
+
+  <!-- Progress Roadmap Nodes -->
+  <div class="progress-roadmap">
+    {% for i in range(1, 6) %}
+      <div class="step-node {% if i < team.current_challenge %}completed{% elif i == team.current_challenge %}active{% endif %}">
+        {% if i < team.current_challenge %}✓{% else %}{{ i }}{% endif %}
+      </div>
+    {% endfor %}
+  </div>
+
+  <div style="background: rgba(10, 10, 10, 0.7); border-radius: var(--radius-md); padding: 1.5rem; margin: 2rem 0; border: 1px solid var(--code-border);">
+    <h3 style="font-size: 1.1rem; color: #fff; margin-bottom: 1rem;">📜 Competition Regulations</h3>
+    <ul style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.8; padding-left: 1.25rem;">
+      <li><strong>Admin Permission Required:</strong> The contest begins as soon as the Admin starts the round and countdown timer.</li>
+      <li><strong>5 Sequential Challenges:</strong> Answers must be completed in order. You cannot skip ahead.</li>
+      <li><strong>Single Device Enforcement:</strong> Only your currently active browser session can submit answers for <strong>{{ team.team_name }}</strong>.</li>
+      <li><strong>Re-logging In:</strong> Save your Unique Passcode <code>{{ team.team_code }}</code> to resume session if your browser closes.</li>
+      <li><strong>Leaderboard Ranking:</strong> Teams are ranked by <strong>Challenge Progress</strong> (Primary) and <strong>Total Completion Speed</strong> (Secondary).</li>
+    </ul>
+  </div>
+
+  <!-- Action Button Container -->
+  <div style="text-align: center; margin-top: 2rem;" id="lobby-action-container">
+    {% if team.current_challenge > 5 %}
+      <a href="{{ url_for('challenges.completed') }}" class="btn-cyber" style="padding: 1rem 3rem; font-size: 1.1rem;">
+        🏆 View Final Results & Rank
+      </a>
+    {% elif round_status == 'ACTIVE' %}
+      <a href="{{ url_for('challenges.view_challenge', challenge_id=team.current_challenge) }}" class="btn-cyber" style="padding: 1rem 3rem; font-size: 1.1rem;">
+        ⚡ Enter Challenge {{ team.current_challenge }}
+      </a>
+    {% else %}
+      <button class="btn-secondary" style="padding: 1rem 2.5rem; font-size: 1rem; opacity: 0.6; cursor: not-allowed;" disabled id="standby-btn">
+        🔒 Waiting for Admin to Start Round...
+      </button>
+    {% endif %}
+  </div>
+</div>
+
+<script>
+  // Auto-polling script to detect when Admin grants permission & starts the round
+  async function pollAdminPermission() {
+    try {
+      const res = await fetch('/api/event-status');
+      const data = await res.json();
+      if (data && data.round_status === 'ACTIVE') {
+        const standbyBanner = document.getElementById('standby-notice-banner');
+        if (standbyBanner && standbyBanner.style.display !== 'none') {
+          // Admin has granted permission & started round -> reload page to unlock!
+          window.location.reload();
+        }
+      }
+    } catch (e) {}
+  }
+  setInterval(pollAdminPermission, 3000);
+</script>
+{% endblock %}

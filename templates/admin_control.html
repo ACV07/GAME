@@ -1,0 +1,343 @@
+{% extends 'base.html' %}
+
+{% block title %}Master Event Control Center — Round 2 Challenge Arena{% endblock %}
+
+{% block content %}
+<div class="glass-card" style="max-width: 1200px; margin: 1.5rem auto;">
+  
+  <!-- Header Bar -->
+  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; border-bottom: 1px solid var(--code-border); padding-bottom: 1.25rem;">
+    <div>
+      <span class="badge-status status-active" style="background: rgba(255, 208, 0, 0.15); color: var(--primary-gold); border-color: rgba(255, 208, 0, 0.4);">
+        🎛️ MASTER EVENT CONTROL CENTER
+      </span>
+      <h1 style="font-size: 2.2rem; font-weight: 800; color: #fff; margin-top: 0.5rem;">
+        ROUND 2 ORGANIZER COMMAND POST
+      </h1>
+    </div>
+    
+    <div style="display: flex; gap: 10px;">
+      <a href="{{ url_for('admin.dashboard') }}" class="btn-secondary" style="font-size: 0.85rem;">
+        👥 Team Monitor
+      </a>
+      <a href="{{ url_for('leaderboard.view_leaderboard') }}" class="btn-cyber" style="font-size: 0.85rem; padding: 0.5rem 1rem;">
+        🏆 Live Scoreboard
+      </a>
+    </div>
+  </div>
+
+  <!-- Master Round Status & Time Control Panel (Admin Only) -->
+  <div style="background: rgba(10, 10, 10, 0.95); border: 2px solid var(--primary-gold); border-radius: var(--radius-md); padding: 1.75rem; margin-bottom: 2rem; box-shadow: 0 0 25px rgba(255, 208, 0, 0.15);">
+    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; border-bottom: 1px dashed var(--code-border); padding-bottom: 1.25rem; margin-bottom: 1.25rem;">
+      <div>
+        <span style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">Current Global State</span>
+        <div id="master-status-label" class="master-status-value">
+          {% if round_status == 'ACTIVE' %}
+            ROUND IS LIVE
+          {% elif round_status == 'PAUSED' %}
+            ROUND PAUSED
+          {% elif round_status == 'STOPPED' %}
+            ROUND STOPPED
+          {% elif round_status == 'NOT_STARTED' %}
+            ROUND NOT STARTED
+          {% else %}
+            ROUND CONCLUDED
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="control-actions">
+        <button class="btn-cyber btn-start" type="button" onclick="setRoundStatus('ACTIVE')">Start / Resume</button>
+        <button class="btn-cyber btn-pause" type="button" onclick="setRoundStatus('PAUSED')">Pause</button>
+        <button class="btn-cyber btn-stop" type="button" onclick="setRoundStatus('STOPPED')">Stop</button>
+        <button class="btn-cyber btn-end" type="button" onclick="setRoundStatus('ENDED')">End round</button>
+      </div>
+    </div>
+
+    <!-- Time Control System Section -->
+    <div>
+      <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <h4 style="color: #fff; font-size: 1.05rem; display: flex; align-items: center; gap: 0.5rem;">
+            ⏱️ Master Round Countdown Timer
+          </h4>
+          <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.2rem;">
+            Set competition duration and start countdown for all contestant devices.
+          </p>
+        </div>
+
+        <div style="font-family: var(--font-code); font-size: 2.2rem; font-weight: 800; color: var(--primary-gold); background: rgba(0,0,0,0.8); border: 1px solid var(--primary-gold); padding: 0.4rem 1.5rem; border-radius: var(--radius-sm);" id="admin-live-countdown">
+          00:00
+        </div>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.08);">
+        <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">Set Duration:</span>
+        <button class="btn-secondary" style="padding: 0.4rem 0.85rem; font-size: 0.85rem;" onclick="setTimerDuration(15)">⏱️ 15 Mins</button>
+        <button class="btn-secondary" style="padding: 0.4rem 0.85rem; font-size: 0.85rem;" onclick="setTimerDuration(30)">⏱️ 30 Mins</button>
+        <button class="btn-secondary" style="padding: 0.4rem 0.85rem; font-size: 0.85rem;" onclick="setTimerDuration(45)">⏱️ 45 Mins</button>
+        <button class="btn-secondary" style="padding: 0.4rem 0.85rem; font-size: 0.85rem;" onclick="setTimerDuration(60)">⏱️ 60 Mins</button>
+        
+        <div style="display: flex; align-items: center; gap: 6px; margin-left: auto;">
+          <input type="number" id="custom-minutes-input" class="input-cyber" style="width: 100px; padding: 0.4rem 0.75rem; font-size: 0.85rem;" placeholder="Custom (m)" min="1" max="180">
+          <button class="btn-cyber" onclick="setTimerDuration(document.getElementById('custom-minutes-input').value)" style="padding: 0.4rem 0.9rem; font-size: 0.85rem;">Set Custom</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="admin-grid" style="grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+    
+    <!-- Announcement Broadcast Box -->
+    <div style="background: rgba(15, 15, 15, 0.8); border: 1px solid var(--code-border); border-radius: var(--radius-md); padding: 1.5rem;">
+      <h3 style="font-size: 1.05rem; color: var(--primary-gold); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+        📢 Broadcast Announcement to All Contestants
+      </h3>
+      <div style="margin-bottom: 1rem;">
+        <input type="text" id="announcement-input" class="input-cyber" value="{{ announcement }}" placeholder="e.g. 10 Minutes remaining! Final push!" autocomplete="off">
+      </div>
+      <div style="display: flex; gap: 10px; justify-content: flex-end;">
+        <button class="btn-secondary" onclick="clearAnnouncement()" style="padding: 0.5rem 1rem; font-size: 0.85rem;">Clear Message</button>
+        <button class="btn-cyber" onclick="sendAnnouncement()" style="padding: 0.5rem 1.25rem; font-size: 0.85rem;">
+          📢 Broadcast Now
+        </button>
+      </div>
+    </div>
+
+    <!-- Master Emergency Controls -->
+    <div style="background: rgba(15, 15, 15, 0.8); border: 1px solid var(--code-border); border-radius: var(--radius-md); padding: 1.5rem;">
+      <h3 style="font-size: 1.05rem; color: #f87171; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+        ⚡ Emergency System Controls
+      </h3>
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <button class="btn-secondary" onclick="unlockAllTeams()" style="border-color: var(--primary-gold); color: var(--primary-gold); width: 100%; text-align: left; padding: 0.75rem 1rem;">
+          🔓 <strong>Unlock All Active Device Sessions</strong>
+          <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: normal;">Allows all contestants to re-login if network issue occurred.</div>
+        </button>
+        <button class="btn-secondary" onclick="setRoundStatus('NOT_STARTED')" style="border-color: #f59e0b; color: #f59e0b; width: 100%; text-align: left; padding: 0.75rem 1rem;">
+          ⏱️ <strong>Reset Round Status to NOT STARTED</strong>
+          <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: normal;">Puts all contestant screens in standby mode.</div>
+        </button>
+        <button class="btn-secondary" onclick="resetEntireGame()" style="border-color: #ef4444; color: #ef4444; background: rgba(239,68,68,0.1); width: 100%; text-align: left; padding: 0.75rem 1rem;">
+          🚨 <strong>RESET ENTIRE GAME (ALL TEAMS)</strong>
+          <div style="font-size: 0.75rem; color: #f87171; font-weight: normal;">Resets all teams to Challenge 1, clears all submissions & restart competition.</div>
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Real-time Activity Telemetry Feed -->
+  <div style="background: rgba(10, 10, 10, 0.8); border: 1px solid var(--code-border); border-radius: var(--radius-md); padding: 1.5rem;">
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+      <h3 style="font-size: 1.1rem; color: #fff; display: flex; align-items: center; gap: 0.5rem;">
+        📡 Live Contestant Activity Feed (Auto-Polling)
+      </h3>
+      <span style="font-size: 0.8rem; color: var(--text-dim);">Updates every 3s</span>
+    </div>
+
+    <div id="live-telemetry-feed" style="display: flex; flex-direction: column; gap: 8px; max-height: 350px; overflow-y: auto; font-family: var(--font-code); font-size: 0.85rem;">
+      {% if recent_activity %}
+        {% for act in recent_activity %}
+          <div style="background: rgba(20, 20, 20, 0.9); padding: 0.6rem 1rem; border-radius: 6px; border-left: 4px solid {% if act.is_correct %}var(--accent-green){% else %}var(--accent-red){% endif %}; display: flex; align-items: center; justify-content: space-between;">
+            <div>
+              <strong style="color: #fff;">{{ act.team_name }}</strong> submitted for <strong>{{ act.challenge_title }}</strong>
+            </div>
+            <div style="display: flex; align-items: center; gap: 1rem;">
+              <span class="badge-status {% if act.is_correct %}status-active{% else %}status-locked{% endif %}" style="font-size: 0.75rem;">
+                {% if act.is_correct %}PASSED ✓{% else %}FAILED ✕{% endif %}
+              </span>
+              <span style="color: var(--text-dim); font-size: 0.75rem;">{{ act.submission_time }}</span>
+            </div>
+          </div>
+        {% endfor %}
+      {% else %}
+        <em style="color: var(--text-dim);">No submission activity logged yet.</em>
+      {% endif %}
+    </div>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+async function setTimerDuration(minutes) {
+  if (!minutes || minutes <= 0) return alert('Please enter a valid number of minutes.');
+  try {
+    const res = await fetch('/api/admin/set-timer-duration', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ minutes: parseInt(minutes) })
+    });
+    const data = await res.json();
+    alert(data.message);
+    window.location.reload();
+  } catch (err) {
+    alert('Failed to set timer duration.');
+  }
+}
+
+async function setRoundStatus(status) {
+  const labels = { ACTIVE: 'start/resume', PAUSED: 'pause', STOPPED: 'stop', ENDED: 'end', NOT_STARTED: 'reset' };
+  if (['ENDED', 'STOPPED', 'NOT_STARTED'].includes(status)) {
+    if (!confirm(`Confirm: ${labels[status] || status} the round? Player progress is kept unless you reset the entire game.`)) return;
+  }
+
+  try {
+    const res = await fetch('/api/admin/set-round-status', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status: status })
+    });
+    const data = await res.json();
+    if (!data.success) {
+      alert(data.message || 'Failed to update status.');
+      return;
+    }
+    window.location.reload();
+  } catch (err) {
+    alert('Failed to update status.');
+  }
+}
+
+// Live Master Countdown Timer Ticker & Sync
+let adminRemainingSeconds = {{ timer_info.get('remaining_seconds', 0) }};
+let adminRoundStatus = "{{ round_status }}";
+
+function renderAdminTimerClock() {
+  const label = document.getElementById('admin-live-countdown');
+  if (!label) return;
+  
+  if (adminRoundStatus === 'PAUSED' || adminRoundStatus === 'STOPPED') {
+    const m = Math.floor(adminRemainingSeconds / 60);
+    const s = adminRemainingSeconds % 60;
+    label.style.color = adminRoundStatus === 'STOPPED' ? "#ef4444" : "#f59e0b";
+    const prefix = adminRoundStatus === 'STOPPED' ? 'STOPPED' : 'PAUSED';
+    label.textContent = `${prefix} ${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+  } else if (adminRoundStatus === 'NOT_STARTED') {
+    const m = Math.floor(adminRemainingSeconds / 60);
+    const s = adminRemainingSeconds % 60;
+    label.style.color = "var(--text-muted)";
+    label.textContent = `⏱️ ${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+  } else if (adminRoundStatus === 'ENDED') {
+    label.style.color = "#ef4444";
+    label.textContent = "00:00 (ENDED)";
+  } else {
+    // ACTIVE
+    const m = Math.floor(adminRemainingSeconds / 60);
+    const s = adminRemainingSeconds % 60;
+    label.style.color = "var(--primary-gold)";
+    label.textContent = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+  }
+}
+
+// Tick down every second if ACTIVE
+setInterval(() => {
+  if (adminRoundStatus === 'ACTIVE' && adminRemainingSeconds > 0) {
+    adminRemainingSeconds--;
+  }
+  renderAdminTimerClock();
+}, 1000);
+
+// Poll server status every 2 seconds
+async function syncAdminTimerState() {
+  try {
+    const res = await fetch('/api/event-status');
+    const data = await res.json();
+    if (data && data.timer_info) {
+      adminRemainingSeconds = data.timer_info.remaining_seconds;
+      adminRoundStatus = data.round_status;
+      renderAdminTimerClock();
+    }
+  } catch (e) {}
+}
+syncAdminTimerState();
+setInterval(syncAdminTimerState, 2000);
+
+async function sendAnnouncement() {
+  const text = document.getElementById('announcement-input').value.trim();
+  try {
+    const res = await fetch('/api/admin/broadcast-announcement', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ announcement: text })
+    });
+    const data = await res.json();
+    alert('Announcement broadcasted to all contestants!');
+  } catch (err) {
+    alert('Failed to send announcement.');
+  }
+}
+
+function clearAnnouncement() {
+  document.getElementById('announcement-input').value = '';
+  sendAnnouncement();
+}
+
+async function unlockAllTeams() {
+  if (!confirm('Unlock active device sessions for ALL teams?')) return;
+  try {
+    const res = await fetch('/api/admin/unlock-all-teams', { method: 'POST' });
+    const data = await res.json();
+    alert(data.message);
+  } catch (err) {
+    alert('Failed to unlock all sessions.');
+  }
+}
+
+async function resetEntireGame() {
+  if (!confirm('🚨 CRITICAL WARNING: This will reset ALL contestant teams back to Challenge 1 and clear all submissions. Are you sure you want to RESET THE ENTIRE GAME?')) return;
+  try {
+    const res = await fetch('/api/admin/reset-entire-game', { method: 'POST' });
+    const data = await res.json();
+    alert(data.message);
+    window.location.reload();
+  } catch (err) {
+    alert('Failed to reset game.');
+  }
+}
+
+// Live activity feed telemetry auto-polling
+setInterval(async () => {
+  try {
+    const res = await fetch('/api/admin/live-activity');
+    const data = await res.json();
+    if (data && data.activity) {
+      renderActivityFeed(data.activity);
+    }
+  } catch (e) {}
+}, 3000);
+
+function renderActivityFeed(activity) {
+  const feed = document.getElementById('live-telemetry-feed');
+  if (!feed) return;
+  if (activity.length === 0) {
+    feed.innerHTML = '<em style="color: var(--text-dim);">No submission activity logged yet.</em>';
+    return;
+  }
+  let html = '';
+  activity.forEach(act => {
+    const statusColor = act.is_correct ? 'var(--accent-green)' : 'var(--accent-red)';
+    const badgeText = act.is_correct ? 'PASSED ✓' : 'FAILED ✕';
+    const badgeClass = act.is_correct ? 'status-active' : 'status-locked';
+    html += `
+      <div style="background: rgba(20, 20, 20, 0.9); padding: 0.6rem 1rem; border-radius: 6px; border-left: 4px solid ${statusColor}; display: flex; align-items: center; justify-content: space-between;">
+        <div>
+          <strong style="color: #fff;">${escapeHtml(act.team_name)}</strong> submitted for <strong>${escapeHtml(act.challenge_title)}</strong>
+        </div>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <span class="badge-status ${badgeClass}" style="font-size: 0.75rem;">${badgeText}</span>
+          <span style="color: var(--text-dim); font-size: 0.75rem;">${act.submission_time}</span>
+        </div>
+      </div>
+    `;
+  });
+  feed.innerHTML = html;
+}
+
+function escapeHtml(str) {
+  return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+</script>
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block title %}Team Login — Round 2 Challenge Arena{% endblock %}
+
+{% block content %}
+<div style="max-width: 520px; margin: 3rem auto;">
+  <div class="glass-card">
+    <div style="text-align: center; margin-bottom: 2rem;">
+      <h1 style="font-size: 2rem; font-weight: 800; background: linear-gradient(135deg, #fff, var(--primary-gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+        ENTER ARENA
+      </h1>
+      <p style="color: var(--text-muted); margin-top: 0.5rem; font-size: 0.95rem;">
+        Enter your <strong>Team Name</strong> to register automatically, or enter your <strong>Unique Team Passcode</strong> to resume an active round.
+      </p>
+    </div>
+
+    <!-- Team Login & Registration Form -->
+    <form action="{{ url_for('auth.team_login') }}" method="POST" id="login-form">
+      <div style="margin-bottom: 1.5rem;">
+        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.9rem; color: var(--text-gold); text-transform: uppercase; letter-spacing: 0.5px;">
+          Team Name OR Unique Passcode
+        </label>
+        <input type="text" name="team_identifier" class="input-cyber" placeholder="e.g. Cyber Wolves or CW-8492" required autofocus autocomplete="off">
+      </div>
+
+      <button type="submit" class="btn-cyber" style="width: 100%;">
+        🚀 Launch Arena Session
+      </button>
+    </form>
+
+    <!-- Info Box -->
+    <div style="background: rgba(255, 208, 0, 0.05); border: 1px dashed rgba(255, 208, 0, 0.25); border-radius: var(--radius-sm); padding: 1rem; margin-top: 1.5rem; font-size: 0.85rem; color: var(--text-muted);">
+      💡 <strong>How Login Works:</strong><br>
+      • <strong>New Teams:</strong> Enter any Team Name (e.g. <code>Quantum Bytes</code>). The system will automatically register your team and generate a unique passcode.<br>
+      • <strong>Returning Teams:</strong> Enter your Team Name or assigned Passcode to log back in.
+    </div>
+
+    <!-- Demo Accounts Quick Click Bar -->
+    <div style="margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid var(--code-border);">
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+        🔑 <strong>Quick Demo Teams:</strong>
+      </p>
+      <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+        <button class="btn-secondary" style="padding: 0.3rem 0.6rem; font-size: 0.8rem;" onclick="fillCode('Cyber Wolves')">Cyber Wolves</button>
+        <button class="btn-secondary" style="padding: 0.3rem 0.6rem; font-size: 0.8rem;" onclick="fillCode('Block Masters')">Block Masters</button>
+        <button class="btn-secondary" style="padding: 0.3rem 0.6rem; font-size: 0.8rem;" onclick="fillCode('Hack Titans')">Hack Titans</button>
+      </div>
+    </div>
+
+    <!-- Separate Admin Portal Link -->
+    <div style="margin-top: 1.5rem; text-align: center;">
+      <a href="{{ url_for('auth.admin_login') }}" style="color: var(--text-muted); font-size: 0.85rem; text-decoration: none;">
+        🔐 Dedicated Organizer Admin Portal →
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+  function fillCode(val) {
+    document.querySelector('input[name="team_identifier"]').value = val;
+  }
+</script>
+{% endblock %}

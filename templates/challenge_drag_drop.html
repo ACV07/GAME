@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block title %}Challenge {{ challenge.id }} — Complete the Code{% endblock %}
+
+{% block content %}
+<div class="glass-card" style="max-width: 950px; margin: 1rem auto;">
+  
+  <!-- Challenge Navigation & Title -->
+  <div class="challenge-header">
+    <div class="challenge-title-group">
+      <h2>
+        <span style="color: var(--primary-cyan); font-family: var(--font-code);">CHALLENGE {{ challenge.id }}</span>
+        <span>— {{ challenge.title }}</span>
+      </h2>
+    </div>
+  </div>
+
+  <p style="color: var(--text-muted); font-size: 1rem; margin-bottom: 1.5rem;">
+    {{ challenge.description }}
+  </p>
+
+  <!-- Interactive Code Editor Panel -->
+  <div class="code-editor-frame">
+    <div class="editor-titlebar">
+      <div class="window-dots">
+        <span class="dot dot-red"></span>
+        <span class="dot dot-yellow"></span>
+        <span class="dot dot-green"></span>
+      </div>
+      <span class="editor-filename">challenge_{{ challenge.id }}_solution.py</span>
+      <span></span>
+    </div>
+    
+    <div class="code-content" id="code-container">
+      {% set raw_code = challenge.code %}
+      <!-- Render code lines with blank drop slots -->
+      <pre style="font-family: inherit; font-size: inherit; white-space: pre-wrap;">{% for line in raw_code.split('\n') %}{% set line_parts = line.split('________') %}{% for part in line_parts %}{{ part }}{% if not loop.last %}<span class="blank-slot" data-index="{{ loop.index0 }}">___</span>{% endif %}{% endfor %}
+{% endfor %}</pre>
+    </div>
+  </div>
+
+  <!-- Keyword Options Bank -->
+  <div class="options-bank-container">
+    <div class="bank-label">🔤 Keyword Bank (Drag or Tap to fill blank)</div>
+    <div class="options-bank">
+      {% for option in challenge.data.options %}
+        <div class="option-chip" draggable="true" data-value="{{ option }}">
+          {{ option }}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Feedback Banner -->
+  <div id="feedback-box" class="alert-banner" style="display: none; margin-top: 1.5rem;"></div>
+
+  <!-- Action Controls -->
+  <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 2rem;">
+    <button type="button" class="btn-secondary" id="btn-reset-blanks">
+      🔄 Clear Blanks
+    </button>
+
+    <form id="challenge-form" data-challenge-id="{{ challenge.id }}">
+      <button type="submit" class="btn-cyber" id="btn-submit">
+        Submit Code Answer ➔
+      </button>
+    </form>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>window.savedDraft = {{ saved_draft | tojson }};</script>
+<script src="{{ url_for('static', filename='js/drag_drop.js') }}"></script>
+{% endblock %}

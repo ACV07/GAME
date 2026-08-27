@@ -1,0 +1,188 @@
+{% extends 'base.html' %}
+
+{% block title %}Organizer Admin Dashboard — Round 2 Challenge Arena{% endblock %}
+
+{% block content %}
+<div class="glass-card" style="max-width: 1150px; margin: 1.5rem auto;">
+  
+  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem;">
+    <div>
+      <span class="badge-status status-active" style="background: rgba(121, 40, 202, 0.2); color: #d670ff; border-color: rgba(121, 40, 202, 0.4);">
+        ORGANIZER CONTROL ROOM
+      </span>
+      <h1 style="font-size: 2.2rem; font-weight: 800; color: #fff; margin-top: 0.5rem;">
+        EVENT ADMIN DASHBOARD
+      </h1>
+    </div>
+    
+    <div style="display: flex; gap: 10px;">
+      <a href="{{ url_for('admin.control_center') }}" class="btn-cyber" style="padding: 0.6rem 1.2rem; font-size: 0.9rem; background: linear-gradient(135deg, var(--primary-gold), var(--primary-amber));">
+        🎛️ Master Control Center
+      </a>
+      <a href="{{ url_for('leaderboard.view_leaderboard') }}" class="btn-secondary" style="padding: 0.6rem 1.2rem; font-size: 0.9rem;">
+        🏆 Live Leaderboard
+      </a>
+    </div>
+  </div>
+
+  <div class="admin-grid">
+    
+    <!-- Teams Monitor Table -->
+    <div>
+      <h3 style="font-size: 1.1rem; color: #fff; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between;">
+        <span>👥 Registered Teams Monitor</span>
+        <small style="color: var(--text-muted); font-size: 0.85rem;">Total: {{ teams | length }}</small>
+      </h3>
+
+      <div style="overflow-x: auto;">
+        <table class="table-cyber" style="margin-top: 0;">
+          <thead>
+            <tr>
+              <th>Team Name</th>
+              <th>Code</th>
+              <th>Status</th>
+              <th>Challenge</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for t in teams %}
+              <tr>
+                <td><strong>{{ t.team_name }}</strong></td>
+                <td><code style="color: var(--primary-gold); font-family: var(--font-code);">{{ t.team_code }}</code></td>
+                <td>
+                  {% if t.status == 'ACTIVE' %}
+                    <span class="badge-status status-active">Active</span>
+                  {% elif t.status == 'COMPLETED' %}
+                    <span class="badge-status status-completed">Completed</span>
+                  {% else %}
+                    <span class="badge-status status-waiting">Waiting</span>
+                  {% endif %}
+                </td>
+                <td>
+                  {% if t.current_challenge > 5 %}
+                    5/5 (Finished)
+                  {% else %}
+                    {{ t.current_challenge }}/5
+                  {% endif %}
+                </td>
+                <td>
+                  <div style="display: flex; gap: 6px;">
+                    <button class="btn-sm-action btn-unlock" onclick="unlockTeam({{ t.id }})" title="Unlock active device lock">
+                      🔓 Unlock
+                    </button>
+                    <button class="btn-sm-action btn-reset" onclick="resetTeam({{ t.id }})" title="Reset score and back to Challenge 1">
+                      🔄 Reset
+                    </button>
+                    <button class="btn-sm-action btn-secondary" onclick="viewSubmissions({{ t.id }}, '{{ t.team_name }}')" style="padding: 0.35rem 0.6rem; font-size: 0.8rem;">
+                      👁️ Audit
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Quick Registration & Audit Panel -->
+    <div>
+      <div style="background: rgba(13, 17, 23, 0.7); border: 1px solid var(--code-border); border-radius: var(--radius-md); padding: 1.5rem; margin-bottom: 1.5rem;">
+        <h3 style="font-size: 1.05rem; color: #fff; margin-bottom: 1rem;">➕ Register New Team</h3>
+        
+        <form action="{{ url_for('admin.add_team') }}" method="POST">
+          <div style="margin-bottom: 1rem;">
+            <label style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.4rem;">Team Name</label>
+            <input type="text" name="team_name" class="input-cyber" placeholder="e.g. ALGO KNIGHTS" required>
+          </div>
+          
+          <div style="margin-bottom: 1.25rem;">
+            <label style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.4rem;">Team Code</label>
+            <input type="text" name="team_code" class="input-cyber" placeholder="e.g. AK2026" required>
+          </div>
+
+          <button type="submit" class="btn-cyber" style="width: 100%; font-size: 0.9rem; padding: 0.7rem;">
+            Register Team
+          </button>
+        </form>
+      </div>
+
+      <!-- Submission Audit Container -->
+      <div id="audit-container" style="display: none; background: rgba(13, 17, 23, 0.8); border: 1px solid var(--primary-cyan); border-radius: var(--radius-md); padding: 1.25rem;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem;">
+          <h4 id="audit-team-title" style="color: var(--primary-cyan); font-size: 0.95rem;">Submission Audit</h4>
+          <button class="btn-secondary" onclick="document.getElementById('audit-container').style.display='none'" style="padding: 0.2rem 0.5rem; font-size: 0.75rem;">✕ Close</button>
+        </div>
+        <div id="audit-list" style="font-size: 0.85rem; color: var(--text-muted); max-height: 250px; overflow-y: auto;"></div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+async function unlockTeam(teamId) {
+  if (!confirm('Unlock session lock for this team?')) return;
+  const res = await fetch('/api/admin/unlock-team', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ team_id: teamId })
+  });
+  const data = await res.json();
+  alert(data.message);
+  window.location.reload();
+}
+
+async function resetTeam(teamId) {
+  if (!confirm('Are you sure you want to RESET this team back to Challenge 1 and clear their score?')) return;
+  const res = await fetch('/api/admin/reset-team', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ team_id: teamId })
+  });
+  const data = await res.json();
+  alert(data.message);
+  window.location.reload();
+}
+
+async function viewSubmissions(teamId, teamName) {
+  const container = document.getElementById('audit-container');
+  const title = document.getElementById('audit-team-title');
+  const list = document.getElementById('audit-list');
+
+  title.textContent = `Audit Log — ${teamName}`;
+  list.innerHTML = 'Loading submissions...';
+  container.style.display = 'block';
+
+  try {
+    const res = await fetch(`/api/admin/team-submissions/${teamId}`);
+    const data = await res.json();
+
+    if (!data.submissions || data.submissions.length === 0) {
+      list.innerHTML = '<em>No submissions recorded yet for this team.</em>';
+      return;
+    }
+
+    let html = '<div style="display: flex; flex-direction: column; gap: 8px;">';
+    data.submissions.forEach(sub => {
+      const statusColor = sub.is_correct ? 'var(--accent-green)' : 'var(--accent-red)';
+      html += `
+        <div style="background: rgba(22,27,34,0.9); padding: 0.5rem 0.75rem; border-radius: 4px; border-left: 3px solid ${statusColor};">
+          <div><strong>${sub.challenge_title}</strong></div>
+          <div style="font-family: var(--font-code); font-size: 0.8rem; margin-top: 2px;">Answer: ${sub.submitted_answer}</div>
+          <div style="font-size: 0.75rem; color: var(--text-dim); margin-top: 2px;">${sub.submission_time}</div>
+        </div>
+      `;
+    });
+    html += '</div>';
+    list.innerHTML = html;
+  } catch (err) {
+    list.innerHTML = '<span style="color: var(--accent-red);">Failed to load audit submissions.</span>';
+  }
+}
+</script>
+{% endblock %}

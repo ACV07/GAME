@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% block title %}Challenge {{ challenge.id }} — Find the Error{% endblock %}
+
+{% block extra_css %}
+<style>
+  .code-line-item {
+    display: flex;
+    align-items: center;
+    padding: 0.4rem 1rem;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: var(--transition-fast);
+    user-select: none;
+  }
+  .code-line-item:hover {
+    background: rgba(0, 242, 254, 0.1);
+  }
+  .code-line-item.selected-error-line {
+    background: rgba(255, 23, 68, 0.25);
+    border-left: 4px solid var(--accent-red);
+    box-shadow: 0 0 15px rgba(255, 23, 68, 0.3);
+  }
+  .line-num {
+    width: 40px;
+    color: var(--text-dim);
+    font-weight: 700;
+    font-size: 0.9rem;
+  }
+  .line-code {
+    flex: 1;
+    font-family: var(--font-code);
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="glass-card" style="max-width: 950px; margin: 1rem auto;">
+  
+  <div class="challenge-header">
+    <div class="challenge-title-group">
+      <h2>
+        <span style="color: var(--primary-cyan); font-family: var(--font-code);">CHALLENGE {{ challenge.id }}</span>
+        <span>— {{ challenge.title }}</span>
+      </h2>
+    </div>
+  </div>
+
+  <p style="color: var(--text-muted); font-size: 1rem; margin-bottom: 1.5rem;">
+    {{ challenge.description }} <strong>Click on the specific line number that contains the error.</strong>
+  </p>
+
+  <!-- Interactive Line Selector Code Frame -->
+  <div class="code-editor-frame">
+    <div class="editor-titlebar">
+      <div class="window-dots">
+        <span class="dot dot-red"></span>
+        <span class="dot dot-yellow"></span>
+        <span class="dot dot-green"></span>
+      </div>
+      <span class="editor-filename">debug_target_{{ challenge.id }}.py</span>
+      <span></span>
+    </div>
+    
+    <div class="code-content" style="padding: 1rem 0.5rem;">
+      {% for line in challenge.data_json | default('') | string %}
+      {% endfor %}
+      
+      {% set lines = challenge.code.split('\n') %}
+      {% for line in lines %}
+        <div class="code-line-item" data-line-number="{{ loop.index }}">
+          <span class="line-num">{{ "%02d" % loop.index }}</span>
+          <span class="line-code">{{ line }}</span>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Feedback Banner -->
+  <div id="feedback-box" class="alert-banner" style="display: none; margin-top: 1.5rem;"></div>
+
+  <!-- Submit Form -->
+  <div style="display: flex; justify-content: flex-end; margin-top: 2rem;">
+    <form id="line-challenge-form" data-challenge-id="{{ challenge.id }}">
+      <button type="submit" class="btn-cyber" id="btn-submit-line">
+        Submit Selected Error Line ➔
+      </button>
+    </form>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>window.savedDraft = {{ saved_draft | tojson }};</script>
+<script src="{{ url_for('static', filename='js/line_selector.js') }}"></script>
+{% endblock %}

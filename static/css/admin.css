@@ -1,0 +1,140 @@
+/* ==========================================================================
+   ADMIN & LEADERBOARD STYLES — BLACK & GOLD THEME
+   ========================================================================== */
+
+.admin-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+}
+
+@media (max-width: 900px) {
+  .admin-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.table-cyber {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 8px;
+  margin-top: 1rem;
+}
+
+.table-cyber th {
+  padding: 1rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-gold);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-align: left;
+  border-bottom: 1px solid var(--code-border);
+}
+
+.table-cyber td {
+  padding: 1rem;
+  background: rgba(18, 18, 18, 0.9);
+  color: var(--text-main);
+  font-size: 0.95rem;
+  border-top: 1px solid var(--bg-card-border);
+  border-bottom: 1px solid var(--bg-card-border);
+}
+
+.table-cyber tr td:first-child {
+  border-left: 1px solid var(--bg-card-border);
+  border-top-left-radius: var(--radius-sm);
+  border-bottom-left-radius: var(--radius-sm);
+}
+
+.table-cyber tr td:last-child {
+  border-right: 1px solid var(--bg-card-border);
+  border-top-right-radius: var(--radius-sm);
+  border-bottom-right-radius: var(--radius-sm);
+}
+
+.table-cyber tr:hover td {
+  background: rgba(28, 28, 28, 0.95);
+}
+
+/* Status Badges */
+.badge-status {
+  padding: 0.35rem 0.85rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  font-family: var(--font-code);
+  text-transform: uppercase;
+  display: inline-block;
+}
+
+.status-active {
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--accent-green);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+}
+
+.status-waiting {
+  background: rgba(255, 208, 0, 0.15);
+  color: var(--primary-gold);
+  border: 1px solid rgba(255, 208, 0, 0.35);
+}
+
+.status-completed {
+  background: rgba(255, 145, 0, 0.15);
+  color: var(--primary-amber);
+  border: 1px solid rgba(255, 145, 0, 0.35);
+}
+
+.status-locked {
+  background: rgba(239, 68, 68, 0.15);
+  color: var(--accent-red);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+}
+
+/* Podium Ranks */
+.rank-podium-1 {
+  color: #ffd700;
+  font-weight: 800;
+  font-size: 1.25rem;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+}
+.rank-podium-2 {
+  color: #e5e7eb;
+  font-weight: 800;
+  font-size: 1.15rem;
+}
+.rank-podium-3 {
+  color: #d97706;
+  font-weight: 800;
+  font-size: 1.1rem;
+}
+
+/* Small Action Buttons */
+.btn-sm-action {
+  padding: 0.35rem 0.75rem;
+  font-size: 0.8rem;
+  border-radius: 4px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.btn-unlock {
+  background: rgba(255, 208, 0, 0.2);
+  color: var(--primary-gold);
+  border: 1px solid rgba(255, 208, 0, 0.4);
+}
+.btn-unlock:hover {
+  background: rgba(255, 208, 0, 0.4);
+}
+
+.btn-reset {
+  background: rgba(239, 68, 68, 0.2);
+  color: #fca5a5;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+}
+.btn-reset:hover {
+  background: rgba(239, 68, 68, 0.4);
+}

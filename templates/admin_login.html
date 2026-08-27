@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}Organizer Admin Portal — Round 2 Challenge Arena{% endblock %}
+
+{% block content %}
+<div style="max-width: 480px; margin: 3rem auto;">
+  <div class="glass-card" style="border-color: rgba(121, 40, 202, 0.4);">
+    
+    <div style="text-align: center; margin-bottom: 2rem;">
+      <span class="badge-status status-active" style="background: rgba(121, 40, 202, 0.2); color: #d670ff; border-color: rgba(121, 40, 202, 0.4);">
+        ORGANIZER ACCESS ONLY
+      </span>
+      <h1 style="font-size: 2rem; font-weight: 800; color: #fff; margin-top: 0.75rem;">
+        🔐 Admin Portal
+      </h1>
+      <p style="color: var(--text-muted); margin-top: 0.5rem; font-size: 0.9rem;">
+        Enter administrator credentials to access live leaderboard and team controls.
+      </p>
+    </div>
+
+    <!-- Separate Admin Login Form -->
+    <form action="{{ url_for('auth.admin_login') }}" method="POST">
+      <div style="margin-bottom: 1.25rem;">
+        <label style="display: block; margin-bottom: 0.4rem; font-weight: 600; font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase;">
+          Admin ID / Username
+        </label>
+        <input type="text" name="admin_id" class="input-cyber" placeholder="Enter Admin ID" required autofocus autocomplete="off">
+      </div>
+
+      <div style="margin-bottom: 1.75rem;">
+        <label style="display: block; margin-bottom: 0.4rem; font-weight: 600; font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase;">
+          Password
+        </label>
+        <input type="password" name="password" class="input-cyber" placeholder="Enter Password" required>
+      </div>
+
+      <button type="submit" class="btn-cyber" style="width: 100%; background: linear-gradient(135deg, var(--accent-purple), var(--primary-cyan));">
+        🔓 Authenticate Admin Portal
+      </button>
+    </form>
+
+    <div style="margin-top: 1.5rem; text-align: center; padding-top: 1rem; border-top: 1px solid var(--code-border);">
+      <a href="{{ url_for('auth.login') }}" style="color: var(--text-muted); font-size: 0.85rem; text-decoration: none;">
+        ← Back to Participant Team Login
+      </a>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

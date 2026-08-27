@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block title %}🏆 Live Leaderboard — Round 2 Challenge Arena{% endblock %}
+
+{% block content %}
+<div class="glass-card" style="max-width: 1050px; margin: 1.5rem auto;">
+  
+  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem;">
+    <div>
+      <h1 style="font-size: 2.2rem; font-weight: 800; background: linear-gradient(135deg, #ffd700, #ff9100); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+        🏆 ROUND 2 LEADERBOARD
+      </h1>
+      <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 0.25rem;">
+        Ranked by Challenge Progress (Primary) & Lower Completion Time (Secondary).
+      </p>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 0.5rem; background: rgba(255, 208, 0, 0.1); border: 1px solid rgba(255, 208, 0, 0.35); padding: 0.4rem 0.9rem; border-radius: 20px; font-size: 0.85rem; color: var(--primary-gold);">
+      <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--accent-green); box-shadow: 0 0 10px var(--accent-green);"></span>
+      Live Auto-Updating (5s)
+    </div>
+  </div>
+
+  <div style="overflow-x: auto;">
+    <table class="table-cyber">
+      <thead>
+        <tr>
+          <th style="width: 80px;">Rank</th>
+          <th>Team Name</th>
+          <th>Progress</th>
+          <th>Completion Time</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="leaderboard-tbody">
+        {% for row in rankings %}
+          <tr>
+            <td class="{% if row.rank == 1 %}rank-podium-1{% elif row.rank == 2 %}rank-podium-2{% elif row.rank == 3 %}rank-podium-3{% endif %}">
+              {% if row.rank == 1 %}🏆 1{% elif row.rank == 2 %}🥈 2{% elif row.rank == 3 %}🥉 3{% else %}#{{ row.rank }}{% endif %}
+            </td>
+            <td>
+              <strong>{{ row.team_name }}</strong> 
+              <small style="color: var(--text-dim);">({{ row.team_code }})</small>
+            </td>
+            <td>
+              {% if row.current_challenge > 5 %}
+                5/5 (Finish)
+              {% else %}
+                {{ row.current_challenge - 1 }}/5
+              {% endif %}
+            </td>
+            <td style="font-family: var(--font-code);">
+              {{ row.formatted_time }}
+            </td>
+            <td>
+              {% if row.status == 'ACTIVE' %}
+                <span class="badge-status status-active">Active</span>
+              {% elif row.status == 'COMPLETED' %}
+                <span class="badge-status status-completed">Completed</span>
+              {% else %}
+                <span class="badge-status status-waiting">Waiting</span>
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/leaderboard.js') }}"></script>
+{% endblock %}

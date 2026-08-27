@@ -1,0 +1,149 @@
+{% extends 'base.html' %}
+
+{% block title %}Challenge 5 — Problem Solving{% endblock %}
+
+{% block content %}
+<div class="glass-card" style="max-width: 950px; margin: 1rem auto;">
+  
+  <div class="challenge-header">
+    <div class="challenge-title-group">
+      <h2>
+        <span style="color: var(--accent-pink); font-family: var(--font-code);">FINAL CHALLENGE 5</span>
+        <span>— {{ challenge.title }}</span>
+      </h2>
+    </div>
+  </div>
+
+  <p style="color: var(--text-muted); font-size: 1rem; margin-bottom: 1.5rem;">
+    {{ challenge.description }}
+  </p>
+
+  <!-- Problem Specification Card -->
+  <div style="background: rgba(13, 17, 23, 0.8); border: 1px solid var(--code-border); border-radius: var(--radius-md); padding: 1.75rem; margin-bottom: 2rem;">
+    <h3 style="color: var(--primary-cyan); font-size: 1.1rem; margin-bottom: 1rem; font-family: var(--font-code);">
+      📋 Problem Statement
+    </h3>
+    <div style="font-family: var(--font-code); color: #e6edf3; font-size: 1rem; line-height: 1.8; white-space: pre-wrap; margin-bottom: 1.5rem;">
+{{ challenge.data.problem_statement }}
+    </div>
+
+    {% if challenge.data.sample_cases %}
+      <div style="border-top: 1px dashed var(--code-border); padding-top: 1rem; margin-top: 1rem;">
+        <strong style="color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px;">
+          Example Verification:
+        </strong>
+        {% for sample in challenge.data.sample_cases %}
+          <div style="background: rgba(22, 27, 34, 0.8); padding: 0.75rem 1rem; border-radius: var(--radius-sm); margin-top: 0.5rem; font-family: var(--font-code); font-size: 0.9rem;">
+            <div><strong>Input:</strong> {{ sample.input }}</div>
+            <div style="color: var(--accent-green);"><strong>Result:</strong> {{ sample.explanation }}</div>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+
+  <!-- Solution Answer Input Form -->
+  <form id="problem-form" data-challenge-id="{{ challenge.id }}">
+    <div style="margin-bottom: 1.5rem;">
+      <label style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-muted); font-size: 0.9rem; text-transform: uppercase;">
+        Enter Final Calculated Answer
+      </label>
+      <input type="text" id="problem-answer" class="input-cyber" placeholder="e.g. 933" required autocomplete="off" value="{{ saved_draft or '' }}">
+    </div>
+
+    <!-- Feedback Banner -->
+    <div id="feedback-box" class="alert-banner" style="display: none; margin-bottom: 1.5rem;"></div>
+
+    <div style="display: flex; justify-content: flex-end;">
+      <button type="submit" class="btn-cyber" id="btn-submit-problem" style="background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink)); box-shadow: var(--shadow-glow-purple);">
+        🏁 Submit Final Solution ➔
+      </button>
+    </div>
+  </form>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>window.savedDraft = {{ saved_draft | tojson }};</script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const problemForm = document.getElementById('problem-form');
+  const feedbackBox = document.getElementById('feedback-box');
+  const btnSubmit = document.getElementById('btn-submit-problem');
+  const answerInput = document.getElementById('problem-answer');
+
+  if (answerInput && window.savedDraft) {
+    answerInput.value = window.savedDraft;
+  }
+
+  if (answerInput) {
+    answerInput.addEventListener('input', () => {
+      if (window.ArenaDraft) {
+        window.ArenaDraft.save(parseInt(problemForm.dataset.challengeId), answerInput.value);
+      }
+    });
+  }
+
+  if (problemForm) {
+    problemForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const answerVal = document.getElementById('problem-answer').value.trim();
+      if (!answerVal) {
+        showFeedback('Please enter an answer.', 'warning');
+        return;
+      }
+
+      if (window.contestantRoundStatus && window.contestantRoundStatus !== 'ACTIVE') {
+        if (window.checkBroadcast) window.checkBroadcast();
+        return;
+      }
+
+      const challengeId = parseInt(problemForm.dataset.challengeId);
+      btnSubmit.disabled = true;
+      btnSubmit.innerHTML = 'Evaluating...';
+
+      try {
+        const response = await fetch('/api/submit-challenge', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            challenge_id: challengeId,
+            answer: answerVal
+          })
+        });
+
+        const resData = await response.json();
+
+        if (resData.is_correct) {
+          showFeedback('Correct. Round 2 completed.', 'success');
+          setTimeout(() => {
+            window.location.href = resData.redirect_url;
+          }, 1200);
+        } else {
+          if (resData.stopped || resData.message === 'GAME_STOPPED') {
+            if (window.checkBroadcast) window.checkBroadcast();
+          } else {
+            showFeedback(resData.message || 'Incorrect answer. Try again.', 'danger');
+          }
+          btnSubmit.disabled = false;
+          btnSubmit.innerHTML = 'Submit final solution';
+        }
+      } catch (err) {
+        if (window.checkBroadcast) window.checkBroadcast();
+        btnSubmit.disabled = false;
+        btnSubmit.innerHTML = 'Submit final solution';
+      }
+    });
+  }
+
+  function showFeedback(msg, type) {
+    if (!feedbackBox) return;
+    feedbackBox.className = `alert-banner alert-${type}`;
+    feedbackBox.innerHTML = msg;
+    feedbackBox.style.display = 'flex';
+  }
+});
+</script>
+{% endblock %}
