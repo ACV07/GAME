@@ -28,9 +28,9 @@ def view_challenge(challenge_id):
     if team['current_challenge'] > 5:
         return redirect(url_for('challenges.completed'))
 
-    # Route Guard: Prevent teams from skipping ahead or replaying past challenges
-    if challenge_id != team['current_challenge']:
-        flash(f"Redirected to your active challenge ({team['current_challenge']} of 5).", "info")
+    # Route Guard: Prevent teams from skipping ahead beyond unlocked challenges
+    if challenge_id > team['current_challenge']:
+        flash(f"Challenge {challenge_id} is locked. Complete Challenge {team['current_challenge']} first.", "warning")
         return redirect(url_for('challenges.view_challenge', challenge_id=team['current_challenge']))
 
     ch = ChallengeModel.get_by_id(challenge_id)
@@ -47,7 +47,9 @@ def view_challenge(challenge_id):
     template_name = template_map.get(ch['type'], 'challenge_problem.html')
     draft = TeamModel.get_draft(team['id'])
     draft_payload = draft['draft'] if draft and draft.get('challenge_id') == challenge_id else None
-    return render_template(template_name, challenge=ch, team=team, saved_draft=draft_payload)
+    is_read_only = (challenge_id < team['current_challenge'])
+
+    return render_template(template_name, challenge=ch, team=team, saved_draft=draft_payload, is_read_only=is_read_only)
 
 
 @challenges_bp.route('/api/save-draft', methods=['POST'])

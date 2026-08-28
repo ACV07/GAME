@@ -48,9 +48,15 @@
   <!-- Progress Roadmap Nodes -->
   <div class="progress-roadmap">
     {% for i in range(1, 6) %}
-      <div class="step-node {% if i < team.current_challenge %}completed{% elif i == team.current_challenge %}active{% endif %}">
-        {% if i < team.current_challenge %}✓{% else %}{{ i }}{% endif %}
-      </div>
+      {% if i <= team.current_challenge %}
+        <a href="{{ url_for('challenges.view_challenge', challenge_id=i) }}" class="step-node {% if i < team.current_challenge %}completed{% elif i == team.current_challenge %}active{% endif %}" title="Go to Challenge {{ i }}" style="text-decoration: none;">
+          {% if i < team.current_challenge %}✓{% else %}{{ i }}{% endif %}
+        </a>
+      {% else %}
+        <div class="step-node" title="Locked">
+          {{ i }}
+        </div>
+      {% endif %}
     {% endfor %}
   </div>
 

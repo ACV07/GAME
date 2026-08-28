@@ -269,9 +269,11 @@ class Round2ArenaTestCase(unittest.TestCase):
     def test_12_skip_challenge(self):
         """Verify contestants can skip a challenge and advance to the next one (0 points)."""
         EventConfigModel.set_round_status('ACTIVE')
-        self.client.post('/login', data={'team_identifier': 'SKIPPER_TEAM'}, follow_redirects=True)
-        team = TeamModel.get_by_name('SKIPPER_TEAM')
-        self.assertEqual(team['current_challenge'], 1)
+        team_id = TeamModel.create_team('SKP2026', 'Skipper Team')
+        team = TeamModel.get_by_id(team_id)
+        SessionModel.force_unlock_team(team_id)
+        self.client.get('/logout')
+        self.client.post('/login', data={'team_identifier': team['team_code']}, follow_redirects=True)
 
         # Skip Challenge 1
         res = self.client.post('/api/skip-challenge', json={'challenge_id': 1})

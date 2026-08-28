@@ -5,6 +5,15 @@
 {% block content %}
 <div class="glass-card" style="max-width: 950px; margin: 1rem auto;">
   
+  {% if is_read_only %}
+    <div class="alert-banner alert-info" style="margin-bottom: 1.25rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+      <span>ℹ️ Reviewing Challenge {{ challenge.id }} (Read-Only Mode)</span>
+      <a href="{{ url_for('challenges.view_challenge', challenge_id=team.current_challenge) }}" class="btn-cyber" style="padding: 0.35rem 0.85rem; font-size: 0.8rem; text-decoration: none;">
+        Go to Active Challenge {{ team.current_challenge }} ➔
+      </a>
+    </div>
+  {% endif %}
+
   <div class="challenge-header">
     <div class="challenge-title-group">
       <h2>
@@ -55,13 +64,29 @@
     <div id="feedback-box" class="alert-banner" style="display: none; margin-bottom: 1.5rem;"></div>
 
     <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
-      <button type="button" class="btn-secondary" id="btn-skip-challenge" style="border-color: rgba(245, 158, 11, 0.4); color: #f59e0b;">
-        ⏭️ Skip Challenge
-      </button>
+      <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+        {% if challenge.id > 1 %}
+          <a href="{{ url_for('challenges.view_challenge', challenge_id=challenge.id - 1) }}" class="btn-secondary" style="text-decoration: none;">
+            ◀️ Previous Challenge
+          </a>
+        {% endif %}
 
-      <button type="submit" class="btn-cyber" id="btn-submit-problem" style="background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink)); box-shadow: var(--shadow-glow-purple);">
-        🏁 Submit Final Solution ➔
-      </button>
+        {% if not is_read_only %}
+          <button type="button" class="btn-secondary" id="btn-skip-challenge" style="border-color: rgba(245, 158, 11, 0.4); color: #f59e0b;">
+            ⏭️ Skip Challenge
+          </button>
+        {% endif %}
+      </div>
+
+      {% if not is_read_only %}
+        <button type="submit" class="btn-cyber" id="btn-submit-problem" style="background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink)); box-shadow: var(--shadow-glow-purple);">
+          🏁 Submit Final Solution ➔
+        </button>
+      {% else %}
+        <a href="{{ url_for('challenges.view_challenge', challenge_id=challenge.id + 1 if challenge.id < team.current_challenge else team.current_challenge) }}" class="btn-cyber" style="text-decoration: none;">
+          Next Challenge ▶️
+        </a>
+      {% endif %}
     </div>
   </form>
 
