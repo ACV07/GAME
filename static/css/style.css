@@ -887,163 +887,199 @@ footer {
 }
 
 /* ---------- Mobile Responsive Styles ---------- */
+html, body {
+  overflow-x: hidden !important;
+  width: 100% !important;
+  max-width: 100vw !important;
+}
+
 @media (max-width: 768px) {
-  .admin-header-bar {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  
-  .admin-header-actions {
-    width: 100%;
-    justify-content: flex-start;
-    margin-top: 0.4rem;
-  }
-
-  .control-actions {
-    width: 100%;
-  }
-
-  .control-actions .btn-cyber {
-    flex: 1 1 45%;
-    text-align: center;
-    padding: 0.6rem 0.5rem;
-    font-size: 0.85rem;
-  }
-
-  .nav-status {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    overflow-x: auto;
-    padding-bottom: 0.25rem;
-    -webkit-overflow-scrolling: touch;
-    flex-wrap: nowrap !important;
-    gap: 0.4rem;
-  }
-  
-  .nav-status .btn-nav {
-    padding: 0.35rem 0.55rem;
-    font-size: 0.75rem;
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-
-  .navbar {
-    padding: 0.65rem 1rem;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-  }
-  
-  .nav-brand {
-    font-size: 1.05rem;
-  }
-
-  .nav-controls {
-    gap: 0.4rem;
-    flex-wrap: wrap;
-  }
-
   .main-container {
-    padding: 1rem 0.75rem;
+    padding: 0.65rem 0.4rem !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
   }
 
   .glass-card {
-    padding: 1.25rem 1rem;
-    margin: 1rem auto;
+    padding: 1.15rem 0.75rem !important;
+    margin: 0.5rem auto !important;
+    border-radius: 12px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .admin-header-bar {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 0.75rem !important;
+    margin-bottom: 1.25rem !important;
+    padding-bottom: 1rem !important;
+  }
+
+  .admin-header-title {
+    font-size: clamp(1.25rem, 5.5vw, 1.75rem) !important;
+    line-height: 1.25 !important;
+    margin-top: 0.35rem !important;
+    word-break: break-word;
+  }
+
+  .admin-header-actions {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
+    width: 100% !important;
+    margin-top: 0.35rem !important;
+  }
+
+  .admin-header-actions a,
+  .admin-header-actions button {
+    width: 100% !important;
+    text-align: center !important;
+    justify-content: center !important;
+    display: flex !important;
+    align-items: center !important;
+    padding: 0.6rem 0.3rem !important;
+    font-size: 0.78rem !important;
+    box-sizing: border-box !important;
+    white-space: nowrap !important;
+  }
+
+  .control-actions {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
+
+  .control-actions .btn-cyber {
+    width: 100% !important;
+    padding: 0.65rem 0.4rem !important;
+    font-size: 0.85rem !important;
+    text-align: center !important;
+    justify-content: center !important;
+  }
+
+  .nav-status {
+    width: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    overflow-x: auto !important;
+    padding-bottom: 0.25rem !important;
+    -webkit-overflow-scrolling: touch !important;
+    flex-wrap: nowrap !important;
+    gap: 0.35rem !important;
+  }
+  
+  .nav-status .btn-nav,
+  .nav-status .badge-status {
+    padding: 0.35rem 0.55rem !important;
+    font-size: 0.75rem !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+  }
+
+  .navbar {
+    padding: 0.5rem 0.75rem !important;
+    flex-wrap: wrap !important;
+    gap: 0.4rem !important;
+  }
+  
+  .nav-brand {
+    font-size: 1rem !important;
   }
 
   .admin-grid {
-    grid-template-columns: 1fr !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 1.25rem !important;
   }
 
   .game-lock-card {
-    padding: 2rem 1.25rem;
-    width: 94%;
+    padding: 1.75rem 1rem !important;
+    width: 95% !important;
   }
 
   .game-lock-word {
-    font-size: clamp(2.5rem, 11vw, 4rem);
+    font-size: clamp(2.2rem, 10vw, 3.5rem) !important;
   }
 
   .game-lock-kicker {
-    font-size: 0.85rem;
+    font-size: 0.8rem !important;
   }
 
   .game-lock-copy {
-    font-size: 0.85rem;
-    margin: 0.85rem auto 1.25rem auto;
+    font-size: 0.8rem !important;
+    margin: 0.75rem auto 1rem auto !important;
   }
 
   .game-lock-badge {
-    padding: 0.75rem 1.25rem;
-    font-size: 0.82rem;
+    padding: 0.65rem 1rem !important;
+    font-size: 0.78rem !important;
   }
 
   .options-bank {
-    gap: 0.5rem;
+    gap: 0.4rem !important;
   }
 
   .option-chip {
-    padding: 0.6rem 0.9rem;
-    font-size: 0.85rem;
-    min-height: 42px;
-    display: inline-flex;
-    align-items: center;
+    padding: 0.55rem 0.8rem !important;
+    font-size: 0.8rem !important;
+    min-height: 40px !important;
+    display: inline-flex !important;
+    align-items: center !important;
   }
 
   .blank-slot {
-    min-width: 75px;
-    height: 34px;
-    font-size: 0.85rem;
+    min-width: 70px !important;
+    height: 32px !important;
+    font-size: 0.8rem !important;
   }
 
   .table-responsive {
-    width: 100%;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
+    width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    border-radius: 8px !important;
+    border: 1px solid var(--code-border) !important;
   }
 
   .table-responsive table {
-    min-width: 640px;
+    min-width: 560px !important;
   }
 
   .btn-cyber, .btn-secondary {
-    padding: 0.65rem 1.25rem;
-    font-size: 0.9rem;
+    padding: 0.6rem 1rem !important;
+    font-size: 0.85rem !important;
   }
 }
 
 @media (max-width: 480px) {
   .navbar {
-    padding: 0.5rem 0.75rem;
+    padding: 0.4rem 0.6rem !important;
   }
 
   .nav-brand .brand-badge {
-    display: none;
+    display: none !important;
   }
 
-  .team-pill {
-    padding: 0.25rem 0.5rem;
-    font-size: 0.75rem;
-  }
-
-  .timer-pill {
-    padding: 0.25rem 0.5rem;
-    font-size: 0.75rem;
+  .team-pill, .timer-pill {
+    padding: 0.2rem 0.4rem !important;
+    font-size: 0.7rem !important;
   }
 
   .glass-card {
-    padding: 1rem 0.85rem;
+    padding: 1rem 0.65rem !important;
   }
 
   .progress-roadmap {
-    gap: 0.35rem;
+    gap: 0.25rem !important;
   }
 
   .step-node {
-    width: 32px;
-    height: 32px;
-    font-size: 0.8rem;
+    width: 30px !important;
+    height: 30px !important;
+    font-size: 0.75rem !important;
   }
 }
