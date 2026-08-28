@@ -79,11 +79,11 @@
       </div>
 
       {% if not is_read_only %}
-        <button type="submit" class="btn-cyber" id="btn-submit-problem" style="background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink)); box-shadow: var(--shadow-glow-purple);">
+        <button type="submit" class="btn-cyber" id="btn-submit-problem" style="margin-left: auto; background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink)); box-shadow: var(--shadow-glow-purple);">
           🏁 Submit Final Solution ➔
         </button>
       {% else %}
-        <a href="{{ url_for('challenges.view_challenge', challenge_id=challenge.id + 1 if challenge.id < team.current_challenge else team.current_challenge) }}" class="btn-cyber" style="text-decoration: none;">
+        <a href="{{ url_for('challenges.view_challenge', challenge_id=challenge.id + 1 if challenge.id < team.current_challenge else team.current_challenge) }}" class="btn-cyber" style="margin-left: auto; text-decoration: none;">
           Next Challenge ▶️
         </a>
       {% endif %}
