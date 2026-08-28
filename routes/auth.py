@@ -18,19 +18,28 @@ def login():
 
 @auth_bp.route('/login', methods=['POST'])
 def team_login():
-    """Handles team registration by name or re-login with Team Code/Name."""
+    """Handles team registration by new Team Name or re-login with Unique Team Passcode."""
     identifier = request.form.get('team_identifier', '').strip() or request.form.get('team_code', '').strip()
     if not identifier:
         flash('Please enter a Team Name or Unique Team Code.', 'danger')
         return redirect(url_for('auth.login'))
 
-    # 1. First check if identifier is an existing Team Code
+    # 1. First check if identifier is a valid existing Unique Team Code/Passcode
     team = TeamModel.get_by_code(identifier)
     is_new = False
     
-    # 2. If not a code, get or create team by Team Name automatically
+    # 2. If not a valid passcode, check if identifier matches an already registered Team Name
     if not team:
-        team, is_new = TeamModel.get_or_create_by_name(identifier)
+        existing_team = TeamModel.get_by_name(identifier)
+        if existing_team:
+            flash(f"⚠️ Team Name '{existing_team['team_name']}' is already registered! Please enter your Unique Team Passcode to log in.", 'danger')
+            return redirect(url_for('auth.login'))
+            
+        # 3. Team Name is available — register new team!
+        code = TeamModel.generate_random_team_code(identifier)
+        team_id = TeamModel.create_team(code, identifier)
+        team = TeamModel.get_by_id(team_id)
+        is_new = True
 
     user_agent = request.headers.get('User-Agent', 'Browser Client')
     session_token, err = SessionModel.create_session(team['id'], device_info=user_agent)
@@ -45,7 +54,7 @@ def team_login():
     session['team_name'] = team['team_name']
 
     if is_new:
-        flash(f"🎉 Team registered successfully! Your Unique Passcode is: {team['team_code']}. Save this code to log back in if needed!", "success")
+        flash(f"🎉 Team registered successfully! Your Unique Passcode is: {team['team_code']}. Save this passcode to log back in if needed!", "success")
 
     return redirect(url_for('auth.lobby'))
 

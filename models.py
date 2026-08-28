@@ -166,6 +166,13 @@ class TeamModel:
         return dict(team) if team else None
 
     @staticmethod
+    def get_by_name(team_name):
+        conn = get_db_connection()
+        team = conn.execute("SELECT * FROM teams WHERE LOWER(team_name) = LOWER(?)", (team_name.strip(),)).fetchone()
+        conn.close()
+        return dict(team) if team else None
+
+    @staticmethod
     def get_by_id(team_id):
         conn = get_db_connection()
         team = conn.execute("SELECT * FROM teams WHERE id = ?", (team_id,)).fetchone()

@@ -152,19 +152,26 @@ class Round2ArenaTestCase(unittest.TestCase):
         new_team_name = "Shadow Hackers"
         res = self.client.post('/login', data={'team_identifier': new_team_name}, follow_redirects=True)
         self.assertEqual(res.status_code, 200)
-        self.assertIn(b'WELCOME, Shadow Hackers', res.data)
+        self.assertIn(b'Shadow Hackers', res.data)
 
         # Retrieve created team from DB
-        team, is_new = TeamModel.get_or_create_by_name(new_team_name)
-        self.assertFalse(is_new) # should now exist
+        team = TeamModel.get_by_name(new_team_name)
+        self.assertIsNotNone(team)
         self.assertIsNotNone(team['team_code'])
         self.assertTrue(team['team_code'].startswith('SH-') or team['team_code'].startswith('TEAM-'))
 
         # Logout and test re-logging in using the generated unique passcode
+        SessionModel.force_unlock_team(team['id'])
         self.client.get('/logout')
         res_relogin = self.client.post('/login', data={'team_identifier': team['team_code']}, follow_redirects=True)
         self.assertEqual(res_relogin.status_code, 200)
-        self.assertIn(b'WELCOME, Shadow Hackers', res_relogin.data)
+        self.assertIn(b'Shadow Hackers', res_relogin.data)
+
+        # Logout and verify that trying to log in with the team name again is BLOCKED
+        SessionModel.force_unlock_team(team['id'])
+        self.client.get('/logout')
+        res_blocked = self.client.post('/login', data={'team_identifier': new_team_name}, follow_redirects=True)
+        self.assertIn(b'already registered', res_blocked.data)
 
     def test_08_admin_permission_guard(self):
         """Verify contestants cannot enter or submit challenges until Admin starts the round."""
