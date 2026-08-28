@@ -118,7 +118,7 @@ def submit_challenge():
         'next_challenge': next_challenge,
         'completed_all': next_challenge > 5,
         'redirect_url': redirect_url,
-        'message': "Answer submitted." if not is_correct else "Correct answer!"
+        'message': "Submitted. Advancing to next challenge..."
     })
 
 @challenges_bp.route('/api/skip-challenge', methods=['POST'])

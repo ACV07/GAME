@@ -65,12 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const resData = await response.json();
 
         if (resData.success) {
-          const msg = resData.is_correct
-            ? `🎉 Correct! Found error on line ${selectedLineNumber}. Advancing to next challenge...`
-            : `⚠️ Answer submitted. Advancing to next challenge...`;
-          const alertType = resData.is_correct ? 'success' : 'warning';
-
-          showFeedback(msg, alertType);
+          showFeedback('✅ Submitted. Advancing to next challenge...', 'info');
           setTimeout(() => {
             window.location.href = resData.redirect_url;
           }, 1200);

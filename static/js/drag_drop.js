@@ -148,12 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const resData = await response.json();
 
         if (resData.success) {
-          const msg = resData.is_correct
-            ? `🎉 Correct! Advancing to next challenge...`
-            : `⚠️ Answer submitted. Advancing to next challenge...`;
-          const alertType = resData.is_correct ? 'success' : 'warning';
-
-          ArenaFeedback.show(feedbackBox, msg, alertType);
+          ArenaFeedback.show(feedbackBox, '✅ Submitted. Advancing to next challenge...', 'info');
           setTimeout(() => {
             window.location.href = resData.redirect_url;
           }, SUCCESS_REDIRECT_DELAY_MS);
