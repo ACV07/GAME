@@ -41,7 +41,7 @@
 }
 
 /* =========================================================
-   ROUND 2 CHALLENGE ARENA — BLACK & GOLD THEME
+   ROUND 2 CHALLENGE ARENA — BLACK & GOLD THEME & ANIMATIONS
    ========================================================= */
 
 :root {
@@ -87,6 +87,43 @@
   --shadow-card:        0 8px 32px rgba(0, 0, 0, 0.55);
 }
 
+/* ---------- Page Entrance & Ambient Animations ---------- */
+@keyframes ambient-pulse {
+  0%, 100% { background-position: 50% -10%, 90% 90%; }
+  50% { background-position: 50% -5%, 85% 85%; }
+}
+
+@keyframes page-fade-in-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes navbar-slide-down {
+  from { opacity: 0; transform: translateY(-100%); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes status-live-pulse {
+  0%, 100% { box-shadow: 0 0 8px rgba(53, 208, 127, 0.3); }
+  50% { box-shadow: 0 0 20px rgba(53, 208, 127, 0.7); }
+}
+
+@keyframes podium-shine {
+  0%, 100% { text-shadow: 0 0 8px rgba(255, 226, 138, 0.4); }
+  50% { text-shadow: 0 0 22px rgba(255, 226, 138, 0.95); }
+}
+
+@keyframes slot-fill-bounce {
+  0% { transform: scale(0.85); }
+  60% { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
+@keyframes card-glow-pulse {
+  0%, 100% { border-color: var(--code-border); }
+  50% { border-color: rgba(212, 175, 55, 0.45); }
+}
+
 /* ---------- Base ---------- */
 * { box-sizing: border-box; }
 
@@ -104,6 +141,7 @@ body {
     radial-gradient(ellipse 60% 40% at 90% 90%, rgba(212, 175, 55, 0.06), transparent),
     var(--bg-black);
   background-attachment: fixed;
+  animation: ambient-pulse 12s ease-in-out infinite;
   line-height: 1.5;
   min-height: 100vh;
   display: flex;
@@ -131,6 +169,7 @@ code {
   top: 0;
   z-index: 100;
   backdrop-filter: blur(10px);
+  animation: navbar-slide-down 0.4s ease-out forwards;
 }
 
 .brand-logo {
@@ -153,6 +192,11 @@ code {
   background: linear-gradient(135deg, var(--gold-bright), var(--primary-gold));
   box-shadow: 0 0 18px rgba(212, 175, 55, 0.4);
   letter-spacing: -0.5px;
+  transition: transform 0.25s ease;
+}
+
+.brand-logo:hover .brand-mark {
+  transform: rotate(6deg) scale(1.08);
 }
 
 .brand-badge {
@@ -187,6 +231,7 @@ code {
   border: 1px solid var(--primary-gold);
   padding: 0.35rem 0.9rem;
   border-radius: 20px;
+  box-shadow: 0 0 12px rgba(212, 175, 55, 0.2);
 }
 
 /* ---------- Buttons ---------- */
@@ -203,8 +248,26 @@ code {
   border: none;
   cursor: pointer;
   text-decoration: none;
-  transition: var(--transition-fast);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
   letter-spacing: 0.2px;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-cyber::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(60deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+  transform: rotate(30deg) translateX(-100%);
+  transition: transform 0.6s ease;
+}
+
+.btn-cyber:hover::after {
+  transform: rotate(30deg) translateX(100%);
 }
 
 .btn-cyber {
@@ -214,12 +277,12 @@ code {
 }
 
 .btn-cyber:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 26px rgba(212, 175, 55, 0.42);
-  filter: brightness(1.05);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 28px rgba(212, 175, 55, 0.45);
+  filter: brightness(1.08);
 }
 
-.btn-cyber:active { transform: translateY(0); }
+.btn-cyber:active { transform: translateY(0) scale(0.98); }
 
 .btn-cyber:disabled {
   opacity: 0.55;
@@ -238,6 +301,7 @@ code {
   background: rgba(212, 175, 55, 0.08);
   border-color: var(--primary-gold);
   color: var(--text-gold);
+  transform: translateY(-1px);
 }
 
 .btn-nav {
@@ -296,7 +360,7 @@ code {
 
 .input-cyber:focus {
   border-color: var(--primary-gold);
-  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.25);
 }
 
 /* ---------- Cards / Layout ---------- */
@@ -306,6 +370,7 @@ code {
   margin: 0 auto;
   padding: 0 1.5rem;
   flex: 1;
+  animation: page-fade-in-up 0.45s ease-out forwards;
 }
 
 .glass-card {
@@ -314,7 +379,14 @@ code {
   border-radius: var(--radius-lg);
   padding: 2rem;
   box-shadow: var(--shadow-card);
-  backdrop-filter: blur(6px);
+  backdrop-filter: blur(8px);
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  animation: page-fade-in-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.glass-card:hover {
+  border-color: rgba(212, 175, 55, 0.35);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.7), 0 0 20px rgba(212, 175, 55, 0.12);
 }
 
 .admin-grid {
@@ -343,6 +415,7 @@ code {
   background: rgba(53, 208, 127, 0.12);
   color: var(--accent-green);
   border-color: rgba(53, 208, 127, 0.35);
+  animation: status-live-pulse 2.2s infinite ease-in-out;
 }
 
 .status-completed {
@@ -383,6 +456,7 @@ code {
   font-size: 0.9rem;
   margin-bottom: 1rem;
   border: 1px solid transparent;
+  animation: page-fade-in-up 0.3s ease-out forwards;
 }
 
 .alert-warning {
@@ -431,11 +505,12 @@ code {
   padding: 0.85rem 1rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   color: var(--text-main);
+  transition: background 0.2s ease;
 }
 
-.table-cyber tbody tr:hover { background: rgba(212, 175, 55, 0.04); }
+.table-cyber tbody tr:hover td { background: rgba(212, 175, 55, 0.06); }
 
-.rank-podium-1 { color: var(--gold-bright); font-weight: 800; font-size: 1.1rem; }
+.rank-podium-1 { color: var(--gold-bright); font-weight: 800; font-size: 1.1rem; animation: podium-shine 2.5s infinite ease-in-out; }
 .rank-podium-2 { color: #d9d9d9; font-weight: 800; }
 .rank-podium-3 { color: #c98a4b; font-weight: 800; }
 
@@ -467,6 +542,7 @@ code {
   border: 2px solid rgba(212, 175, 55, 0.3);
   border-radius: var(--radius-lg);
   box-shadow: 0 0 60px rgba(0, 0, 0, 0.9), 0 0 30px rgba(212, 175, 55, 0.15);
+  animation: page-fade-in-up 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .game-lock-kicker {
@@ -544,6 +620,11 @@ body.player-input-locked { overflow: hidden; }
   background: rgba(255, 255, 255, 0.04);
   border: 2px solid var(--code-border);
   position: relative;
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.step-node:hover {
+  transform: scale(1.1);
 }
 
 .step-node:not(:last-child)::after {
@@ -592,6 +673,12 @@ body.player-input-locked { overflow: hidden; }
   border-radius: var(--radius-md);
   overflow: hidden;
   margin-bottom: 1.5rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.code-editor-frame:hover {
+  border-color: rgba(212, 175, 55, 0.35);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
 }
 
 .editor-titlebar {
@@ -637,11 +724,13 @@ body.player-input-locked { overflow: hidden; }
   background: rgba(212, 175, 55, 0.08);
   color: var(--primary-gold);
   font-weight: 700;
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
 }
 
 .blank-slot.filled {
   border-style: solid;
   background: rgba(212, 175, 55, 0.18);
+  animation: slot-fill-bounce 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 /* ---------- Error line challenge ---------- */
@@ -651,16 +740,20 @@ body.player-input-locked { overflow: hidden; }
   padding: 0.4rem 1rem;
   border-radius: var(--radius-sm);
   cursor: pointer;
-  transition: var(--transition-fast);
+  transition: background 0.2s ease, transform 0.15s ease, border-color 0.2s ease;
   user-select: none;
 }
 
-.code-line-item:hover { background: rgba(212, 175, 55, 0.08); }
+.code-line-item:hover {
+  background: rgba(212, 175, 55, 0.1);
+  transform: translateX(4px);
+}
 
 .code-line-item.selected-error-line {
-  background: rgba(255, 77, 79, 0.15);
+  background: rgba(255, 77, 79, 0.18);
   border-left: 4px solid var(--accent-red);
-  box-shadow: 0 0 15px rgba(255, 77, 79, 0.2);
+  box-shadow: 0 0 18px rgba(255, 77, 79, 0.3);
+  transform: translateX(6px);
 }
 
 .line-num {
@@ -703,15 +796,16 @@ body.player-input-locked { overflow: hidden; }
   font-size: 0.85rem;
   font-weight: 600;
   cursor: grab;
-  transition: var(--transition-fast);
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease, background 0.2s ease;
 }
 
 .option-chip:hover {
-  background: rgba(212, 175, 55, 0.2);
-  transform: translateY(-2px);
+  background: rgba(212, 175, 55, 0.22);
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.35);
 }
 
-.option-chip.used { opacity: 0.35; cursor: not-allowed; }
+.option-chip.used { opacity: 0.35; cursor: not-allowed; transform: none; box-shadow: none; }
 
 /* ---------- Footer ---------- */
 footer {
