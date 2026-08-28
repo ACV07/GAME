@@ -846,3 +846,119 @@ footer {
   border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb:hover { background: rgba(249, 115, 22, 0.6); }
+
+/* ---------- Mobile Responsive Styles ---------- */
+@media (max-width: 768px) {
+  .navbar {
+    padding: 0.65rem 1rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  
+  .nav-brand {
+    font-size: 1.05rem;
+  }
+
+  .nav-controls {
+    gap: 0.4rem;
+    flex-wrap: wrap;
+  }
+
+  .main-container {
+    padding: 1rem 0.75rem;
+  }
+
+  .glass-card {
+    padding: 1.25rem 1rem;
+    margin: 1rem auto;
+  }
+
+  .admin-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .game-lock-card {
+    padding: 2rem 1.25rem;
+    width: 94%;
+  }
+
+  .game-lock-word {
+    font-size: clamp(2.5rem, 11vw, 4rem);
+  }
+
+  .game-lock-kicker {
+    font-size: 0.85rem;
+  }
+
+  .game-lock-copy {
+    font-size: 0.85rem;
+    margin: 0.85rem auto 1.25rem auto;
+  }
+
+  .game-lock-badge {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.82rem;
+  }
+
+  .options-bank {
+    gap: 0.5rem;
+  }
+
+  .option-chip {
+    padding: 0.6rem 0.9rem;
+    font-size: 0.85rem;
+    min-height: 42px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .blank-slot {
+    min-width: 75px;
+    height: 34px;
+    font-size: 0.85rem;
+  }
+
+  .table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .btn-cyber, .btn-secondary {
+    padding: 0.65rem 1.25rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar {
+    padding: 0.5rem 0.75rem;
+  }
+
+  .nav-brand .brand-badge {
+    display: none;
+  }
+
+  .team-pill {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+  }
+
+  .timer-pill {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+  }
+
+  .glass-card {
+    padding: 1rem 0.85rem;
+  }
+
+  .progress-roadmap {
+    gap: 0.35rem;
+  }
+
+  .step-node {
+    width: 32px;
+    height: 32px;
+    font-size: 0.8rem;
+  }
+}
