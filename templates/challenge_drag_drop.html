@@ -83,8 +83,8 @@
     </div>
 
     {% if not is_read_only %}
-      <form id="challenge-form" data-challenge-id="{{ challenge.id }}" class="btn-submit-action" style="margin-left: auto;">
-        <button type="submit" class="btn-cyber" id="btn-submit">
+      <form id="challenge-form" data-challenge-id="{{ challenge.id }}" class="btn-submit-action" style="margin-left: auto; display: flex; justify-content: flex-end;">
+        <button type="submit" class="btn-cyber" id="btn-submit" style="margin-left: auto;">
           Submit Code Answer ➔
         </button>
       </form>

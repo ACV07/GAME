@@ -1066,8 +1066,17 @@ html, body {
 
   .challenge-actions-bar .btn-submit-action,
   .challenge-actions-bar form,
+  .challenge-actions-bar form.btn-submit-action,
   .challenge-actions-bar > .btn-cyber,
   .challenge-actions-bar > a.btn-cyber {
+    margin-left: auto !important;
+    display: flex !important;
+    justify-content: flex-end !important;
+    text-align: right !important;
+  }
+
+  .challenge-actions-bar form.btn-submit-action button,
+  .challenge-actions-bar button.btn-submit-action {
     margin-left: auto !important;
   }
 
