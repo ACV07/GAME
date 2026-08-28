@@ -23,13 +23,16 @@
     </a>
 
     <div class="nav-status">
-      <div id="contestant-timer-widget" class="timer-chip" style="display: none;">
-        <span id="contestant-timer-clock">00:00</span>
-      </div>
-
       {% set is_admin_page = request.path.startswith('/admin') %}
+      {% set is_auth_page = request.path in ['/', '/login', '/admin/login'] %}
 
-      {% if session.get('team_name') and not is_admin_page %}
+      {% if not is_auth_page and not is_admin_page %}
+        <div id="contestant-timer-widget" class="timer-chip" style="display: none;">
+          <span id="contestant-timer-clock">00:00</span>
+        </div>
+      {% endif %}
+
+      {% if session.get('team_name') and not is_admin_page and not is_auth_page %}
         <div class="team-badge">{{ session.get('team_name') }}</div>
         <a href="{{ url_for('auth.logout') }}" class="btn-secondary btn-nav">Logout</a>
       {% elif is_admin_page and session.get('is_admin') %}
