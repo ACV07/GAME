@@ -187,20 +187,15 @@
       const s = contestantRemainingSeconds % 60;
       const timeStr = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
 
+      clockSpan.textContent = timeStr;
+
       if (contestantRoundStatus === 'PAUSED') {
-        clockSpan.textContent = 'PAUSED ' + timeStr;
         if (timerWidget) timerWidget.style.borderColor = '#f59e0b';
       } else if (contestantRoundStatus === 'STOPPED') {
-        clockSpan.textContent = 'STOPPED ' + timeStr;
         if (timerWidget) timerWidget.style.borderColor = '#ef4444';
-      } else if (contestantRoundStatus === 'NOT_STARTED') {
-        clockSpan.textContent = 'STANDBY ' + timeStr;
-        if (timerWidget) timerWidget.style.borderColor = 'var(--code-border)';
       } else if (contestantRoundStatus === 'ENDED') {
-        clockSpan.textContent = 'ENDED';
         if (timerWidget) timerWidget.style.borderColor = '#ef4444';
       } else {
-        clockSpan.textContent = timeStr;
         if (timerWidget) timerWidget.style.borderColor = 'var(--primary-gold)';
       }
     }
