@@ -27,17 +27,17 @@
         <span id="contestant-timer-clock">00:00</span>
       </div>
 
-      {% if session.get('team_name') %}
+      {% set is_admin_page = request.path.startswith('/admin') %}
+
+      {% if session.get('team_name') and not is_admin_page %}
         <div class="team-badge">{{ session.get('team_name') }}</div>
         <a href="{{ url_for('auth.logout') }}" class="btn-secondary btn-nav">Logout</a>
-      {% elif session.get('is_admin') %}
+      {% elif is_admin_page and session.get('is_admin') %}
         <span class="badge-status status-active">Organizer</span>
         <a href="{{ url_for('admin.control_center') }}" class="btn-secondary btn-nav">Control</a>
         <a href="{{ url_for('admin.dashboard') }}" class="btn-secondary btn-nav">Teams</a>
         <a href="{{ url_for('leaderboard.view_leaderboard') }}" class="btn-secondary btn-nav">Leaderboard</a>
         <a href="{{ url_for('auth.logout') }}" class="btn-secondary btn-nav">Logout</a>
-      {% else %}
-        <a href="{{ url_for('auth.admin_login') }}" class="btn-secondary btn-nav">Admin</a>
       {% endif %}
     </div>
   </nav>
