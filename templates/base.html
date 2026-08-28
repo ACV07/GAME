@@ -52,21 +52,28 @@
   {% if show_player_lock %}
     <div id="game-stopped-overlay" class="game-lock-overlay{% if round_status and round_status != 'ACTIVE' %} is-visible{% endif %}" aria-live="assertive">
       <div id="overlay-card" class="game-lock-card state-{{ (round_status or 'NOT_STARTED')|lower }}">
-        <p class="game-lock-kicker">Administrator control</p>
         <h1 id="overlay-title-text" class="game-lock-word">
           {% if round_status == 'ENDED' %}ENDED{% elif round_status == 'STOPPED' %}STOPPED{% elif round_status == 'PAUSED' %}PAUSED{% else %}STANDBY{% endif %}
         </h1>
+        <div id="overlay-kicker-text" class="game-lock-kicker">
+          {% if round_status == 'ENDED' %}THE ROUND HAS CONCLUDED{% elif round_status == 'STOPPED' %}THE EVENT ADMIN HAS STOPPED THE GAME{% elif round_status == 'PAUSED' %}THE EVENT ADMIN HAS PAUSED THE GAME{% else %}WAITING FOR ORGANIZER TO START ROUND{% endif %}
+        </div>
         <p id="game-stopped-subtitle" class="game-lock-copy">
           {% if round_status == 'ENDED' %}
-            The round is closed. Submissions are locked.
+            The time limit has expired. Submissions are now closed. ⏱️
           {% elif round_status == 'STOPPED' %}
-            Play is stopped. Your progress is saved and will return when the round resumes.
+            Play is temporarily stopped by the event administrator. Your answers stay saved. ⏱️
           {% elif round_status == 'PAUSED' %}
-            Play is paused. Your progress is saved and will return when the round resumes.
+            A tactical pause has been called. The questions and progress will resume once the game continues. ⏱️
           {% else %}
-            Standby — waiting for the organizer to start the round.
+            Standby — waiting for the event administrator to start the round. ⏱️
           {% endif %}
         </p>
+        <div style="margin-top: 1.5rem;">
+          <div id="overlay-button-badge" class="game-lock-badge">
+            {% if round_status == 'ENDED' %}ROUND CLOSED{% elif round_status == 'STANDBY' or round_status == 'NOT_STARTED' %}WAIT FOR ADMIN TO START ROUND{% else %}WAIT FOR GAME TO RESUME{% endif %}
+          </div>
+        </div>
       </div>
     </div>
   {% endif %}
@@ -124,17 +131,20 @@
 
       if (locked) {
         const copy = {
-          ENDED: ['ENDED', 'The round is closed. Submissions are locked.'],
-          STOPPED: ['STOPPED', 'Play is stopped. Your progress is saved and will return when the round resumes.'],
-          PAUSED: ['PAUSED', 'Play is paused. Your progress is saved and will return when the round resumes.'],
-          NOT_STARTED: ['STANDBY', 'Standby — waiting for the organizer to start the round.']
+          ENDED: ['ENDED', 'THE ROUND HAS CONCLUDED', 'The time limit has expired. Submissions are now closed. ⏱️', 'ROUND CLOSED'],
+          STOPPED: ['STOPPED', 'THE EVENT ADMIN HAS STOPPED THE GAME', 'Play is temporarily stopped by the event administrator. Your answers stay saved. ⏱️', 'WAIT FOR GAME TO RESUME'],
+          PAUSED: ['PAUSED', 'THE EVENT ADMIN HAS PAUSED THE GAME', 'A tactical pause has been called. The questions and progress will resume once the game continues. ⏱️', 'WAIT FOR GAME TO RESUME'],
+          NOT_STARTED: ['STANDBY', 'WAITING FOR ORGANIZER TO START ROUND', 'The round has not started yet. Please standby for the event administrator to launch. ⏱️', 'WAIT FOR ADMIN TO START ROUND']
         };
         const pair = copy[status] || copy.NOT_STARTED;
         if (overlayTitleText) overlayTitleText.textContent = pair[0];
-        if (overlaySubtitle) overlaySubtitle.textContent = pair[1];
+        const kickerEl = document.getElementById('overlay-kicker-text');
+        if (kickerEl) kickerEl.textContent = pair[1];
+        if (overlaySubtitle) overlaySubtitle.textContent = pair[2];
+        const badgeEl = document.getElementById('overlay-button-badge');
+        if (badgeEl) badgeEl.textContent = pair[3];
         if (overlayCard) overlayCard.className = 'game-lock-card state-' + String(status || 'NOT_STARTED').toLowerCase();
         overlay.classList.add('is-visible');
-        setPlayerInputLocked(true);
       } else {
         overlay.classList.remove('is-visible');
         setPlayerInputLocked(false);

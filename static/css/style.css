@@ -509,7 +509,7 @@ code {
 .rank-podium-2 { color: #E4E4E7; font-weight: 800; }
 .rank-podium-3 { color: #A1A1AA; font-weight: 800; }
 
-/* ---------- Game lock overlay ---------- */
+/* ---------- Game lock overlay (Esports Tournament Design) ---------- */
 .game-lock-overlay {
   position: fixed;
   inset: 0;
@@ -517,9 +517,9 @@ code {
   display: none;
   align-items: center;
   justify-content: center;
-  background: rgba(11, 11, 15, 0.96);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  background: rgba(11, 11, 15, 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   touch-action: none;
   pointer-events: auto;
   user-select: none;
@@ -529,66 +529,92 @@ code {
 
 .game-lock-card {
   text-align: center;
-  padding: 3rem 2rem;
-  max-width: 800px;
+  padding: 2.75rem 2.25rem;
+  max-width: 620px;
   width: 90%;
   margin: auto;
-  background: rgba(23, 23, 29, 0.96);
-  border: 2px solid rgba(249, 115, 22, 0.35);
-  border-radius: var(--radius-lg);
-  box-shadow: 0 0 60px rgba(0, 0, 0, 0.95), 0 0 35px rgba(249, 115, 22, 0.2);
+  background: linear-gradient(180deg, #181822 0%, #0d0d14 100%);
+  border: 2px solid #F97316;
+  border-radius: 16px;
+  box-shadow: 0 0 50px rgba(249, 115, 22, 0.45), inset 0 0 20px rgba(249, 115, 22, 0.1);
   animation: page-fade-in-up 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-.game-lock-kicker {
-  font-size: 0.85rem;
-  text-transform: uppercase;
-  letter-spacing: 0.3em;
-  font-weight: 800;
-  color: var(--text-muted);
-  margin-bottom: 1rem;
-}
-
 .game-lock-word {
-  font-size: clamp(3.5rem, 15vw, 8rem);
+  font-size: clamp(3.2rem, 10vw, 5.5rem);
   font-weight: 900;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.08em;
   line-height: 0.95;
-  margin: 0.5rem 0;
-  color: var(--primary-gold);
-  text-shadow: 0 0 50px rgba(249, 115, 22, 0.65), 0 0 100px rgba(249, 115, 22, 0.35);
+  margin: 0;
+  color: #FFFFFF;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.8), 0 0 30px rgba(255, 255, 255, 0.2);
 }
 
-.game-lock-card.state-paused {
-  border-color: rgba(251, 191, 36, 0.5);
-  box-shadow: 0 0 60px rgba(251, 191, 36, 0.25);
-}
-
-.game-lock-card.state-paused .game-lock-word {
-  color: #FBBF24;
-  text-shadow: 0 0 50px rgba(251, 191, 36, 0.7), 0 0 100px rgba(251, 191, 36, 0.35);
-}
-
-.game-lock-card.state-stopped,
-.game-lock-card.state-ended {
-  border-color: rgba(239, 68, 68, 0.5);
-  box-shadow: 0 0 60px rgba(239, 68, 68, 0.25);
-}
-
-.game-lock-card.state-stopped .game-lock-word,
-.game-lock-card.state-ended .game-lock-word {
-  color: var(--accent-red);
-  text-shadow: 0 0 50px rgba(239, 68, 68, 0.7), 0 0 100px rgba(239, 68, 68, 0.35);
+.game-lock-kicker {
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 800;
+  color: #F97316;
+  margin-top: 0.65rem;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 0 12px rgba(249, 115, 22, 0.4);
 }
 
 .game-lock-copy {
-  margin-top: 1.5rem;
-  color: var(--text-main);
-  font-size: 1.1rem;
-  max-width: 32rem;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 1.15rem auto 1.5rem auto;
+  color: #A1A1AA;
+  font-size: 0.95rem;
+  max-width: 440px;
   line-height: 1.6;
+}
+
+.game-lock-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #F97316, #FBBF24);
+  color: #0B0B0F;
+  font-weight: 800;
+  font-size: 0.92rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.85rem 2.25rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 22px rgba(249, 115, 22, 0.45);
+  clip-path: polygon(0 0, 100% 0, 96% 100%, 4% 100%);
+  width: 100%;
+  max-width: 340px;
+}
+
+/* State variants */
+.game-lock-card.state-paused {
+  border-color: #F97316;
+  box-shadow: 0 0 50px rgba(249, 115, 22, 0.45), inset 0 0 20px rgba(249, 115, 22, 0.1);
+}
+
+.game-lock-card.state-stopped {
+  border-color: #EF4444;
+  box-shadow: 0 0 50px rgba(239, 68, 68, 0.45), inset 0 0 20px rgba(239, 68, 68, 0.1);
+}
+.game-lock-card.state-stopped .game-lock-kicker {
+  color: #EF4444;
+  text-shadow: 0 0 12px rgba(239, 68, 68, 0.4);
+}
+.game-lock-card.state-stopped .game-lock-badge {
+  background: linear-gradient(135deg, #EF4444, #F87171);
+  color: #ffffff;
+  box-shadow: 0 4px 22px rgba(239, 68, 68, 0.45);
+}
+
+.game-lock-card.state-ended {
+  border-color: #EF4444;
+  box-shadow: 0 0 50px rgba(239, 68, 68, 0.45);
+}
+.game-lock-card.state-ended .game-lock-kicker {
+  color: #EF4444;
+}
+.game-lock-card.state-ended .game-lock-badge {
+  background: linear-gradient(135deg, #EF4444, #DC2626);
+  color: #ffffff;
 }
 
 body.player-input-locked { overflow: hidden; }
