@@ -847,8 +847,81 @@ footer {
 }
 ::-webkit-scrollbar-thumb:hover { background: rgba(249, 115, 22, 0.6); }
 
+/* ---------- Admin Header Responsive Rules ---------- */
+.admin-header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--code-border);
+  padding-bottom: 1.25rem;
+}
+
+.admin-header-title {
+  font-size: clamp(1.3rem, 4.5vw, 2.2rem);
+  font-weight: 800;
+  color: #fff;
+  margin-top: 0.5rem;
+  line-height: 1.2;
+}
+
+.admin-header-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.control-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
 /* ---------- Mobile Responsive Styles ---------- */
 @media (max-width: 768px) {
+  .admin-header-bar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .admin-header-actions {
+    width: 100%;
+    justify-content: flex-start;
+    margin-top: 0.4rem;
+  }
+
+  .control-actions {
+    width: 100%;
+  }
+
+  .control-actions .btn-cyber {
+    flex: 1 1 45%;
+    text-align: center;
+    padding: 0.6rem 0.5rem;
+    font-size: 0.85rem;
+  }
+
+  .nav-status {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    overflow-x: auto;
+    padding-bottom: 0.25rem;
+    -webkit-overflow-scrolling: touch;
+    flex-wrap: nowrap !important;
+    gap: 0.4rem;
+  }
+  
+  .nav-status .btn-nav {
+    padding: 0.35rem 0.55rem;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
   .navbar {
     padding: 0.65rem 1rem;
     flex-wrap: wrap;

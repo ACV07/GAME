@@ -6,17 +6,17 @@
 <div class="glass-card" style="max-width: 1200px; margin: 1.5rem auto;">
   
   <!-- Header Bar -->
-  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; border-bottom: 1px solid var(--code-border); padding-bottom: 1.25rem;">
+  <div class="admin-header-bar">
     <div>
       <span class="badge-status status-active" style="background: rgba(255, 208, 0, 0.15); color: var(--primary-gold); border-color: rgba(255, 208, 0, 0.4);">
         🎛️ MASTER EVENT CONTROL CENTER
       </span>
-      <h1 style="font-size: 2.2rem; font-weight: 800; color: #fff; margin-top: 0.5rem;">
+      <h1 class="admin-header-title">
         ROUND 2 ORGANIZER COMMAND POST
       </h1>
     </div>
     
-    <div style="display: flex; gap: 10px;">
+    <div class="admin-header-actions">
       <a href="{{ url_for('admin.dashboard') }}" class="btn-secondary" style="font-size: 0.85rem;">
         👥 Team Monitor
       </a>
