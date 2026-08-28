@@ -82,17 +82,19 @@
       {% endif %}
     </div>
 
-    {% if not is_read_only %}
-      <form id="challenge-form" data-challenge-id="{{ challenge.id }}" class="btn-submit-action" style="margin-left: auto; display: flex; justify-content: flex-end;">
-        <button type="submit" class="btn-cyber" id="btn-submit" style="margin-left: auto;">
-          Submit Code Answer ➔
-        </button>
-      </form>
-    {% else %}
-      <a href="{{ url_for('challenges.view_challenge', challenge_id=challenge.id + 1 if challenge.id < team.current_challenge else team.current_challenge) }}" class="btn-cyber btn-submit-action" style="margin-left: auto; text-decoration: none;">
-        Next Challenge ▶️
-      </a>
-    {% endif %}
+    <div class="actions-right-group">
+      {% if not is_read_only %}
+        <form id="challenge-form" data-challenge-id="{{ challenge.id }}">
+          <button type="submit" class="btn-cyber" id="btn-submit">
+            Submit Code Answer ➔
+          </button>
+        </form>
+      {% else %}
+        <a href="{{ url_for('challenges.view_challenge', challenge_id=challenge.id + 1 if challenge.id < team.current_challenge else team.current_challenge) }}" class="btn-cyber" style="text-decoration: none;">
+          Next Challenge ▶️
+        </a>
+      {% endif %}
+    </div>
   </div>
 
 </div>

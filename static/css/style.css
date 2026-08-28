@@ -1055,6 +1055,7 @@ html, body {
     flex-wrap: wrap !important;
     gap: 10px !important;
     width: 100% !important;
+    box-sizing: border-box !important;
   }
 
   .challenge-actions-bar .actions-left-group {
@@ -1064,19 +1065,18 @@ html, body {
     flex-wrap: wrap !important;
   }
 
-  .challenge-actions-bar .btn-submit-action,
-  .challenge-actions-bar form,
-  .challenge-actions-bar form.btn-submit-action,
-  .challenge-actions-bar > .btn-cyber,
-  .challenge-actions-bar > a.btn-cyber {
+  .challenge-actions-bar .actions-right-group {
     margin-left: auto !important;
     display: flex !important;
+    align-items: center !important;
     justify-content: flex-end !important;
+    flex-grow: 1 !important;
     text-align: right !important;
   }
 
-  .challenge-actions-bar form.btn-submit-action button,
-  .challenge-actions-bar button.btn-submit-action {
+  .challenge-actions-bar .actions-right-group button,
+  .challenge-actions-bar .actions-right-group a,
+  .challenge-actions-bar .actions-right-group form {
     margin-left: auto !important;
   }
 
