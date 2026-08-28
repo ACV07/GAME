@@ -1126,8 +1126,74 @@ html, body {
   }
 
   .step-node {
-    width: 30px !important;
-    height: 30px !important;
-    font-size: 0.75rem !important;
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 0.8rem !important;
+  }
+}
+
+/* ==========================================================================
+   COOL CYBERPUNK ANIMATIONS & TOUCH OPTIMIZATIONS
+   ========================================================================== */
+
+@keyframes cyber-glow-pulse {
+  0% { box-shadow: 0 0 10px rgba(255, 208, 0, 0.25), inset 0 0 5px rgba(255, 208, 0, 0.1); }
+  50% { box-shadow: 0 0 22px rgba(255, 208, 0, 0.55), inset 0 0 12px rgba(255, 208, 0, 0.25); }
+  100% { box-shadow: 0 0 10px rgba(255, 208, 0, 0.25), inset 0 0 5px rgba(255, 208, 0, 0.1); }
+}
+
+@keyframes timer-heartbeat {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes badge-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+.step-node.active {
+  animation: cyber-glow-pulse 2s infinite ease-in-out !important;
+}
+
+.timer-chip {
+  animation: timer-heartbeat 3s infinite ease-in-out;
+}
+
+.brand-badge {
+  animation: badge-float 4s infinite ease-in-out;
+}
+
+.glass-card {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.glass-card:hover {
+  border-color: rgba(255, 208, 0, 0.3);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 208, 0, 0.12);
+}
+
+.btn-cyber {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.18s ease, filter 0.18s ease;
+}
+
+.btn-cyber:active {
+  transform: scale(0.96) !important;
+}
+
+.btn-secondary {
+  transition: transform 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+}
+
+.btn-secondary:active {
+  transform: scale(0.96) !important;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  * {
+    -webkit-tap-highlight-color: transparent !important;
+    touch-action: manipulation;
   }
 }

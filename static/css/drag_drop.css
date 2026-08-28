@@ -94,3 +94,26 @@
   pointer-events: none;
   border-style: dashed;
 }
+
+@keyframes chip-selected-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(255, 208, 0, 0.6); }
+  70% { box-shadow: 0 0 0 10px rgba(255, 208, 0, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 208, 0, 0); }
+}
+
+@keyframes blank-fill-bounce {
+  0% { transform: scale(0.92); }
+  50% { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
+.option-chip.selected-for-fill {
+  border-color: var(--primary-gold) !important;
+  color: var(--primary-gold) !important;
+  background: rgba(255, 208, 0, 0.15) !important;
+  animation: chip-selected-pulse 1.5s infinite ease-in-out !important;
+}
+
+.blank-slot.filled {
+  animation: blank-fill-bounce 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
