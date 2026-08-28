@@ -1051,33 +1051,18 @@ html, body {
   .challenge-actions-bar {
     display: flex !important;
     align-items: center !important;
-    justify-content: space-between !important;
+    justify-content: flex-start !important;
     flex-wrap: wrap !important;
     gap: 10px !important;
     width: 100% !important;
     box-sizing: border-box !important;
   }
 
-  .challenge-actions-bar .actions-left-group {
-    display: flex !important;
-    align-items: center !important;
-    gap: 8px !important;
-    flex-wrap: wrap !important;
-  }
-
-  .challenge-actions-bar .actions-right-group {
-    margin-left: auto !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: flex-end !important;
-    flex-grow: 1 !important;
-    text-align: right !important;
-  }
-
-  .challenge-actions-bar .actions-right-group button,
-  .challenge-actions-bar .actions-right-group a,
-  .challenge-actions-bar .actions-right-group form {
-    margin-left: auto !important;
+  .challenge-actions-bar form,
+  .challenge-actions-bar button,
+  .challenge-actions-bar a,
+  .challenge-actions-bar div {
+    margin-left: 0 !important;
   }
 
   .challenge-actions-bar button,

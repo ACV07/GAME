@@ -89,8 +89,20 @@
   <div id="feedback-box" class="alert-banner" style="display: none; margin-top: 1.5rem;"></div>
 
   <!-- Submit & Skip Controls -->
-  <div class="challenge-actions-bar">
-    <div class="actions-left-group">
+  <div class="challenge-actions-bar" style="display: flex; align-items: center; justify-content: flex-start; flex-wrap: wrap; gap: 10px; margin-top: 2rem;">
+    {% if not is_read_only %}
+      <form id="line-challenge-form" data-challenge-id="{{ challenge.id }}">
+        <button type="submit" class="btn-cyber" id="btn-submit-line">
+          Submit Selected Error Line ➔
+        </button>
+      </form>
+    {% else %}
+      <a href="{{ url_for('challenges.view_challenge', challenge_id=challenge.id + 1 if challenge.id < team.current_challenge else team.current_challenge) }}" class="btn-cyber" style="text-decoration: none;">
+        Next Challenge ▶️
+      </a>
+    {% endif %}
+
+    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
       {% if challenge.id > 1 %}
         <a href="{{ url_for('challenges.view_challenge', challenge_id=challenge.id - 1) }}" class="btn-secondary" style="text-decoration: none;">
           ◀️ Previous Challenge
@@ -101,20 +113,6 @@
         <button type="button" class="btn-secondary" id="btn-skip-challenge" style="border-color: rgba(245, 158, 11, 0.4); color: #f59e0b;">
           ⏭️ Skip Challenge
         </button>
-      {% endif %}
-    </div>
-
-    <div class="actions-right-group">
-      {% if not is_read_only %}
-        <form id="line-challenge-form" data-challenge-id="{{ challenge.id }}">
-          <button type="submit" class="btn-cyber" id="btn-submit-line">
-            Submit Selected Error Line ➔
-          </button>
-        </form>
-      {% else %}
-        <a href="{{ url_for('challenges.view_challenge', challenge_id=challenge.id + 1 if challenge.id < team.current_challenge else team.current_challenge) }}" class="btn-cyber" style="text-decoration: none;">
-          Next Challenge ▶️
-        </a>
       {% endif %}
     </div>
   </div>
