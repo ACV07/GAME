@@ -101,28 +101,25 @@ def submit_challenge():
     # Store submission record and update score/progress server-side
     SubmissionModel.record_submission(
         team_id=team['id'],
-        challenge_id=challenge_id,
+        challenge_id=int(challenge_id),
         submitted_answer=submitted_answer,
         is_correct=is_correct,
         points=points
     )
 
-    if is_correct:
-        next_challenge = challenge_id + 1
-        return jsonify({
-            'success': True,
-            'is_correct': True,
-            'explanation': explanation,
-            'next_challenge': next_challenge,
-            'completed_all': next_challenge > 5,
-            'redirect_url': url_for('challenges.completed') if next_challenge > 5 else url_for('challenges.view_challenge', challenge_id=next_challenge)
-        })
-    else:
-        return jsonify({
-            'success': False,
-            'is_correct': False,
-            'message': 'Incorrect submission. Review your code/answer and try again!'
-        })
+    next_challenge = int(challenge_id) + 1
+    redirect_url = url_for('challenges.completed') if next_challenge > 5 else url_for('challenges.view_challenge', challenge_id=next_challenge)
+
+    return jsonify({
+        'success': True,
+        'is_correct': is_correct,
+        'points_earned': points,
+        'explanation': explanation,
+        'next_challenge': next_challenge,
+        'completed_all': next_challenge > 5,
+        'redirect_url': redirect_url,
+        'message': f"Answer submitted (+{points} pts)." if not is_correct else "Correct answer!"
+    })
 
 @challenges_bp.route('/api/skip-challenge', methods=['POST'])
 def skip_challenge():

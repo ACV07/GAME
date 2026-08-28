@@ -64,20 +64,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const resData = await response.json();
 
-        if (resData.is_correct) {
-          showFeedback(`Correct! Found error on line ${selectedLineNumber}. Advancing to next challenge...`, 'success');
+        if (resData.success) {
+          const msg = resData.is_correct
+            ? `🎉 Correct! Found error on line ${selectedLineNumber} (+${resData.points_earned} pts). Advancing to next challenge...`
+            : `⚠️ Answer submitted (+${resData.points_earned} pts). Advancing to next challenge...`;
+          const alertType = resData.is_correct ? 'success' : 'warning';
+
+          showFeedback(msg, alertType);
           setTimeout(() => {
             window.location.href = resData.redirect_url;
           }, 1200);
-        } else {
-          if (resData.stopped || resData.message === 'GAME_STOPPED') {
-            if (window.checkBroadcast) window.checkBroadcast();
-          } else {
-            showFeedback(resData.message || 'Incorrect line selected. Inspect the syntax and logic carefully.', 'danger');
-          }
-          btnSubmit.disabled = false;
-          btnSubmit.innerHTML = 'Submit Error Line';
+          return;
         }
+
+        if (resData.stopped || resData.message === 'GAME_STOPPED') {
+          if (window.checkBroadcast) window.checkBroadcast();
+        } else {
+          showFeedback(resData.message || 'Failed to submit challenge.', 'danger');
+        }
+        btnSubmit.disabled = false;
+        btnSubmit.innerHTML = 'Submit Error Line';
       } catch (err) {
         if (window.checkBroadcast) window.checkBroadcast();
         btnSubmit.disabled = false;

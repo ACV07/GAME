@@ -147,8 +147,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const resData = await response.json();
 
-        if (resData.is_correct) {
-          ArenaFeedback.show(feedbackBox, 'Correct! Advancing to next challenge...', 'success');
+        if (resData.success) {
+          const msg = resData.is_correct
+            ? `🎉 Correct! (+${resData.points_earned} pts earned). Advancing to next challenge...`
+            : `⚠️ Answer submitted (+${resData.points_earned} pts earned). Advancing to next challenge...`;
+          const alertType = resData.is_correct ? 'success' : 'warning';
+
+          ArenaFeedback.show(feedbackBox, msg, alertType);
           setTimeout(() => {
             window.location.href = resData.redirect_url;
           }, SUCCESS_REDIRECT_DELAY_MS);
@@ -158,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (resData.stopped || resData.message === 'GAME_STOPPED') {
           if (window.checkBroadcast) window.checkBroadcast();
         } else {
-          ArenaFeedback.show(feedbackBox, resData.message || 'Incorrect answer. Review your choices and try again!', 'danger');
+          ArenaFeedback.show(feedbackBox, resData.message || 'Failed to submit challenge.', 'danger');
         }
         btnSubmit.disabled = false;
         btnSubmit.innerHTML = SUBMIT_LABEL_DEFAULT;

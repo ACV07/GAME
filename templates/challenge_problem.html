@@ -145,20 +145,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const resData = await response.json();
 
-        if (resData.is_correct) {
-          showFeedback('Correct. Round 2 completed.', 'success');
+        if (resData.success) {
+          const msg = resData.is_correct
+            ? `🎉 Correct! Solution verified (+${resData.points_earned} pts). Advancing...`
+            : `⚠️ Solution submitted (+${resData.points_earned} pts). Advancing...`;
+          const alertType = resData.is_correct ? 'success' : 'warning';
+
+          showFeedback(msg, alertType);
           setTimeout(() => {
             window.location.href = resData.redirect_url;
           }, 1200);
-        } else {
-          if (resData.stopped || resData.message === 'GAME_STOPPED') {
-            if (window.checkBroadcast) window.checkBroadcast();
-          } else {
-            showFeedback(resData.message || 'Incorrect answer. Try again.', 'danger');
-          }
-          btnSubmit.disabled = false;
-          btnSubmit.innerHTML = 'Submit final solution';
+          return;
         }
+
+        if (resData.stopped || resData.message === 'GAME_STOPPED') {
+          if (window.checkBroadcast) window.checkBroadcast();
+        } else {
+          showFeedback(resData.message || 'Failed to submit solution.', 'danger');
+        }
+        btnSubmit.disabled = false;
+        btnSubmit.innerHTML = 'Submit final solution';
       } catch (err) {
         if (window.checkBroadcast) window.checkBroadcast();
         btnSubmit.disabled = false;
