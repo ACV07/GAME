@@ -77,6 +77,9 @@
                     <button class="btn-sm-action btn-secondary" onclick="viewSubmissions({{ t.id }}, '{{ t.team_name }}')" style="padding: 0.35rem 0.6rem; font-size: 0.8rem;">
                       👁️ Audit
                     </button>
+                    <button class="btn-sm-action btn-reset" onclick="deleteTeam({{ t.id }}, '{{ t.team_name }}')" title="Permanently delete team from database" style="border-color: rgba(239, 68, 68, 0.4); color: #ef4444;">
+                      🗑️ Delete
+                    </button>
                   </div>
                 </td>
               </tr>
@@ -147,6 +150,21 @@ async function resetTeam(teamId) {
   const data = await res.json();
   alert(data.message);
   window.location.reload();
+}
+
+async function deleteTeam(teamId, teamName) {
+  if (!confirm(`Are you sure you want to PERMANENTLY delete team "${teamName}" from the database?\n\nThis will delete all progress, sessions, and submission logs for this team!`)) return;
+  try {
+    const res = await fetch(`/api/admin/delete-team/${teamId}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' }
+    });
+    const data = await res.json();
+    alert(data.message || 'Team deleted successfully.');
+    window.location.reload();
+  } catch (err) {
+    alert('Failed to delete team.');
+  }
 }
 
 async function viewSubmissions(teamId, teamName) {

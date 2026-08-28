@@ -247,5 +247,24 @@ class Round2ArenaTestCase(unittest.TestCase):
         self.assertTrue(json.loads(resumed.data)['is_correct'])
         self.assertEqual(TeamModel.get_by_id(team['id'])['current_challenge'], 3)
 
+    def test_11_admin_delete_team(self):
+        """Verify Admin can permanently delete a team from DB."""
+        # 1. Create temporary team
+        team_id = TeamModel.create_team('DEL2026', 'Temp Delete Team')
+        self.assertIsNotNone(TeamModel.get_by_id(team_id))
+
+        # 2. Non-admin request should redirect to admin login
+        res1 = self.client.post(f'/api/admin/delete-team/{team_id}')
+        self.assertEqual(res1.status_code, 302)
+
+        # 3. Log in as admin and delete team
+        self.client.post('/admin/login', data={'admin_id': 'admin', 'password': 'admin2026'})
+        res2 = self.client.post(f'/api/admin/delete-team/{team_id}')
+        self.assertEqual(res2.status_code, 200)
+        self.assertTrue(json.loads(res2.data)['success'])
+
+        # 4. Verify team is gone from DB
+        self.assertIsNone(TeamModel.get_by_id(team_id))
+
 if __name__ == '__main__':
     unittest.main()

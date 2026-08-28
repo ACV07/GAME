@@ -187,6 +187,18 @@ class TeamModel:
         return [dict(t) for t in teams]
 
     @staticmethod
+    def delete_team(team_id):
+        """Permanently deletes a team, their sessions, and their submission records from DB."""
+        conn = get_db_connection()
+        conn.execute("DELETE FROM sessions WHERE team_id = ?", (team_id,))
+        conn.execute("DELETE FROM submissions WHERE team_id = ?", (team_id,))
+        conn.execute("DELETE FROM teams WHERE id = ?", (team_id,))
+        conn.commit()
+        conn.close()
+        return True
+
+
+    @staticmethod
     def create_team(team_code, team_name):
         conn = get_db_connection()
         cursor = conn.cursor()

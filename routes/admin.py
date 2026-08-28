@@ -197,6 +197,18 @@ def live_activity():
     activity = EventConfigModel.get_recent_activity(limit=20)
     return jsonify({'activity': activity})
 
+@admin_bp.route('/api/admin/delete-team/<int:team_id>', methods=['POST'])
+@admin_required
+def delete_team_api(team_id):
+    """Deletes a team permanently from DB (Admin only)."""
+    team = TeamModel.get_by_id(team_id)
+    if not team:
+        return jsonify({'success': False, 'message': 'Team not found.'}), 404
+        
+    team_name = team['team_name']
+    TeamModel.delete_team(team_id)
+    return jsonify({'success': True, 'message': f'Team "{team_name}" deleted from database successfully.'})
+
 @admin_bp.route('/api/event-status')
 def public_event_status():
     """Public endpoint polled by contestant pages to check round status, announcements, and master countdown timer."""

@@ -298,6 +298,21 @@ async function resetEntireGame() {
   }
 }
 
+async function deleteTeam(teamId, teamName) {
+  if (!confirm(`Are you sure you want to PERMANENTLY delete team "${teamName}" from the database?\n\nThis will delete all progress, sessions, and submission logs for this team!`)) return;
+  try {
+    const res = await fetch(`/api/admin/delete-team/${teamId}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' }
+    });
+    const data = await res.json();
+    alert(data.message || 'Team deleted successfully.');
+    window.location.reload();
+  } catch (err) {
+    alert('Failed to delete team.');
+  }
+}
+
 // Live activity feed telemetry auto-polling
 setInterval(async () => {
   try {
