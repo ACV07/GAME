@@ -37,11 +37,11 @@
 {% block content %}
 <div class="glass-card" style="max-width: 950px; margin: 1rem auto;">
   
-  {% if is_read_only %}
+  {% if challenge.id < team.current_challenge %}
     <div class="alert-banner alert-info" style="margin-bottom: 1.25rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
-      <span>ℹ️ Reviewing Challenge {{ challenge.id }} (Read-Only Mode)</span>
-      <a href="{{ url_for('challenges.view_challenge', challenge_id=team.current_challenge) }}" class="btn-cyber" style="padding: 0.35rem 0.85rem; font-size: 0.8rem; text-decoration: none;">
-        Go to Active Challenge {{ team.current_challenge }} ➔
+      <span>ℹ️ Reviewing Challenge {{ challenge.id }} — You can edit & resubmit your solution.</span>
+      <a href="{{ url_for('challenges.view_challenge', challenge_id=team.current_challenge if team.current_challenge <= 5 else 5) }}" class="btn-cyber" style="padding: 0.35rem 0.85rem; font-size: 0.8rem; text-decoration: none;">
+        Go to Active Challenge {{ team.current_challenge if team.current_challenge <= 5 else 5 }} ➔
       </a>
     </div>
   {% endif %}

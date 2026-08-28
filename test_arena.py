@@ -285,5 +285,34 @@ class Round2ArenaTestCase(unittest.TestCase):
         updated_team = TeamModel.get_by_id(team['id'])
         self.assertEqual(updated_team['current_challenge'], 2)
 
+    def test_13_resubmit_previous_challenge(self):
+        """Verify contestants can edit and resubmit answers for previous unlocked challenges, updating points."""
+        EventConfigModel.set_round_status('ACTIVE')
+        team = TeamModel.get_by_code('CW2026')
+        SessionModel.force_unlock_team(team['id'])
+        self.client.get('/logout')
+        self.client.post('/login', data={'team_code': 'CW2026'}, follow_redirects=True)
+
+        # 1. Submit partial answer for Challenge 1 (1 out of 2 correct = 5.0 pts)
+        self.client.post('/api/submit-challenge', json={'challenge_id': 1, 'answer': ['main', 'wrong_word']})
+        t1 = TeamModel.get_by_id(team['id'])
+        self.assertEqual(t1['current_challenge'], 2)
+        self.assertEqual(t1['total_score'], 5.0)
+
+        # 2. Advance to Challenge 3 by submitting Challenge 2 (10.0 pts)
+        self.client.post('/api/submit-challenge', json={'challenge_id': 2, 'answer': ['<', 'print', 'return']})
+        t2 = TeamModel.get_by_id(team['id'])
+        self.assertEqual(t2['current_challenge'], 3)
+        self.assertEqual(t2['total_score'], 15.0)
+
+        # 3. Go back to Challenge 1, edit answer to 100% correct (10.0 pts), and resubmit
+        res_resub = self.client.post('/api/submit-challenge', json={'challenge_id': 1, 'answer': ['main', 'print']})
+        self.assertEqual(res_resub.status_code, 200)
+
+        # 4. Verify points updated from 15.0 to 20.0 (5.0 -> 10.0 for Ch 1, + 10.0 for Ch 2)
+        t3 = TeamModel.get_by_id(team['id'])
+        self.assertEqual(t3['current_challenge'], 3) # Active challenge remains 3
+        self.assertEqual(t3['total_score'], 20.0) # Score updated from 15.0 to 20.0!
+
 if __name__ == '__main__':
     unittest.main()

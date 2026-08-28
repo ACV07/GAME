@@ -519,6 +519,17 @@ class ChallengeModel:
 
 class SubmissionModel:
     @staticmethod
+    def get_team_submission(team_id, challenge_id):
+        conn = get_db_connection()
+        row = conn.execute("""
+            SELECT * FROM submissions
+            WHERE team_id = ? AND challenge_id = ?
+            ORDER BY id DESC LIMIT 1
+        """, (team_id, challenge_id)).fetchone()
+        conn.close()
+        return dict(row) if row else None
+
+    @staticmethod
     def record_submission(team_id, challenge_id, submitted_answer, is_correct, points):
         conn = get_db_connection()
         cursor = conn.cursor()
@@ -526,17 +537,34 @@ class SubmissionModel:
         # Format answer string for storage
         ans_str = json.dumps(submitted_answer) if not isinstance(submitted_answer, str) else submitted_answer
         
-        cursor.execute("""
-            INSERT INTO submissions (team_id, challenge_id, submitted_answer, is_correct, points_earned, submission_time)
-            VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
-        """, (team_id, challenge_id, ans_str, 1 if is_correct else 0, points))
+        # Check for an existing submission on this challenge
+        existing = cursor.execute("""
+            SELECT id, points_earned FROM submissions
+            WHERE team_id = ? AND challenge_id = ?
+            ORDER BY id DESC LIMIT 1
+        """, (team_id, challenge_id)).fetchone()
+
+        if existing:
+            prev_points = float(existing['points_earned'] or 0.0)
+            point_delta = float(points) - prev_points
+            cursor.execute("""
+                UPDATE submissions 
+                SET submitted_answer = ?, is_correct = ?, points_earned = ?, submission_time = CURRENT_TIMESTAMP
+                WHERE id = ?
+            """, (ans_str, 1 if is_correct else 0, points, existing['id']))
+        else:
+            point_delta = float(points)
+            cursor.execute("""
+                INSERT INTO submissions (team_id, challenge_id, submitted_answer, is_correct, points_earned, submission_time)
+                VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+            """, (team_id, challenge_id, ans_str, 1 if is_correct else 0, points))
         
         cursor.execute("SELECT current_challenge, total_score, start_time FROM teams WHERE id = ?", (team_id,))
         team = cursor.fetchone()
         
         if team:
             new_challenge = max(team['current_challenge'], challenge_id + 1)
-            new_score = round(team['total_score'] + points, 1)
+            new_score = round(max(0.0, float(team['total_score'] or 0.0) + point_delta), 1)
             
             if new_challenge > 5:
                 pause_sec = EventConfigModel.get_pause_seconds()
