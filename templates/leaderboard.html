@@ -27,8 +27,9 @@
         <tr>
           <th style="width: 80px;">Rank</th>
           <th>Team Name</th>
+          <th>Points Earned</th>
           <th>Progress</th>
-          <th>Completion Time</th>
+          <th>Time Taken</th>
           <th>Status</th>
         </tr>
       </thead>
@@ -41,6 +42,9 @@
             <td>
               <strong>{{ row.team_name }}</strong> 
               <small style="color: var(--text-dim);">({{ row.team_code }})</small>
+            </td>
+            <td>
+              <strong style="color: var(--primary-gold);">{{ row.total_score }}</strong> <small style="color: var(--text-muted);">/ 50 pts</small>
             </td>
             <td>
               {% if row.current_challenge > 5 %}

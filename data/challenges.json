@@ -16,7 +16,7 @@
     "id": 2,
     "title": "Complete the Code — Blockchain Balance Guard",
     "type": "drag_drop",
-    "points": 15,
+    "points": 10,
     "description": "Fill in the missing operators and control statements to complete the smart contract balance validation logic.",
     "code": "def verify_transaction(balance, amount):\n    if balance ________ amount:\n        ________(\"Insufficient funds for transaction\")\n        return False\n    ________ balance - amount",
     "data": {
@@ -29,7 +29,7 @@
     "id": 3,
     "title": "Find the Error — Data Hash Syntax Bug",
     "type": "error_line",
-    "points": 20,
+    "points": 10,
     "description": "Review the code snippet below and click on the specific line number that contains the syntax error.",
     "lines": [
       "def calculate_hash(data):",
@@ -48,7 +48,7 @@
     "id": 4,
     "title": "Find the Error — Cryptographic Nonce Flaw",
     "type": "error_line",
-    "points": 25,
+    "points": 10,
     "description": "Analyze this Proof-of-Work block validation function. Click on the line with the critical logical vulnerability.",
     "lines": [
       "def validate_block_nonce(block_header, nonce, target_difficulty):",
@@ -69,7 +69,7 @@
     "id": 5,
     "title": "Problem Solving — Cryptographic Prime Checksum",
     "type": "problem_solving",
-    "points": 30,
+    "points": 10,
     "description": "Calculate the block validator control checksum by completing the algorithmic scenario below.",
     "problem_statement": "To verify block validity, the system requires a prime checksum value:\n\n1) Find all prime numbers in the range [10, 50] inclusive.\n2) Compute the sum of these prime numbers.\n3) Multiply the total sum by 3.\n\nEnter the final calculated integer checksum below.",
     "sample_cases": [

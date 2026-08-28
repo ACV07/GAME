@@ -469,37 +469,51 @@ class ChallengeModel:
         ch_type = ch['type']
         ch_data = ch['data']
         is_correct = False
+        points = 0.0
 
         if ch_type == 'drag_drop':
-            # submitted_answer expected to be list or JSON string of answers for blanks
             if isinstance(submitted_answer, str):
                 try:
                     submitted = json.loads(submitted_answer)
                 except Exception:
                     submitted = [submitted_answer]
             else:
-                submitted = submitted_answer
+                submitted = submitted_answer or []
             
             target_blanks = ch_data.get('blanks', [])
-            is_correct = (submitted == target_blanks)
+            total_blanks = len(target_blanks)
+            
+            if total_blanks > 0:
+                pts_per_blank = 10.0 / total_blanks
+                correct_count = 0
+                for i in range(min(len(submitted), total_blanks)):
+                    if str(submitted[i]).strip() == str(target_blanks[i]).strip():
+                        correct_count += 1
+                        points += pts_per_blank
+                
+                points = round(points, 1)
+                is_correct = (correct_count == total_blanks)
+            else:
+                is_correct = (submitted == target_blanks)
+                points = 10.0 if is_correct else 0.0
 
         elif ch_type == 'error_line':
-            # submitted_answer is integer line number (1-based)
             try:
                 selected_line = int(submitted_answer)
                 correct_line = int(ch_data.get('correct_line', -1))
                 is_correct = (selected_line == correct_line)
+                points = 10.0 if is_correct else 0.0
             except (ValueError, TypeError):
                 is_correct = False
+                points = 0.0
 
         elif ch_type == 'problem_solving':
-            # submitted_answer is text/number string
             clean_sub = str(submitted_answer).strip()
             target_ans = str(ch_data.get('correct_answer', '')).strip()
             acceptable = [str(a).strip() for a in ch_data.get('acceptable_answers', [target_ans])]
             is_correct = (clean_sub in acceptable)
+            points = 10.0 if is_correct else 0.0
 
-        points = ch['points'] if is_correct else 0
         return is_correct, points, ch_data.get('explanation', '')
 
 
@@ -517,13 +531,12 @@ class SubmissionModel:
             VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
         """, (team_id, challenge_id, ans_str, 1 if is_correct else 0, points))
         
-        if is_correct:
-            # Advance team to next challenge and add points
-            cursor.execute("SELECT current_challenge, total_score, start_time FROM teams WHERE id = ?", (team_id,))
-            team = cursor.fetchone()
-            
+        cursor.execute("SELECT current_challenge, total_score, start_time FROM teams WHERE id = ?", (team_id,))
+        team = cursor.fetchone()
+        
+        if team:
             new_challenge = max(team['current_challenge'], challenge_id + 1)
-            new_score = team['total_score'] + points
+            new_score = round(team['total_score'] + points, 1)
             
             if new_challenge > 5:
                 pause_sec = EventConfigModel.get_pause_seconds()
@@ -567,12 +580,13 @@ class LeaderboardModel:
     @staticmethod
     def get_rankings():
         conn = get_db_connection()
-        # Ranking rules (No Points system):
-        # Primary: Higher current_challenge = Higher Rank
-        # Secondary: Lower completion time / elapsed_seconds = Higher Rank
+        # Leaderboard Ranking Rules:
+        # 1. Total Score (Points) DESCENDING (Primary factor)
+        # 2. Progress (current_challenge) DESCENDING (Secondary factor)
+        # 3. Elapsed Time (elapsed_seconds) ASCENDING (Tie-breaker)
         query = """
             SELECT 
-                id, team_code, team_name, current_challenge, status, start_time, completion_time,
+                id, team_code, team_name, current_challenge, total_score, status, start_time, completion_time,
                 CASE 
                     WHEN status = 'COMPLETED' THEN total_time_seconds
                     WHEN start_time IS NOT NULL THEN CAST((strftime('%s', 'now') - strftime('%s', start_time)) AS INTEGER)
@@ -580,6 +594,7 @@ class LeaderboardModel:
                 END AS elapsed_seconds
             FROM teams
             ORDER BY 
+                total_score DESC,
                 current_challenge DESC,
                 elapsed_seconds ASC,
                 id ASC

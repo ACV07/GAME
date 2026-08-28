@@ -20,8 +20,8 @@ def admin_required(f):
 def dashboard():
     """Renders organizer control room and live team monitor."""
     SessionModel.clean_expired_sessions()
-    teams = TeamModel.get_all()
-    rankings = LeaderboardModel.get_rankings()
+    teams = LeaderboardModel.get_rankings()
+    rankings = teams
     round_status = EventConfigModel.get_round_status()
     announcement = EventConfigModel.get_announcement()
     timer_info = EventConfigModel.get_timer_info()
@@ -32,8 +32,8 @@ def dashboard():
 def control_center():
     """Dedicated Master Event Control Center web page for Round 2 Organizers."""
     SessionModel.clean_expired_sessions()
-    teams = TeamModel.get_all()
-    rankings = LeaderboardModel.get_rankings()
+    teams = LeaderboardModel.get_rankings()
+    rankings = teams
     round_status = EventConfigModel.get_round_status()
     announcement = EventConfigModel.get_announcement()
     recent_activity = EventConfigModel.get_recent_activity(limit=15)

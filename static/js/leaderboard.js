@@ -49,6 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
       tr.innerHTML = `
         <td class="${rankClass}">${rankDisplay}</td>
         <td><strong>${escapeHtml(row.team_name)}</strong> <small style="color: var(--text-dim);">(${escapeHtml(row.team_code)})</small></td>
+        <td><strong style="color: var(--primary-gold);">${row.total_score}</strong> <small style="color: var(--text-muted);">/ 50 pts</small></td>
         <td>${progress}</td>
         <td style="font-family: var(--font-code);">${escapeHtml(row.formatted_time)}</td>
         <td>${statusBadge}</td>

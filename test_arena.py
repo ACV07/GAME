@@ -24,10 +24,10 @@ class Round2ArenaTestCase(unittest.TestCase):
         challenges = ChallengeModel.get_all()
         self.assertEqual(len(challenges), 5)
         self.assertEqual(challenges[0]['points'], 10)
-        self.assertEqual(challenges[1]['points'], 15)
-        self.assertEqual(challenges[2]['points'], 20)
-        self.assertEqual(challenges[3]['points'], 25)
-        self.assertEqual(challenges[4]['points'], 30)
+        self.assertEqual(challenges[1]['points'], 10)
+        self.assertEqual(challenges[2]['points'], 10)
+        self.assertEqual(challenges[3]['points'], 10)
+        self.assertEqual(challenges[4]['points'], 10)
 
         team = TeamModel.get_by_code('CW2026')
         self.assertIsNotNone(team)
@@ -123,12 +123,12 @@ class Round2ArenaTestCase(unittest.TestCase):
         self.assertEqual(updated_team['current_challenge'], 6)
 
     def test_05_leaderboard_rankings(self):
-        """Verify leaderboard produces sorted ranks based on progress."""
+        """Verify leaderboard produces sorted ranks based on total_score points."""
         rankings = LeaderboardModel.get_rankings()
         self.assertTrue(len(rankings) >= 5)
-        # Ensure current_challenge sorted descending
+        # Ensure total_score sorted descending
         for i in range(len(rankings) - 1):
-            self.assertGreaterEqual(rankings[i]['current_challenge'], rankings[i+1]['current_challenge'])
+            self.assertGreaterEqual(rankings[i]['total_score'], rankings[i+1]['total_score'])
 
     def test_06_admin_only_leaderboard_protection(self):
         """Verify that non-admins are blocked from viewing leaderboard, and admin login grants access."""
@@ -269,11 +269,10 @@ class Round2ArenaTestCase(unittest.TestCase):
     def test_12_skip_challenge(self):
         """Verify contestants can skip a challenge and advance to the next one (0 points)."""
         EventConfigModel.set_round_status('ACTIVE')
-        team_id = TeamModel.create_team('SKP2026', 'Skipper Team')
-        team = TeamModel.get_by_id(team_id)
-        SessionModel.force_unlock_team(team_id)
+        team = TeamModel.get_by_code('CW2026')
+        SessionModel.force_unlock_team(team['id'])
         self.client.get('/logout')
-        self.client.post('/login', data={'team_identifier': team['team_code']}, follow_redirects=True)
+        self.client.post('/login', data={'team_code': 'CW2026'}, follow_redirects=True)
 
         # Skip Challenge 1
         res = self.client.post('/api/skip-challenge', json={'challenge_id': 1})

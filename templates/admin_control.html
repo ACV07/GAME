@@ -127,7 +127,73 @@
 
   </div>
 
-  <!-- Real-time Activity Telemetry Feed -->
+  <!-- Live Team Points & Standings Table -->
+  <div style="background: rgba(13, 17, 23, 0.7); border: 1px solid var(--code-border); border-radius: var(--radius-md); padding: 1.5rem; margin-bottom: 2rem;">
+    <h3 style="font-size: 1.1rem; color: #fff; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+      <span>🏆 Live Teams Leaderboard & Points Monitor</span>
+      <small style="font-size: 0.8rem; color: var(--text-muted); font-weight: normal;">Ranked by Total Points (Primary) & Time Taken (Secondary)</small>
+    </h3>
+
+    <div class="table-responsive">
+      <table class="table-cyber" style="margin-top: 0;">
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Team Name</th>
+            <th>Code</th>
+            <th>Points</th>
+            <th>Progress</th>
+            <th>Time Taken</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for t in teams %}
+            <tr>
+              <td><strong>#{{ t.rank }}</strong></td>
+              <td><strong>{{ t.team_name }}</strong></td>
+              <td><code style="color: var(--primary-gold); font-family: var(--font-code);">{{ t.team_code }}</code></td>
+              <td><strong style="color: var(--primary-gold);">{{ t.total_score }}</strong> <small style="color: var(--text-muted);">/ 50 pts</small></td>
+              <td>
+                {% if t.current_challenge > 5 %}
+                  5/5 (Finished)
+                {% else %}
+                  {{ t.current_challenge - 1 }}/5
+                {% endif %}
+              </td>
+              <td style="font-family: var(--font-code);">{{ t.formatted_time }}</td>
+              <td>
+                {% if t.status == 'ACTIVE' %}
+                  <span class="badge-status status-active">Active</span>
+                {% elif t.status == 'COMPLETED' %}
+                  <span class="badge-status status-completed">Completed</span>
+                {% else %}
+                  <span class="badge-status status-waiting">Waiting</span>
+                {% endif %}
+              </td>
+              <td>
+                <div style="display: flex; gap: 6px;">
+                  <button class="btn-sm-action btn-unlock" onclick="unlockTeam({{ t.id }})" title="Unlock active device lock">
+                    🔓 Unlock
+                  </button>
+                  <button class="btn-sm-action btn-reset" onclick="resetTeam({{ t.id }})" title="Reset score and back to Challenge 1">
+                    🔄 Reset
+                  </button>
+                  <button class="btn-sm-action btn-secondary" onclick="viewSubmissions({{ t.id }}, '{{ t.team_name }}')" style="padding: 0.35rem 0.6rem; font-size: 0.8rem;">
+                    👁️ Audit
+                  </button>
+                  <button class="btn-sm-action btn-reset" onclick="deleteTeam({{ t.id }}, '{{ t.team_name }}')" title="Permanently delete team from database" style="border-color: rgba(239, 68, 68, 0.4); color: #ef4444;">
+                    🗑️ Delete
+                  </button>
+                </div>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
   <div style="background: rgba(10, 10, 10, 0.8); border: 1px solid var(--code-border); border-radius: var(--radius-md); padding: 1.5rem;">
     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
       <h3 style="font-size: 1.1rem; color: #fff; display: flex; align-items: center; gap: 0.5rem;">
