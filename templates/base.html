@@ -145,6 +145,7 @@
         if (badgeEl) badgeEl.textContent = pair[3];
         if (overlayCard) overlayCard.className = 'game-lock-card state-' + String(status || 'NOT_STARTED').toLowerCase();
         overlay.classList.add('is-visible');
+        setPlayerInputLocked(true);
       } else {
         overlay.classList.remove('is-visible');
         setPlayerInputLocked(false);
@@ -166,9 +167,9 @@
         }
 
         const timerWidget = document.getElementById('contestant-timer-widget');
+        window.contestantRoundStatus = data.round_status;
         if (data && data.timer_info && data.timer_info.has_timer) {
           window.contestantRemainingSeconds = data.timer_info.remaining_seconds;
-          window.contestantRoundStatus = data.round_status;
           if (timerWidget) timerWidget.style.display = 'inline-block';
         } else if (timerWidget) {
           timerWidget.style.display = 'none';
