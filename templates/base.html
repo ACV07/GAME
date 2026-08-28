@@ -117,7 +117,7 @@
     function applyLockOverlay(status) {
       const overlay = document.getElementById('game-stopped-overlay');
       const currentPath = window.location.pathname;
-      const isNonPlayerPage = currentPath.startsWith('/admin') || ['/', '/login', '/admin/login'].includes(currentPath) || window.isAdmin;
+      const isNonPlayerPage = currentPath.startsWith('/admin') || ['/', '/login', '/admin/login'].includes(currentPath);
       if (!overlay || isNonPlayerPage) {
         if (overlay) overlay.classList.remove('is-visible');
         setPlayerInputLocked(false);
