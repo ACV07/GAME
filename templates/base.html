@@ -212,6 +212,7 @@
     <p>Round 2 Challenge Arena · College Technical Championship</p>
   </footer>
 
+  <script src="{{ url_for('static', filename='js/ui-feedback.js') }}"></script>
   {% if session.get('session_token') %}
     <script src="{{ url_for('static', filename='js/heartbeat.js') }}"></script>
   {% endif %}

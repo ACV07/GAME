@@ -1,10 +1,23 @@
 /**
- * Leaderboard Live Auto-Refresh Script
+ * leaderboard.js
+ * Polls the live leaderboard endpoint and re-renders the standings table.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
   const leaderboardBody = document.getElementById('leaderboard-tbody');
   const POLL_INTERVAL_MS = 5000;
+
+  const RANK_DISPLAY = {
+    1: { label: '🏆 1', className: 'rank-podium-1' },
+    2: { label: '🥈 2', className: 'rank-podium-2' },
+    3: { label: '🥉 3', className: 'rank-podium-3' }
+  };
+
+  const STATUS_BADGES = {
+    ACTIVE: '<span class="badge-status status-active">Active</span>',
+    COMPLETED: '<span class="badge-status status-completed">Completed</span>'
+  };
+  const DEFAULT_STATUS_BADGE = '<span class="badge-status status-waiting">Waiting</span>';
 
   async function updateLeaderboard() {
     if (!leaderboardBody) return;
@@ -12,8 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       const res = await fetch('/api/leaderboard');
       const data = await res.json();
-      
-      if (data && data.rankings) {
+
+      if (data && Array.isArray(data.rankings)) {
         renderRankings(data.rankings);
       }
     } catch (err) {
@@ -23,38 +36,43 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function renderRankings(rankings) {
     leaderboardBody.innerHTML = '';
-    
+
     rankings.forEach(row => {
       const tr = document.createElement('tr');
-      
-      let rankDisplay = `#${row.rank}`;
-      let rankClass = '';
-      if (row.rank === 1) { rankDisplay = '🏆 1'; rankClass = 'rank-podium-1'; }
-      else if (row.rank === 2) { rankDisplay = '🥈 2'; rankClass = 'rank-podium-2'; }
-      else if (row.rank === 3) { rankDisplay = '🥉 3'; rankClass = 'rank-podium-3'; }
-
-      let statusBadge = `<span class="badge-status status-waiting">Waiting</span>`;
-      if (row.status === 'ACTIVE') {
-        statusBadge = `<span class="badge-status status-active">Active</span>`;
-      } else if (row.status === 'COMPLETED') {
-        statusBadge = `<span class="badge-status status-completed">Completed</span>`;
-      }
+      const { label: rankDisplay, className: rankClass } =
+        RANK_DISPLAY[row.rank] || { label: `#${row.rank}`, className: '' };
+      const statusBadge = STATUS_BADGES[row.status] || DEFAULT_STATUS_BADGE;
+      const progress = row.current_challenge > 5
+        ? '5/5 (Finish)'
+        : `${row.current_challenge - 1}/5`;
 
       tr.innerHTML = `
         <td class="${rankClass}">${rankDisplay}</td>
-        <td><strong>${escapeHtml(row.team_name)}</strong> <small style="color: var(--text-dim);">(${row.team_code})</small></td>
-        <td>${row.current_challenge > 5 ? '5/5 (Finish)' : `${row.current_challenge - 1}/5`}</td>
-        <td style="font-family: var(--font-code);">${row.formatted_time}</td>
+        <td><strong>${escapeHtml(row.team_name)}</strong> <small style="color: var(--text-dim);">(${escapeHtml(row.team_code)})</small></td>
+        <td>${progress}</td>
+        <td style="font-family: var(--font-code);">${escapeHtml(row.formatted_time)}</td>
         <td>${statusBadge}</td>
       `;
       leaderboardBody.appendChild(tr);
     });
   }
 
-  function escapeHtml(str) {
-    return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  /**
+   * Escape a value for safe insertion into innerHTML.
+   * Handles all HTML-significant characters, not just angle brackets,
+   * so values used inside attributes stay safe too.
+   * @param {*} value
+   * @returns {string}
+   */
+  function escapeHtml(value) {
+    return String(value)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
   }
 
-  // Poll every 5 seconds
+  updateLeaderboard();
   setInterval(updateLeaderboard, POLL_INTERVAL_MS);
 });
