@@ -64,7 +64,7 @@
   <div id="feedback-box" class="alert-banner" style="display: none; margin-top: 1.5rem;"></div>
 
   <!-- Action Controls -->
-  <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-top: 2rem;">
+  <div class="challenge-actions-bar">
     <div style="display: flex; gap: 10px; flex-wrap: wrap;">
       {% if challenge.id > 1 %}
         <a href="{{ url_for('challenges.view_challenge', challenge_id=challenge.id - 1) }}" class="btn-secondary" style="text-decoration: none;">

@@ -171,37 +171,4 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Skip Challenge Button Listener
-  const btnSkip = document.getElementById('btn-skip-challenge');
-  if (btnSkip) {
-    btnSkip.addEventListener('click', async () => {
-      const formEl = document.getElementById('challenge-form') || document.getElementById('line-challenge-form') || document.getElementById('problem-form');
-      const challengeId = formEl ? parseInt(formEl.dataset.challengeId, 10) : 1;
-      
-      if (!confirm(`Are you sure you want to SKIP Challenge ${challengeId}?\n\nYou will advance to the next challenge without receiving points for this challenge.`)) return;
-
-      btnSkip.disabled = true;
-      btnSkip.textContent = 'Skipping...';
-
-      try {
-        const response = await fetch('/api/skip-challenge', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ challenge_id: challengeId })
-        });
-        const resData = await response.json();
-        if (resData.success) {
-          window.location.href = resData.redirect_url;
-        } else {
-          alert(resData.message || 'Failed to skip challenge.');
-          btnSkip.disabled = false;
-          btnSkip.textContent = '⏭️ Skip Challenge';
-        }
-      } catch (err) {
-        alert('Failed to skip challenge.');
-        btnSkip.disabled = false;
-        btnSkip.textContent = '⏭️ Skip Challenge';
-      }
-    });
-  }
 });

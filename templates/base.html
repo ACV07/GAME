@@ -226,6 +226,51 @@
   {% endif %}
   <script src="{{ url_for('static', filename='js/drafts.js') }}"></script>
 
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const btnSkip = document.getElementById('btn-skip-challenge');
+      if (btnSkip) {
+        btnSkip.addEventListener('click', async (e) => {
+          e.preventDefault();
+          const formEl = document.getElementById('challenge-form') || document.getElementById('line-challenge-form') || document.getElementById('problem-form');
+          const challengeId = formEl ? parseInt(formEl.dataset.challengeId, 10) : 1;
+          
+          if (!confirm(`Are you sure you want to SKIP Challenge ${challengeId}?\n\nYou will advance to the next challenge.`)) return;
+
+          btnSkip.disabled = true;
+          btnSkip.innerHTML = 'Skipping...';
+
+          const feedbackBox = document.getElementById('feedback-box');
+          if (feedbackBox) {
+            feedbackBox.className = 'alert-banner alert-info';
+            feedbackBox.innerHTML = '⏭️ Skipping challenge...';
+            feedbackBox.style.display = 'flex';
+          }
+
+          try {
+            const response = await fetch('/api/skip-challenge', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ challenge_id: challengeId })
+            });
+            const resData = await response.json();
+            if (resData.success) {
+              window.location.href = resData.redirect_url;
+            } else {
+              alert(resData.message || 'Failed to skip challenge.');
+              btnSkip.disabled = false;
+              btnSkip.innerHTML = '⏭️ Skip Challenge';
+            }
+          } catch (err) {
+            alert('Failed to skip challenge.');
+            btnSkip.disabled = false;
+            btnSkip.innerHTML = '⏭️ Skip Challenge';
+          }
+        });
+      }
+    });
+  </script>
+
   {% block extra_js %}{% endblock %}
 </body>
 </html>
