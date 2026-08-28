@@ -147,8 +147,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (resData.success) {
           const msg = resData.is_correct
-            ? `🎉 Correct! Solution verified (+${resData.points_earned} pts). Advancing...`
-            : `⚠️ Solution submitted (+${resData.points_earned} pts). Advancing...`;
+            ? `🎉 Correct! Solution verified. Advancing...`
+            : `⚠️ Solution submitted. Advancing...`;
           const alertType = resData.is_correct ? 'success' : 'warning';
 
           showFeedback(msg, alertType);

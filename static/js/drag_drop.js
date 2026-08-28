@@ -149,8 +149,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (resData.success) {
           const msg = resData.is_correct
-            ? `🎉 Correct! (+${resData.points_earned} pts earned). Advancing to next challenge...`
-            : `⚠️ Answer submitted (+${resData.points_earned} pts earned). Advancing to next challenge...`;
+            ? `🎉 Correct! Advancing to next challenge...`
+            : `⚠️ Answer submitted. Advancing to next challenge...`;
           const alertType = resData.is_correct ? 'success' : 'warning';
 
           ArenaFeedback.show(feedbackBox, msg, alertType);

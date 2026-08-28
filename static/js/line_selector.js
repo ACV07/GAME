@@ -66,8 +66,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (resData.success) {
           const msg = resData.is_correct
-            ? `🎉 Correct! Found error on line ${selectedLineNumber} (+${resData.points_earned} pts). Advancing to next challenge...`
-            : `⚠️ Answer submitted (+${resData.points_earned} pts). Advancing to next challenge...`;
+            ? `🎉 Correct! Found error on line ${selectedLineNumber}. Advancing to next challenge...`
+            : `⚠️ Answer submitted. Advancing to next challenge...`;
           const alertType = resData.is_correct ? 'success' : 'warning';
 
           showFeedback(msg, alertType);
