@@ -879,6 +879,13 @@ footer {
   flex-wrap: wrap;
 }
 
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-top: 0.5rem;
+}
+
 /* ---------- Mobile Responsive Styles ---------- */
 @media (max-width: 768px) {
   .admin-header-bar {
@@ -992,8 +999,13 @@ footer {
   }
 
   .table-responsive {
+    width: 100%;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
+  }
+
+  .table-responsive table {
+    min-width: 640px;
   }
 
   .btn-cyber, .btn-secondary {

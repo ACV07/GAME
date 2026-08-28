@@ -5,17 +5,17 @@
 {% block content %}
 <div class="glass-card" style="max-width: 1150px; margin: 1.5rem auto;">
   
-  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem;">
+  <div class="admin-header-bar">
     <div>
       <span class="badge-status status-active" style="background: rgba(121, 40, 202, 0.2); color: #d670ff; border-color: rgba(121, 40, 202, 0.4);">
         ORGANIZER CONTROL ROOM
       </span>
-      <h1 style="font-size: 2.2rem; font-weight: 800; color: #fff; margin-top: 0.5rem;">
+      <h1 class="admin-header-title">
         EVENT ADMIN DASHBOARD
       </h1>
     </div>
     
-    <div style="display: flex; gap: 10px;">
+    <div class="admin-header-actions">
       <a href="{{ url_for('admin.control_center') }}" class="btn-cyber" style="padding: 0.6rem 1.2rem; font-size: 0.9rem; background: linear-gradient(135deg, var(--primary-gold), var(--primary-amber));">
         🎛️ Master Control Center
       </a>
@@ -34,7 +34,7 @@
         <small style="color: var(--text-muted); font-size: 0.85rem;">Total: {{ teams | length }}</small>
       </h3>
 
-      <div style="overflow-x: auto;">
+      <div class="table-responsive">
         <table class="table-cyber" style="margin-top: 0;">
           <thead>
             <tr>
