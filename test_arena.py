@@ -266,5 +266,23 @@ class Round2ArenaTestCase(unittest.TestCase):
         # 4. Verify team is gone from DB
         self.assertIsNone(TeamModel.get_by_id(team_id))
 
+    def test_12_skip_challenge(self):
+        """Verify contestants can skip a challenge and advance to the next one (0 points)."""
+        EventConfigModel.set_round_status('ACTIVE')
+        self.client.post('/login', data={'team_identifier': 'SKIPPER_TEAM'}, follow_redirects=True)
+        team = TeamModel.get_by_name('SKIPPER_TEAM')
+        self.assertEqual(team['current_challenge'], 1)
+
+        # Skip Challenge 1
+        res = self.client.post('/api/skip-challenge', json={'challenge_id': 1})
+        self.assertEqual(res.status_code, 200)
+        data = json.loads(res.data)
+        self.assertTrue(data['success'])
+        self.assertEqual(data['next_challenge'], 2)
+
+        # Verify DB updated
+        updated_team = TeamModel.get_by_id(team['id'])
+        self.assertEqual(updated_team['current_challenge'], 2)
+
 if __name__ == '__main__':
     unittest.main()

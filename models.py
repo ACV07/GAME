@@ -197,6 +197,41 @@ class TeamModel:
         conn.close()
         return True
 
+    @staticmethod
+    def skip_challenge(team_id, challenge_id):
+        """Advances team to next challenge when skipped (0 points earned)."""
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT current_challenge, total_score, start_time FROM teams WHERE id = ?", (team_id,))
+        team = cursor.fetchone()
+        if not team:
+            conn.close()
+            return
+            
+        next_challenge = max(team['current_challenge'], challenge_id + 1)
+        
+        if next_challenge > 5:
+            pause_sec = EventConfigModel.get_pause_seconds()
+            cursor.execute("""
+                UPDATE teams 
+                SET current_challenge = 6,
+                    completion_time = CURRENT_TIMESTAMP,
+                    status = 'COMPLETED',
+                    total_time_seconds = MAX(0, CAST((strftime('%s', 'now') - strftime('%s', start_time)) AS INTEGER) - ?),
+                    draft_json = ''
+                WHERE id = ?
+            """, (pause_sec, team_id))
+        else:
+            cursor.execute("""
+                UPDATE teams 
+                SET current_challenge = ?,
+                    draft_json = ''
+                WHERE id = ?
+            """, (next_challenge, team_id))
+            
+        conn.commit()
+        conn.close()
+
 
     @staticmethod
     def create_team(team_code, team_name):

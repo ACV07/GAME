@@ -79,8 +79,12 @@
   <!-- Feedback Banner -->
   <div id="feedback-box" class="alert-banner" style="display: none; margin-top: 1.5rem;"></div>
 
-  <!-- Submit Form -->
-  <div style="display: flex; justify-content: flex-end; margin-top: 2rem;">
+  <!-- Submit & Skip Controls -->
+  <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-top: 2rem;">
+    <button type="button" class="btn-secondary" id="btn-skip-challenge" style="border-color: rgba(245, 158, 11, 0.4); color: #f59e0b;">
+      ⏭️ Skip Challenge
+    </button>
+
     <form id="line-challenge-form" data-challenge-id="{{ challenge.id }}">
       <button type="submit" class="btn-cyber" id="btn-submit-line">
         Submit Selected Error Line ➔

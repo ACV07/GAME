@@ -122,6 +122,52 @@ def submit_challenge():
             'message': 'Incorrect submission. Review your code/answer and try again!'
         })
 
+@challenges_bp.route('/api/skip-challenge', methods=['POST'])
+def skip_challenge():
+    """Endpoint allowing contestants to skip their active challenge (0 points)."""
+    sess_data, team = get_current_active_team()
+    if not team:
+        return jsonify({'success': False, 'message': 'Unauthorized or session expired.'}), 401
+
+    status = EventConfigModel.get_round_status()
+    if status != 'ACTIVE':
+        return jsonify({'success': False, 'stopped': True, 'message': 'GAME_STOPPED'}), 403
+
+    data = request.get_json() or {}
+    challenge_id = data.get('challenge_id')
+
+    if not challenge_id:
+        return jsonify({'success': False, 'message': 'Missing challenge id.'}), 400
+
+    if int(challenge_id) != team['current_challenge']:
+        return jsonify({
+            'success': False,
+            'message': f"Skip rejected. Your active challenge is Challenge {team['current_challenge']}."
+        }), 403
+
+    # Record submission log for audit
+    SubmissionModel.record_submission(
+        team_id=team['id'],
+        challenge_id=int(challenge_id),
+        submitted_answer='[SKIPPED]',
+        is_correct=False,
+        points=0
+    )
+
+    # Advance team to next challenge
+    TeamModel.skip_challenge(team['id'], int(challenge_id))
+
+    next_challenge = int(challenge_id) + 1
+    redirect_url = url_for('challenges.completed') if next_challenge > 5 else url_for('challenges.view_challenge', challenge_id=next_challenge)
+
+    return jsonify({
+        'success': True,
+        'message': f"Challenge {challenge_id} skipped.",
+        'next_challenge': next_challenge,
+        'completed_all': next_challenge > 5,
+        'redirect_url': redirect_url
+    })
+
 @challenges_bp.route('/completed')
 def completed():
     """Renders final result and victory screen."""

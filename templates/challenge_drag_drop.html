@@ -55,10 +55,15 @@
   <div id="feedback-box" class="alert-banner" style="display: none; margin-top: 1.5rem;"></div>
 
   <!-- Action Controls -->
-  <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 2rem;">
-    <button type="button" class="btn-secondary" id="btn-reset-blanks">
-      🔄 Clear Blanks
-    </button>
+  <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-top: 2rem;">
+    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+      <button type="button" class="btn-secondary" id="btn-reset-blanks">
+        🔄 Clear Blanks
+      </button>
+      <button type="button" class="btn-secondary" id="btn-skip-challenge" style="border-color: rgba(245, 158, 11, 0.4); color: #f59e0b;">
+        ⏭️ Skip Challenge
+      </button>
+    </div>
 
     <form id="challenge-form" data-challenge-id="{{ challenge.id }}">
       <button type="submit" class="btn-cyber" id="btn-submit">
