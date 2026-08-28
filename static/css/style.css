@@ -1,5 +1,19 @@
 /* Organizer / Admin console — polish layer (Dark x Orange Competitive Theme) */
 
+html, body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  scroll-behavior: smooth;
+  touch-action: manipulation;
+}
+
+.glass-card, .btn-cyber, .btn-secondary, .option-chip, .blank-slot, .step-node {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
 #audit-container {
   animation: fade-in-up 0.25s ease;
 }

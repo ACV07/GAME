@@ -138,3 +138,31 @@
 .btn-reset:hover {
   background: rgba(239, 68, 68, 0.4);
 }
+
+/* Responsive Mobile Adjustments for Admin & Leaderboard */
+@media (max-width: 768px) {
+  .admin-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1.25rem !important;
+  }
+
+  .table-cyber th,
+  .table-cyber td {
+    padding: 0.65rem 0.5rem !important;
+    font-size: 0.8rem !important;
+  }
+
+  .btn-sm-action {
+    padding: 0.4rem 0.6rem !important;
+    font-size: 0.75rem !important;
+    min-height: 36px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .badge-status {
+    padding: 0.25rem 0.6rem !important;
+    font-size: 0.72rem !important;
+  }
+}
