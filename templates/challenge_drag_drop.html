@@ -31,10 +31,10 @@
       <span></span>
     </div>
     
-    <div class="code-content" id="code-container">
+    <div class="code-content" id="code-container" style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
       {% set raw_code = challenge.code %}
       <!-- Render code lines with blank drop slots -->
-      <pre style="font-family: inherit; font-size: inherit; white-space: pre-wrap;">{% for line in raw_code.split('\n') %}{% set line_parts = line.split('________') %}{% for part in line_parts %}{{ part }}{% if not loop.last %}<span class="blank-slot" data-index="{{ loop.index0 }}">___</span>{% endif %}{% endfor %}
+      <pre style="font-family: inherit; font-size: inherit; white-space: pre; margin: 0; padding: 0.25rem 0; line-height: 2.2;">{% for line in raw_code.split('\n') %}{% set line_parts = line.split('________') %}{% for part in line_parts %}{{ part }}{% if not loop.last %}<span class="blank-slot" data-index="{{ loop.index0 }}">___</span>{% endif %}{% endfor %}
 {% endfor %}</pre>
     </div>
   </div>
