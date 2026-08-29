@@ -1,5 +1,5 @@
 /* ==========================================================================
-   CHALLENGE DRAG & DROP STYLES — CRIMSON & TERRACOTTA THEME
+   CHALLENGE DRAG & DROP STYLES — CYBER NAVY & SAPPHIRE PALETTE
    ========================================================================== */
 
 /* Blank drop slot inside code block */
@@ -9,23 +9,23 @@
   height: 38px;
   padding: 0 12px;
   margin: 0 6px;
-  background: rgba(231, 123, 73, 0.12);
-  border: 2px dashed #E77B49;
+  background: rgba(118, 146, 255, 0.14);
+  border: 2px dashed #7692FF;
   border-radius: var(--radius-sm);
   vertical-align: middle;
   text-align: center;
   line-height: 34px;
   font-family: var(--font-code);
   font-weight: 700;
-  color: #FFF7F3;
+  color: #F0F6FF;
   transition: var(--transition-fast);
   cursor: pointer;
   touch-action: none;
 }
 
 @keyframes slot-pulse-cyan {
-  0%, 100% { box-shadow: 0 0 12px rgba(231, 123, 73, 0.4); border-color: #E77B49; background: rgba(231, 123, 73, 0.18); }
-  50% { box-shadow: 0 0 24px rgba(231, 123, 73, 0.9); border-color: #F09265; background: rgba(231, 123, 73, 0.32); transform: scale(1.06); }
+  0%, 100% { box-shadow: 0 0 12px rgba(118, 146, 255, 0.4); border-color: #7692FF; background: rgba(118, 146, 255, 0.18); }
+  50% { box-shadow: 0 0 24px rgba(171, 210, 250, 0.9); border-color: #ABD2FA; background: rgba(118, 146, 255, 0.35); transform: scale(1.06); }
 }
 
 .blank-slot.drag-over {
@@ -36,15 +36,15 @@
 @keyframes correct-drop-bounce {
   0% { transform: scale(0.92); }
   50% { transform: scale(1.08); background: rgba(34, 197, 94, 0.35); border-color: #22C55E; box-shadow: 0 0 20px rgba(34, 197, 94, 0.7); }
-  100% { transform: scale(1); background: rgba(231, 123, 73, 0.25); border-color: #E77B49; }
+  100% { transform: scale(1); background: rgba(118, 146, 255, 0.28); border-color: #7692FF; }
 }
 
 .blank-slot.filled {
   border-style: solid;
-  background: linear-gradient(135deg, rgba(231, 123, 73, 0.35), rgba(179, 74, 68, 0.45));
-  border-color: #E77B49;
-  color: #FFF7F3;
-  box-shadow: 0 0 16px rgba(231, 123, 73, 0.35);
+  background: linear-gradient(135deg, rgba(118, 146, 255, 0.38), rgba(27, 44, 193, 0.48));
+  border-color: #7692FF;
+  color: #F0F6FF;
+  box-shadow: 0 0 16px rgba(118, 146, 255, 0.4);
   animation: correct-drop-bounce 0.32s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
@@ -52,7 +52,7 @@
 .options-bank-container {
   margin-top: 2rem;
   padding: 1.5rem;
-  background: rgba(96, 36, 30, 0.85);
+  background: rgba(17, 32, 88, 0.88);
   border: 1px dashed var(--code-border);
   border-radius: var(--radius-md);
 }
@@ -60,7 +60,7 @@
 .bank-label {
   font-size: 0.9rem;
   font-weight: 600;
-  color: #E77B49;
+  color: #7692FF;
   text-transform: uppercase;
   letter-spacing: 1px;
   margin-bottom: 1rem;
@@ -73,7 +73,7 @@
 }
 
 .option-chip {
-  background: rgba(149, 39, 29, 0.95);
+  background: rgba(27, 44, 193, 0.95);
   border: 1px solid var(--code-border);
   color: var(--text-main);
   padding: 0.65rem 1.25rem;
@@ -85,23 +85,23 @@
   user-select: none;
   touch-action: none;
   transition: var(--transition-fast);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 4px 12px rgba(4, 9, 28, 0.5);
 }
 
 .option-chip:hover, .option-chip:focus {
-  border-color: #E77B49;
-  color: #FFF7F3;
+  border-color: #7692FF;
+  color: #F0F6FF;
   transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(231, 123, 73, 0.35);
+  box-shadow: 0 6px 18px rgba(118, 146, 255, 0.4);
 }
 
 /* Mobile Touch Grab */
 .option-chip.dragging, .option-chip.is-dragging-touch {
   opacity: 0.9;
   transform: scale(1.08) !important;
-  box-shadow: 0 0 24px rgba(231, 123, 73, 0.8) !important;
-  border-color: #E77B49 !important;
-  color: #FFF7F3 !important;
+  box-shadow: 0 0 24px rgba(118, 146, 255, 0.85) !important;
+  border-color: #7692FF !important;
+  color: #F0F6FF !important;
   z-index: 1000 !important;
 }
 
@@ -113,15 +113,15 @@
 }
 
 @keyframes chip-selected-pulse {
-  0% { box-shadow: 0 0 0 0 rgba(231, 123, 73, 0.7); }
-  70% { box-shadow: 0 0 0 10px rgba(231, 123, 73, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(231, 123, 73, 0); }
+  0% { box-shadow: 0 0 0 0 rgba(118, 146, 255, 0.7); }
+  70% { box-shadow: 0 0 0 10px rgba(118, 146, 255, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(118, 146, 255, 0); }
 }
 
 .option-chip.selected-for-fill {
-  border-color: #E77B49 !important;
-  color: #FFF7F3 !important;
-  background: rgba(231, 123, 73, 0.25) !important;
+  border-color: #7692FF !important;
+  color: #F0F6FF !important;
+  background: rgba(118, 146, 255, 0.28) !important;
   animation: chip-selected-pulse 1.5s infinite ease-in-out !important;
 }
 
