@@ -59,44 +59,42 @@ html, body {
    ========================================================= */
 
 :root {
-  /* Environment — Deep Black & Charcoal Palette */
-  --bg-black:        #080A0A;  /* Deep Black Main Background */
-  --bg-black-soft:   #111414;  /* Dark Charcoal Secondary Background */
-  --bg-panel:        #181C1C;  /* Dark Gray Cards */
-  --bg-panel-2:      #222727;  /* Hover Panel Card */
+  /* Environment — Crimson & Terracotta Palette */
+  --bg-black:        #3A1714;  /* Main background */
+  --bg-black-soft:   #60241E;  /* Dark section */
+  --bg-panel:        #95271D;  /* Card background */
+  --bg-panel-2:      #A83126;  /* Card hover */
 
-  /* Competition & Action — Orange */
-  --primary-orange:  #FF6B00;  /* Primary Accent Orange */
-  --orange-hover:   #FF8A33;  /* Orange Hover Light Orange */
+  /* Primary Action Family */
+  --primary-orange:  #E77B49;  /* Primary action */
+  --orange-hover:   #F09265;  /* Primary action hover */
+  --primary-cyan:    #E77B49;  /* Secondary accent binding */
+  --cyan-hover:     #F09265;
 
-  /* Technology & Interaction — Cyan */
-  --primary-cyan:    #00D9FF;  /* Secondary Accent Cyan */
-  --cyan-hover:     #5CEBFF;  /* Cyan Hover Light Cyan */
-
-  /* Legacy variable alias bindings for complete compatibility */
-  --primary-gold:    #FF6B00;  /* Primary Action -> Orange */
-  --primary-amber:   #FF6B00;
-  --primary-purple:  #00D9FF;  /* Technology -> Cyan */
-  --purple-hover:    #5CEBFF;
-  --gold-bright:     #FF8A33;  /* Bright Action Orange */
-  --gold-dim:        #C25200;  /* Deep Action Orange */
-  --text-gold:       #00D9FF;  /* Technology Text -> Cyan */
+  /* Theme variable bindings */
+  --primary-gold:    #E77B49;  /* Primary Action -> Terracotta Orange */
+  --primary-amber:   #E77B49;
+  --primary-purple:  #E77B49;
+  --purple-hover:    #F09265;
+  --gold-bright:     #F09265;
+  --gold-dim:        #C85F30;
+  --text-gold:       #E77B49;
 
   /* Typography Palette */
-  --text-main:       #F5F7F7;  /* Main Text Off White */
-  --text-muted:      #9CA3AF;  /* Secondary Text Gray */
-  --text-dim:        #6B7280;  /* Dim Gray */
+  --text-main:       #FFF7F3;  /* Main text (Off-White/Warm Cream) */
+  --text-muted:      #D8B9B2;  /* Secondary text (Muted Warm Sand) */
+  --text-dim:        #B5958E;  /* Dim text */
 
   /* Functional Status Colors */
   --accent-green:    #22C55E;  /* Correct (Green) */
   --accent-red:      #EF4444;  /* Wrong (Red) */
-  --accent-yellow:   #FACC15;  /* Warning / Timer (Yellow) */
-  --accent-cyan:     #00D9FF;  /* Cyan Tech Accent */
-  --accent-orange:   #FF6B00;  /* Orange Competition Accent */
+  --accent-yellow:   #FACC15;  /* Warning (Yellow) */
+  --accent-cyan:     #E77B49;
+  --accent-orange:   #E77B49;
 
   /* Structure & Borders */
-  --code-border:     rgba(0, 217, 255, 0.25);
-  --bg-card-border:  rgba(255, 107, 0, 0.2);
+  --code-border:     #B34A44;  /* Border/secondary */
+  --bg-card-border:  rgba(179, 74, 68, 0.45);
   --radius-sm:        6px;
   --radius-md:        12px;
   --radius-lg:        20px;
@@ -107,11 +105,11 @@ html, body {
   --transition-fast: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-med:  all 0.32s cubic-bezier(0.4, 0, 0.2, 1);
 
-  --shadow-glow-orange: 0 0 30px rgba(255, 107, 0, 0.45);
-  --shadow-glow-cyan:   0 0 30px rgba(0, 217, 255, 0.45);
-  --shadow-glow-gold:   0 0 30px rgba(255, 107, 0, 0.45);
-  --shadow-glow-purple: 0 0 30px rgba(0, 217, 255, 0.45);
-  --shadow-card:        0 10px 40px rgba(0, 0, 0, 0.9);
+  --shadow-glow-orange: 0 0 30px rgba(231, 123, 73, 0.45);
+  --shadow-glow-cyan:   0 0 30px rgba(231, 123, 73, 0.45);
+  --shadow-glow-gold:   0 0 30px rgba(231, 123, 73, 0.45);
+  --shadow-glow-purple: 0 0 30px rgba(231, 123, 73, 0.45);
+  --shadow-card:        0 10px 40px rgba(0, 0, 0, 0.7);
 }
 
 /* ---------- Page Entrance & Ambient Animations ---------- */
@@ -191,36 +189,36 @@ html, body {
 }
 
 .progress-dot.completed {
-  background: #FF6B00;
-  box-shadow: 0 0 10px rgba(255, 107, 0, 0.6);
+  background: #B34A44;
+  box-shadow: 0 0 10px rgba(179, 74, 68, 0.6);
 }
 
 .progress-dot.active {
-  background: #00D9FF;
-  box-shadow: 0 0 16px rgba(0, 217, 255, 0.9);
+  background: #E77B49;
+  box-shadow: 0 0 16px rgba(231, 123, 73, 0.9);
   transform: scale(1.25);
   animation: active-dot-pulse 1.6s infinite ease-in-out;
 }
 
 @keyframes active-dot-pulse {
-  0%, 100% { box-shadow: 0 0 10px rgba(0, 217, 255, 0.6); }
-  50% { box-shadow: 0 0 22px rgba(0, 217, 255, 1); transform: scale(1.35); }
+  0%, 100% { box-shadow: 0 0 10px rgba(231, 123, 73, 0.6); }
+  50% { box-shadow: 0 0 22px rgba(231, 123, 73, 1); transform: scale(1.35); }
 }
 
 .progress-dot.upcoming {
-  background: #374151;
+  background: #60241E;
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .progress-dot-line {
   width: 18px;
   height: 2px;
-  background: #374151;
+  background: #60241E;
   transition: background 0.3s ease;
 }
 
 .progress-dot-line.completed {
-  background: #FF6B00;
+  background: #E77B49;
 }
 
 /* Floating Reward Score Animation (+50 / +100) */
@@ -232,14 +230,14 @@ html, body {
 
 .floating-score-pop {
   position: absolute;
-  color: #00D9FF;
+  color: #E77B49;
   font-weight: 800;
   font-size: 1.25rem;
   font-family: var(--font-code);
   pointer-events: none;
   z-index: 1000;
   animation: float-score-up 0.55s ease-out forwards;
-  text-shadow: 0 0 14px rgba(0, 217, 255, 0.9);
+  text-shadow: 0 0 14px rgba(231, 123, 73, 0.9);
 }
 
 /* Correct Answer Inline Toast (~600ms) */
@@ -422,9 +420,9 @@ code {
   border-radius: 10px;
   font-weight: 800;
   font-size: 0.95rem;
-  color: #080A0A;
-  background: linear-gradient(135deg, #00D9FF, #5CEBFF);
-  box-shadow: 0 0 20px rgba(0, 217, 255, 0.45);
+  color: #FFF7F3;
+  background: linear-gradient(135deg, #E77B49, #F09265);
+  box-shadow: 0 0 20px rgba(231, 123, 73, 0.45);
   letter-spacing: -0.5px;
   transition: transform 0.25s ease;
 }
@@ -449,8 +447,8 @@ code {
 .team-badge {
   font-weight: 600;
   font-size: 0.9rem;
-  color: #00D9FF;
-  background: rgba(0, 217, 255, 0.1);
+  color: #E77B49;
+  background: rgba(231, 123, 73, 0.15);
   border: 1px solid var(--code-border);
   padding: 0.4rem 0.9rem;
   border-radius: 20px;
@@ -461,7 +459,7 @@ code {
   font-weight: 700;
   font-size: 0.9rem;
   color: var(--accent-yellow);
-  background: rgba(24, 28, 28, 0.85);
+  background: rgba(96, 36, 30, 0.85);
   border: 1px solid var(--accent-yellow);
   padding: 0.35rem 0.9rem;
   border-radius: 20px;
@@ -505,18 +503,18 @@ code {
 }
 
 .btn-cyber {
-  color: #080A0A !important;
+  color: #FFF7F3 !important;
   font-weight: 800 !important;
-  background: linear-gradient(135deg, #FF6B00 0%, #FF8A33 100%) !important;
-  box-shadow: 0 4px 20px rgba(255, 107, 0, 0.45), 0 0 15px rgba(255, 107, 0, 0.3) !important;
-  border: 1px solid rgba(255, 138, 51, 0.6) !important;
+  background: linear-gradient(135deg, #E77B49 0%, #F09265 100%) !important;
+  box-shadow: 0 4px 20px rgba(231, 123, 73, 0.45), 0 0 15px rgba(231, 123, 73, 0.3) !important;
+  border: 1px solid rgba(240, 146, 101, 0.6) !important;
 }
 
 .btn-cyber:hover {
-  color: #080A0A !important;
+  color: #FFF7F3 !important;
   transform: translateY(-2px) scale(1.02) !important;
-  background: linear-gradient(135deg, #FF8A33 0%, #FFA052 100%) !important;
-  box-shadow: 0 8px 30px rgba(255, 138, 51, 0.65), 0 0 20px rgba(255, 138, 51, 0.4) !important;
+  background: linear-gradient(135deg, #F09265 0%, #FAAA82 100%) !important;
+  box-shadow: 0 8px 30px rgba(240, 146, 101, 0.65), 0 0 20px rgba(240, 146, 101, 0.4) !important;
   filter: brightness(1.12) !important;
 }
 
@@ -612,7 +610,7 @@ code {
 }
 
 .glass-card {
-  background: linear-gradient(180deg, rgba(24, 28, 28, 0.94), rgba(17, 20, 20, 0.97));
+  background: linear-gradient(180deg, rgba(149, 39, 29, 0.94), rgba(96, 36, 30, 0.97));
   border: 1px solid var(--code-border);
   border-radius: var(--radius-lg);
   padding: 2rem;
@@ -625,8 +623,8 @@ code {
 }
 
 .glass-card:hover {
-  border-color: rgba(0, 217, 255, 0.45);
-  box-shadow: 0 14px 45px rgba(0, 0, 0, 0.9), 0 0 25px rgba(0, 217, 255, 0.2);
+  border-color: #B34A44;
+  box-shadow: 0 14px 45px rgba(0, 0, 0, 0.7), 0 0 25px rgba(231, 123, 73, 0.25);
 }
 
 .admin-grid {
@@ -903,15 +901,15 @@ body.player-input-locked { overflow: hidden; }
 }
 
 .step-node.completed {
-  background: linear-gradient(135deg, #FF6B00, #FF8A33);
-  border-color: #FF6B00;
-  color: #080A0A;
+  background: linear-gradient(135deg, #E77B49, #F09265);
+  border-color: #E77B49;
+  color: #FFF7F3;
 }
 
 .step-node.active {
-  border-color: #00D9FF;
-  color: #00D9FF;
-  box-shadow: 0 0 18px rgba(0, 217, 255, 0.45);
+  border-color: #E77B49;
+  color: #E77B49;
+  box-shadow: 0 0 18px rgba(231, 123, 73, 0.5);
 }
 
 /* ---------- Challenge header ---------- */
@@ -934,7 +932,7 @@ body.player-input-locked { overflow: hidden; }
 
 /* ---------- Code editor frame ---------- */
 .code-editor-frame {
-  background: #111116;
+  background: #481B17;
   border: 1px solid var(--code-border);
   border-radius: var(--radius-md);
   overflow: hidden;
