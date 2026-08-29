@@ -146,6 +146,41 @@
     gap: 1.25rem !important;
   }
 
+  .admin-header-bar {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.85rem !important;
+  }
+
+  .admin-header-actions {
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0.5rem !important;
+  }
+
+  .admin-header-actions .btn-cyber,
+  .admin-header-actions .btn-secondary {
+    width: 100% !important;
+    text-align: center !important;
+    justify-content: center !important;
+    min-height: 44px !important;
+  }
+
+  .control-actions {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 0.6rem !important;
+    width: 100% !important;
+  }
+
+  .control-actions button {
+    width: 100% !important;
+    padding: 0.65rem 0.4rem !important;
+    font-size: 0.82rem !important;
+    min-height: 44px !important;
+  }
+
   .table-cyber th,
   .table-cyber td {
     padding: 0.65rem 0.5rem !important;
@@ -154,9 +189,9 @@
   }
 
   .btn-sm-action {
-    padding: 0.4rem 0.6rem !important;
-    font-size: 0.75rem !important;
-    min-height: 36px !important;
+    padding: 0.45rem 0.65rem !important;
+    font-size: 0.78rem !important;
+    min-height: 38px !important;
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
@@ -179,5 +214,6 @@
     text-align: center !important;
     padding: 0.55rem 0.6rem !important;
     font-size: 0.78rem !important;
+    min-height: 40px !important;
   }
 }
