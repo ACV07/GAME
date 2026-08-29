@@ -1295,39 +1295,51 @@ html, body {
 
   .challenge-actions-bar {
     display: flex !important;
-    align-items: center !important;
-    justify-content: flex-start !important;
-    flex-wrap: wrap !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
     gap: 10px !important;
     width: 100% !important;
     box-sizing: border-box !important;
   }
 
   .challenge-actions-bar form,
-  .challenge-actions-bar button,
-  .challenge-actions-bar a,
-  .challenge-actions-bar div {
+  .challenge-actions-bar > button,
+  .challenge-actions-bar > a,
+  .challenge-actions-bar > div {
+    width: 100% !important;
     margin-left: 0 !important;
   }
 
-  .challenge-actions-bar button,
-  .challenge-actions-bar a {
-    font-size: 0.82rem !important;
-    padding: 0.6rem 0.85rem !important;
+  .challenge-actions-bar .btn-cyber,
+  .challenge-actions-bar .btn-secondary {
+    width: 100% !important;
+    text-align: center !important;
+    justify-content: center !important;
+    padding: 0.8rem 1rem !important;
+    font-size: 0.92rem !important;
+    box-sizing: border-box !important;
+    min-height: 46px !important;
+  }
+
+  .input-cyber {
+    font-size: 1rem !important; /* Prevents iOS auto-zoom on input focus */
+    padding: 0.85rem 0.9rem !important;
   }
 
   .option-chip {
-    padding: 0.55rem 0.8rem !important;
-    font-size: 0.8rem !important;
-    min-height: 40px !important;
+    padding: 0.65rem 0.95rem !important;
+    font-size: 0.88rem !important;
+    min-height: 44px !important;
     display: inline-flex !important;
     align-items: center !important;
   }
 
   .blank-slot {
-    min-width: 70px !important;
-    height: 32px !important;
-    font-size: 0.8rem !important;
+    min-width: 80px !important;
+    height: 36px !important;
+    line-height: 32px !important;
+    font-size: 0.85rem !important;
+    margin: 0 4px !important;
   }
 
   .table-responsive {

@@ -150,6 +150,7 @@
   .table-cyber td {
     padding: 0.65rem 0.5rem !important;
     font-size: 0.8rem !important;
+    white-space: nowrap !important;
   }
 
   .btn-sm-action {
@@ -164,5 +165,19 @@
   .badge-status {
     padding: 0.25rem 0.6rem !important;
     font-size: 0.72rem !important;
+  }
+
+  .filter-pills-container {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+    width: 100% !important;
+  }
+
+  .filter-pill-btn {
+    flex: 1 1 45% !important;
+    text-align: center !important;
+    padding: 0.55rem 0.6rem !important;
+    font-size: 0.78rem !important;
   }
 }
