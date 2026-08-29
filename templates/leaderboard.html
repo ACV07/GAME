@@ -2,10 +2,29 @@
 
 {% block title %}🏆 Live Leaderboard — Round 2 Challenge Arena{% endblock %}
 
+{% block extra_css %}
+<style>
+  .filter-pill {
+    padding: 0.4rem 0.95rem;
+    font-size: 0.82rem;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .filter-pill.active-filter {
+    background: var(--primary-gold) !important;
+    color: #000 !important;
+    font-weight: 800 !important;
+    border-color: var(--primary-gold) !important;
+    box-shadow: 0 0 14px rgba(255, 208, 0, 0.45);
+  }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="glass-card" style="max-width: 1050px; margin: 1.5rem auto;">
   
-  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem;">
+  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
     <div>
       <h1 style="font-size: 2.2rem; font-weight: 800; background: linear-gradient(135deg, #ffd700, #ff9100); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
         🏆 ROUND 2 LEADERBOARD
@@ -18,6 +37,23 @@
     <div style="display: flex; align-items: center; gap: 0.5rem; background: rgba(255, 208, 0, 0.1); border: 1px solid rgba(255, 208, 0, 0.35); padding: 0.4rem 0.9rem; border-radius: 20px; font-size: 0.85rem; color: var(--primary-gold);">
       <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--accent-green); box-shadow: 0 0 10px var(--accent-green);"></span>
       Live Auto-Updating (5s)
+    </div>
+  </div>
+
+  <!-- Filter & Sort Controls -->
+  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem; background: rgba(10, 10, 10, 0.7); border: 1px solid var(--code-border); padding: 0.75rem 1.25rem; border-radius: var(--radius-md);">
+    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+      <span style="color: var(--text-gold); font-weight: 700; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px;">
+        🔍 Filter / Sort Standings:
+      </span>
+      <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+        <button id="filter-btn-points" class="btn-secondary filter-pill {% if active_sort == 'points' or not active_sort %}active-filter{% endif %}" onclick="setLeaderboardFilter('points')">
+          🎯 By Highest Points
+        </button>
+        <button id="filter-btn-time" class="btn-secondary filter-pill {% if active_sort == 'time' %}active-filter{% endif %}" onclick="setLeaderboardFilter('time')">
+          ⚡ By Fastest Time
+        </button>
+      </div>
     </div>
   </div>
 

@@ -328,5 +328,19 @@ class Round2ArenaTestCase(unittest.TestCase):
         deleted_team = TeamModel.get_by_id(team['id'])
         self.assertIsNone(deleted_team)
 
+    def test_15_leaderboard_filter_sorting(self):
+        """Verify leaderboard filter endpoints for sorting by points vs sorting by time."""
+        self.client.post('/admin/login', data={'admin_id': 'admin', 'password': 'admin2026'})
+        
+        res_pts = self.client.get('/api/leaderboard?sort=points')
+        self.assertEqual(res_pts.status_code, 200)
+        data_pts = json.loads(res_pts.data)
+        self.assertEqual(data_pts['active_sort'], 'points')
+        
+        res_time = self.client.get('/api/leaderboard?sort=time')
+        self.assertEqual(res_time.status_code, 200)
+        data_time = json.loads(res_time.data)
+        self.assertEqual(data_time['active_sort'], 'time')
+
 if __name__ == '__main__':
     unittest.main()

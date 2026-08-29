@@ -6,6 +6,15 @@
 document.addEventListener('DOMContentLoaded', () => {
   const leaderboardBody = document.getElementById('leaderboard-tbody');
   const POLL_INTERVAL_MS = 5000;
+  let currentSort = 'points';
+
+  window.setLeaderboardFilter = function(sortType) {
+    currentSort = sortType;
+    document.querySelectorAll('.filter-pill').forEach(btn => btn.classList.remove('active-filter'));
+    const activeBtn = document.getElementById(`filter-btn-${sortType}`);
+    if (activeBtn) activeBtn.classList.add('active-filter');
+    updateLeaderboard();
+  };
 
   const RANK_DISPLAY = {
     1: { label: '🏆 1', className: 'rank-podium-1' },
@@ -23,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!leaderboardBody) return;
 
     try {
-      const res = await fetch('/api/leaderboard');
+      const res = await fetch(`/api/leaderboard?sort=${currentSort}`);
       const data = await res.json();
 
       if (data && Array.isArray(data.rankings)) {

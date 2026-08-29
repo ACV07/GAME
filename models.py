@@ -617,13 +617,25 @@ class SubmissionModel:
 
 class LeaderboardModel:
     @staticmethod
-    def get_rankings():
+    def get_rankings(sort_by='points'):
         conn = get_db_connection()
-        # Leaderboard Ranking Rules:
-        # 1. Total Score (Points) DESCENDING (Primary factor)
-        # 2. Progress (current_challenge) DESCENDING (Secondary factor)
-        # 3. Elapsed Time (elapsed_seconds) ASCENDING (Tie-breaker)
-        query = """
+        
+        if sort_by == 'time':
+            order_clause = """
+                elapsed_seconds ASC,
+                total_score DESC,
+                current_challenge DESC,
+                id ASC
+            """
+        else:
+            order_clause = """
+                total_score DESC,
+                current_challenge DESC,
+                elapsed_seconds ASC,
+                id ASC
+            """
+
+        query = f"""
             SELECT 
                 id, team_code, team_name, current_challenge, total_score, status, start_time, completion_time,
                 CASE 
@@ -632,11 +644,7 @@ class LeaderboardModel:
                     ELSE 999999
                 END AS elapsed_seconds
             FROM teams
-            ORDER BY 
-                total_score DESC,
-                current_challenge DESC,
-                elapsed_seconds ASC,
-                id ASC
+            ORDER BY {order_clause}
         """
         rows = conn.execute(query).fetchall()
         conn.close()
