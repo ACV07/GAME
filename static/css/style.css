@@ -307,17 +307,19 @@ code {
 }
 
 .btn-cyber {
-  color: #080A0A;
-  font-weight: 800;
-  background: linear-gradient(135deg, #FF6B00, #FF8A33);
-  box-shadow: 0 4px 20px rgba(255, 107, 0, 0.45);
+  color: #080A0A !important;
+  font-weight: 800 !important;
+  background: linear-gradient(135deg, #FF6B00 0%, #FF8A33 100%) !important;
+  box-shadow: 0 4px 20px rgba(255, 107, 0, 0.45), 0 0 15px rgba(255, 107, 0, 0.3) !important;
+  border: 1px solid rgba(255, 138, 51, 0.6) !important;
 }
 
 .btn-cyber:hover {
-  transform: translateY(-2px) scale(1.02);
-  background: linear-gradient(135deg, #FF8A33, #FFA052);
-  box-shadow: 0 8px 30px rgba(255, 138, 51, 0.65);
-  filter: brightness(1.12);
+  color: #080A0A !important;
+  transform: translateY(-2px) scale(1.02) !important;
+  background: linear-gradient(135deg, #FF8A33 0%, #FFA052 100%) !important;
+  box-shadow: 0 8px 30px rgba(255, 138, 51, 0.65), 0 0 20px rgba(255, 138, 51, 0.4) !important;
+  filter: brightness(1.12) !important;
 }
 
 .btn-cyber:active { transform: translateY(0) scale(0.98); }
