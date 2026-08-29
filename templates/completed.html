@@ -35,15 +35,9 @@
 
 
   <div>
-    {% if session.get('is_admin') %}
-      <a href="{{ url_for('leaderboard.view_leaderboard') }}" class="btn-cyber" style="padding: 1rem 3rem; font-size: 1.1rem;">
-        🏆 View Live Event Leaderboard ➔
-      </a>
-    {% else %}
-      <a href="{{ url_for('auth.lobby') }}" class="btn-cyber" style="padding: 1rem 3rem; font-size: 1.1rem;">
-        🏠 Return to Team Lobby ➔
-      </a>
-    {% endif %}
+    <a href="{{ url_for('auth.lobby') }}" class="btn-cyber" style="padding: 1rem 3rem; font-size: 1.1rem;">
+      🏠 Return to Team Lobby ➔
+    </a>
   </div>
 
 </div>
