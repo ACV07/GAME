@@ -32,28 +32,7 @@
     </div>
   </div>
 
-  <!-- Submissions Log -->
-  <div style="text-align: left; background: rgba(10, 10, 10, 0.8); border: 1px solid var(--code-border); border-radius: var(--radius-md); padding: 1.5rem; margin-bottom: 2.5rem;">
-    <h3 style="font-size: 1.1rem; color: #fff; margin-bottom: 1rem;">📊 Challenge Performance Breakdown</h3>
-    <table class="table-cyber" style="margin-top: 0;">
-      <thead>
-        <tr>
-          <th>Challenge</th>
-          <th>Status</th>
-          <th>Submitted At</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for sub in submissions %}
-          <tr>
-            <td><strong>{{ sub.challenge_title }}</strong></td>
-            <td><span class="badge-status status-completed">Submitted</span></td>
-            <td style="color: var(--text-muted); font-size: 0.85rem;">{{ sub.submission_time }}</td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
+
 
   <div>
     {% if session.get('is_admin') %}
