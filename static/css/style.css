@@ -277,23 +277,43 @@ html, body {
   animation: form-wrong-shake 0.35s cubic-bezier(0.36, 0.07, 0.19, 0.97) !important;
 }
 
-/* Challenge Level Transition Slide (250–350ms) */
+/* Challenge Level Transition Slide (Forward & Reverse Horizontal) */
 @keyframes challenge-slide-out-left {
   from { opacity: 1; transform: translateX(0); }
-  to   { opacity: 0; transform: translateX(-35px); }
+  to   { opacity: 0; transform: translateX(-45px); }
 }
 
 @keyframes challenge-slide-in-right {
-  from { opacity: 0; transform: translateX(35px); }
+  from { opacity: 0; transform: translateX(45px); }
   to   { opacity: 1; transform: translateX(0); }
 }
 
-.challenge-slide-out {
-  animation: challenge-slide-out-left 0.28s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+@keyframes challenge-slide-out-right {
+  from { opacity: 1; transform: translateX(0); }
+  to   { opacity: 0; transform: translateX(45px); }
 }
 
-.challenge-slide-in {
-  animation: challenge-slide-in-right 0.32s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+@keyframes challenge-slide-in-left {
+  from { opacity: 0; transform: translateX(-45px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.challenge-slide-out,
+.challenge-slide-out-next {
+  animation: challenge-slide-out-left 0.26s cubic-bezier(0.4, 0, 0.2, 1) forwards !important;
+}
+
+.challenge-slide-in,
+.challenge-slide-in-next {
+  animation: challenge-slide-in-right 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+}
+
+.challenge-slide-out-prev {
+  animation: challenge-slide-out-right 0.26s cubic-bezier(0.4, 0, 0.2, 1) forwards !important;
+}
+
+.challenge-slide-in-prev {
+  animation: challenge-slide-in-left 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
 }
 
 /* Start Screen Terminal Typing Animation */

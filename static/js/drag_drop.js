@@ -217,13 +217,13 @@ document.addEventListener('DOMContentLoaded', () => {
           ArenaFeedback.popScore(50);
           ArenaFeedback.show(feedbackBox, '<span class="correct-toast-inline">✓ CORRECT! +50</span>', 'success');
           
-          // Smooth 300ms level transition slide
-          const mainCard = document.querySelector('.glass-card');
-          if (mainCard) mainCard.classList.add('challenge-slide-out');
-
-          setTimeout(() => {
-            window.location.href = resData.redirect_url;
-          }, SUCCESS_REDIRECT_DELAY_MS);
+          if (window.triggerSlideNav) {
+            window.triggerSlideNav(resData.redirect_url, false);
+          } else {
+            setTimeout(() => {
+              window.location.href = resData.redirect_url;
+            }, SUCCESS_REDIRECT_DELAY_MS);
+          }
           return;
         }
 

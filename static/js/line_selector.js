@@ -74,12 +74,13 @@ document.addEventListener('DOMContentLoaded', () => {
             window.ArenaFeedback.show(feedbackBox, '<span class="correct-toast-inline">✓ CORRECT! +50</span>', 'success');
           }
 
-          const mainCard = document.querySelector('.glass-card');
-          if (mainCard) mainCard.classList.add('challenge-slide-out');
-
-          setTimeout(() => {
-            window.location.href = resData.redirect_url;
-          }, 1200);
+          if (window.triggerSlideNav) {
+            window.triggerSlideNav(resData.redirect_url, false);
+          } else {
+            setTimeout(() => {
+              window.location.href = resData.redirect_url;
+            }, 1200);
+          }
           return;
         }
 
