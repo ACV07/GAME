@@ -60,24 +60,24 @@ html, body {
 
 :root {
   /* Core palette — Dark Purple & Cyberpunk Orange Palette */
-  --bg-black:        #0F0F14;  /* Main background (Almost Black) */
-  --bg-black-soft:   #171421;  /* Secondary background (Dark Purple) */
-  --bg-panel:        #1E1A29;  /* Cards (Dark Gray/Purple) */
-  --bg-panel-2:      #282337;  /* Hover Panel Card */
+  --bg-black:        #0A0910;  /* Deepest Dark Purple-Black background */
+  --bg-black-soft:   #120F1C;  /* Secondary background (Dark Purple) */
+  --bg-panel:        #181424;  /* Cards (Dark Gray/Purple) */
+  --bg-panel-2:      #221C33;  /* Hover Panel Card */
 
-  /* Primary Family — Purple */
-  --primary-purple:  #A855F7;  /* Primary Purple */
-  --purple-hover:    #C084FC;  /* Primary Hover Light Purple */
+  /* Primary Family — Darker Purple */
+  --primary-purple:  #7E22CE;  /* Deep Dark Purple */
+  --purple-hover:    #9333EA;  /* Dark Purple Hover */
 
   /* Main Accent Family — Orange */
   --primary-orange:  #F97316;  /* Main Accent Orange */
   --orange-hover:   #FB923C;  /* Orange Hover Light Orange */
 
   /* Theme variable bindings */
-  --primary-gold:    #A855F7;  /* Primary Action -> Purple */
+  --primary-gold:    #8B5CF6;  /* Primary Action -> Purple */
   --primary-amber:   #F97316;  /* Main Accent -> Orange */
-  --gold-bright:     #C084FC;  /* Light Purple */
-  --gold-dim:        #7E22CE;  /* Deep Purple */
+  --gold-bright:     #A855F7;  /* Bright Purple */
+  --gold-dim:        #581C87;  /* Deep Dark Purple */
   --text-gold:       #FB923C;  /* Accent Text -> Light Orange */
 
   /* Text Palette */
@@ -89,13 +89,13 @@ html, body {
   --accent-green:    #22C55E;  /* Correct (Green) */
   --accent-red:      #EF4444;  /* Wrong (Red) */
   --accent-yellow:   #FACC15;  /* Warning / Timer (Yellow) */
-  --accent-purple:   #A855F7;  /* Primary Purple */
+  --accent-purple:   #8B5CF6;  /* Accent Purple */
   --accent-pink:     #F43F5E;  /* Accent Pink */
-  --primary-cyan:    #A855F7;  /* Accent Purple */
+  --primary-cyan:    #8B5CF6;  /* Accent Purple */
 
   /* Structure & Borders */
-  --code-border:     rgba(168, 85, 247, 0.25);
-  --bg-card-border:  rgba(168, 85, 247, 0.18);
+  --code-border:     rgba(139, 92, 246, 0.28);
+  --bg-card-border:  rgba(139, 92, 246, 0.2);
   --radius-sm:        6px;
   --radius-md:        12px;
   --radius-lg:        20px;
@@ -106,9 +106,9 @@ html, body {
   --transition-fast: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-med:  all 0.32s cubic-bezier(0.4, 0, 0.2, 1);
 
-  --shadow-glow-purple: 0 0 30px rgba(168, 85, 247, 0.35);
+  --shadow-glow-purple: 0 0 30px rgba(126, 34, 206, 0.45);
   --shadow-glow-gold:   0 0 30px rgba(249, 115, 22, 0.35);
-  --shadow-card:        0 10px 40px rgba(0, 0, 0, 0.8);
+  --shadow-card:        0 10px 40px rgba(0, 0, 0, 0.85);
 }
 
 /* ---------- Page Entrance & Ambient Animations ---------- */
@@ -156,15 +156,29 @@ body {
   font-family: var(--font-body);
   color: var(--text-main);
   background:
-    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(249, 115, 22, 0.12), transparent),
-    radial-gradient(ellipse 60% 40% at 90% 90%, rgba(251, 191, 36, 0.08), transparent),
-    var(--bg-black);
+    radial-gradient(ellipse 90% 60% at 50% -15%, rgba(126, 34, 206, 0.28), transparent 70%),
+    radial-gradient(ellipse 70% 50% at 85% 95%, rgba(249, 115, 22, 0.15), transparent 70%),
+    radial-gradient(ellipse 50% 50% at 10% 40%, rgba(107, 33, 168, 0.18), transparent 60%),
+    linear-gradient(180deg, #0A0910 0%, #0F0F14 100%);
   background-attachment: fixed;
   animation: ambient-pulse 12s ease-in-out infinite;
   line-height: 1.5;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  position: relative;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(126, 34, 206, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(126, 34, 206, 0.04) 1px, transparent 1px);
+  background-size: 44px 44px;
+  pointer-events: none;
+  z-index: 0;
 }
 
 a { color: var(--primary-gold); }
@@ -291,13 +305,14 @@ code {
 
 .btn-cyber {
   color: #FFFFFF;
-  background: linear-gradient(135deg, #A855F7, #C084FC);
-  box-shadow: 0 4px 20px rgba(168, 85, 247, 0.4);
+  background: linear-gradient(135deg, #7E22CE, #9333EA);
+  box-shadow: 0 4px 20px rgba(126, 34, 206, 0.45);
 }
 
 .btn-cyber:hover {
   transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 8px 30px rgba(192, 132, 252, 0.6);
+  background: linear-gradient(135deg, #9333EA, #A855F7);
+  box-shadow: 0 8px 30px rgba(147, 51, 234, 0.65);
   filter: brightness(1.12);
 }
 
