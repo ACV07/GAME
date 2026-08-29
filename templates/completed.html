@@ -19,19 +19,6 @@
       Outstanding execution, <strong style="color: #00D9FF;">{{ team.team_name }}</strong>! All 5 challenges have been evaluated.
     </p>
 
-    <!-- Animated Score Counter -->
-    <div style="background: rgba(13, 22, 48, 0.92); border: 2px solid #00D9FF; border-radius: 20px; padding: 2rem; max-width: 480px; margin: 0 auto 2.5rem auto; box-shadow: 0 0 35px rgba(0, 217, 255, 0.4);">
-      <div style="color: var(--text-muted); font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px;">
-        TOTAL SCORE EARNED
-      </div>
-      <div id="victory-score-counter" style="font-size: 3.8rem; font-weight: 900; color: #00D9FF; font-family: var(--font-code); line-height: 1.1; margin-top: 0.4rem; text-shadow: 0 0 20px rgba(0, 217, 255, 0.7);">
-        0
-      </div>
-      <div style="color: #8B5CF6; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; margin-top: 0.5rem;">
-        POINTS ACCUMULATED
-      </div>
-    </div>
-
     <!-- Summary Stats Cards -->
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2.5rem;">
       <div style="background: rgba(13, 22, 48, 0.85); border: 1px solid rgba(57, 255, 136, 0.4); padding: 1.5rem; border-radius: var(--radius-md);">
@@ -60,28 +47,6 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-  // Score Count-Up Animation
-  const targetScore = parseInt("{{ team.total_score or 0 }}", 10);
-  const scoreEl = document.getElementById('victory-score-counter');
-  if (scoreEl && targetScore > 0) {
-    let currentScore = 0;
-    const duration = 1200; // ms
-    const startTime = performance.now();
-    
-    function animateScore(now) {
-      const elapsed = now - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      const easeProgress = 1 - Math.pow(1 - progress, 3);
-      currentScore = Math.floor(easeProgress * targetScore);
-      scoreEl.textContent = currentScore;
-      if (progress < 1) {
-        requestAnimationFrame(animateScore);
-      } else {
-        scoreEl.textContent = targetScore;
-      }
-    }
-    setTimeout(() => requestAnimationFrame(animateScore), 300);
-  }
 
   // Cyan & Orange Cyberpunk Floating Particle Burst
   const container = document.getElementById('confetti-container');
