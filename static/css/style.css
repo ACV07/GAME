@@ -59,43 +59,44 @@ html, body {
    ========================================================= */
 
 :root {
-  /* Core palette — Dark Purple & Cyberpunk Orange Palette */
-  --bg-black:        #0A0910;  /* Deepest Dark Purple-Black background */
-  --bg-black-soft:   #120F1C;  /* Secondary background (Dark Purple) */
-  --bg-panel:        #181424;  /* Cards (Dark Gray/Purple) */
-  --bg-panel-2:      #221C33;  /* Hover Panel Card */
+  /* Environment — Deep Black & Charcoal Palette */
+  --bg-black:        #080A0A;  /* Deep Black Main Background */
+  --bg-black-soft:   #111414;  /* Dark Charcoal Secondary Background */
+  --bg-panel:        #181C1C;  /* Dark Gray Cards */
+  --bg-panel-2:      #222727;  /* Hover Panel Card */
 
-  /* Primary Family — Darker Purple */
-  --primary-purple:  #7E22CE;  /* Deep Dark Purple */
-  --purple-hover:    #9333EA;  /* Dark Purple Hover */
+  /* Competition & Action — Orange */
+  --primary-orange:  #FF6B00;  /* Primary Accent Orange */
+  --orange-hover:   #FF8A33;  /* Orange Hover Light Orange */
 
-  /* Main Accent Family — Orange */
-  --primary-orange:  #F97316;  /* Main Accent Orange */
-  --orange-hover:   #FB923C;  /* Orange Hover Light Orange */
+  /* Technology & Interaction — Cyan */
+  --primary-cyan:    #00D9FF;  /* Secondary Accent Cyan */
+  --cyan-hover:     #5CEBFF;  /* Cyan Hover Light Cyan */
 
-  /* Theme variable bindings */
-  --primary-gold:    #8B5CF6;  /* Primary Action -> Purple */
-  --primary-amber:   #F97316;  /* Main Accent -> Orange */
-  --gold-bright:     #A855F7;  /* Bright Purple */
-  --gold-dim:        #581C87;  /* Deep Dark Purple */
-  --text-gold:       #FB923C;  /* Accent Text -> Light Orange */
+  /* Legacy variable alias bindings for complete compatibility */
+  --primary-gold:    #FF6B00;  /* Primary Action -> Orange */
+  --primary-amber:   #FF6B00;
+  --primary-purple:  #00D9FF;  /* Technology -> Cyan */
+  --purple-hover:    #5CEBFF;
+  --gold-bright:     #FF8A33;  /* Bright Action Orange */
+  --gold-dim:        #C25200;  /* Deep Action Orange */
+  --text-gold:       #00D9FF;  /* Technology Text -> Cyan */
 
-  /* Text Palette */
-  --text-main:       #F8FAFC;  /* Main Text (White) */
-  --text-muted:      #A1A1AA;  /* Secondary Text (Gray) */
-  --text-dim:        #71717A;  /* Dim Gray */
+  /* Typography Palette */
+  --text-main:       #F5F7F7;  /* Main Text Off White */
+  --text-muted:      #9CA3AF;  /* Secondary Text Gray */
+  --text-dim:        #6B7280;  /* Dim Gray */
 
-  /* Functional Accents */
+  /* Functional Status Colors */
   --accent-green:    #22C55E;  /* Correct (Green) */
   --accent-red:      #EF4444;  /* Wrong (Red) */
   --accent-yellow:   #FACC15;  /* Warning / Timer (Yellow) */
-  --accent-purple:   #8B5CF6;  /* Accent Purple */
-  --accent-pink:     #F43F5E;  /* Accent Pink */
-  --primary-cyan:    #8B5CF6;  /* Accent Purple */
+  --accent-cyan:     #00D9FF;  /* Cyan Tech Accent */
+  --accent-orange:   #FF6B00;  /* Orange Competition Accent */
 
   /* Structure & Borders */
-  --code-border:     rgba(139, 92, 246, 0.28);
-  --bg-card-border:  rgba(139, 92, 246, 0.2);
+  --code-border:     rgba(0, 217, 255, 0.25);
+  --bg-card-border:  rgba(255, 107, 0, 0.2);
   --radius-sm:        6px;
   --radius-md:        12px;
   --radius-lg:        20px;
@@ -106,9 +107,11 @@ html, body {
   --transition-fast: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-med:  all 0.32s cubic-bezier(0.4, 0, 0.2, 1);
 
-  --shadow-glow-purple: 0 0 30px rgba(126, 34, 206, 0.45);
-  --shadow-glow-gold:   0 0 30px rgba(249, 115, 22, 0.35);
-  --shadow-card:        0 10px 40px rgba(0, 0, 0, 0.85);
+  --shadow-glow-orange: 0 0 30px rgba(255, 107, 0, 0.45);
+  --shadow-glow-cyan:   0 0 30px rgba(0, 217, 255, 0.45);
+  --shadow-glow-gold:   0 0 30px rgba(255, 107, 0, 0.45);
+  --shadow-glow-purple: 0 0 30px rgba(0, 217, 255, 0.45);
+  --shadow-card:        0 10px 40px rgba(0, 0, 0, 0.9);
 }
 
 /* ---------- Page Entrance & Ambient Animations ---------- */
@@ -156,10 +159,10 @@ body {
   font-family: var(--font-body);
   color: var(--text-main);
   background:
-    radial-gradient(ellipse 90% 60% at 50% -15%, rgba(126, 34, 206, 0.28), transparent 70%),
-    radial-gradient(ellipse 70% 50% at 85% 95%, rgba(249, 115, 22, 0.15), transparent 70%),
-    radial-gradient(ellipse 50% 50% at 10% 40%, rgba(107, 33, 168, 0.18), transparent 60%),
-    linear-gradient(180deg, #0A0910 0%, #0F0F14 100%);
+    radial-gradient(ellipse 90% 60% at 50% -15%, rgba(0, 217, 255, 0.18), transparent 70%),
+    radial-gradient(ellipse 70% 50% at 85% 95%, rgba(255, 107, 0, 0.15), transparent 70%),
+    radial-gradient(ellipse 50% 50% at 10% 40%, rgba(0, 217, 255, 0.12), transparent 60%),
+    linear-gradient(180deg, #080A0A 0%, #111414 100%);
   background-attachment: fixed;
   animation: ambient-pulse 12s ease-in-out infinite;
   line-height: 1.5;
@@ -174,8 +177,8 @@ body::before {
   position: fixed;
   inset: 0;
   background-image: 
-    linear-gradient(rgba(126, 34, 206, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(126, 34, 206, 0.04) 1px, transparent 1px);
+    linear-gradient(rgba(0, 217, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 217, 255, 0.04) 1px, transparent 1px);
   background-size: 44px 44px;
   pointer-events: none;
   z-index: 0;
@@ -221,9 +224,9 @@ code {
   border-radius: 10px;
   font-weight: 800;
   font-size: 0.95rem;
-  color: #FFFFFF;
-  background: linear-gradient(135deg, #A855F7, #C084FC);
-  box-shadow: 0 0 20px rgba(168, 85, 247, 0.45);
+  color: #080A0A;
+  background: linear-gradient(135deg, #00D9FF, #5CEBFF);
+  box-shadow: 0 0 20px rgba(0, 217, 255, 0.45);
   letter-spacing: -0.5px;
   transition: transform 0.25s ease;
 }
@@ -248,8 +251,8 @@ code {
 .team-badge {
   font-weight: 600;
   font-size: 0.9rem;
-  color: var(--text-gold);
-  background: rgba(249, 115, 22, 0.12);
+  color: #00D9FF;
+  background: rgba(0, 217, 255, 0.1);
   border: 1px solid var(--code-border);
   padding: 0.4rem 0.9rem;
   border-radius: 20px;
@@ -260,7 +263,7 @@ code {
   font-weight: 700;
   font-size: 0.9rem;
   color: var(--accent-yellow);
-  background: rgba(23, 20, 33, 0.85);
+  background: rgba(24, 28, 28, 0.85);
   border: 1px solid var(--accent-yellow);
   padding: 0.35rem 0.9rem;
   border-radius: 20px;
@@ -304,15 +307,16 @@ code {
 }
 
 .btn-cyber {
-  color: #FFFFFF;
-  background: linear-gradient(135deg, #7E22CE, #9333EA);
-  box-shadow: 0 4px 20px rgba(126, 34, 206, 0.45);
+  color: #080A0A;
+  font-weight: 800;
+  background: linear-gradient(135deg, #FF6B00, #FF8A33);
+  box-shadow: 0 4px 20px rgba(255, 107, 0, 0.45);
 }
 
 .btn-cyber:hover {
   transform: translateY(-2px) scale(1.02);
-  background: linear-gradient(135deg, #9333EA, #A855F7);
-  box-shadow: 0 8px 30px rgba(147, 51, 234, 0.65);
+  background: linear-gradient(135deg, #FF8A33, #FFA052);
+  box-shadow: 0 8px 30px rgba(255, 138, 51, 0.65);
   filter: brightness(1.12);
 }
 
@@ -408,19 +412,21 @@ code {
 }
 
 .glass-card {
-  background: linear-gradient(180deg, rgba(23, 23, 29, 0.92), rgba(18, 18, 24, 0.95));
+  background: linear-gradient(180deg, rgba(24, 28, 28, 0.94), rgba(17, 20, 20, 0.97));
   border: 1px solid var(--code-border);
   border-radius: var(--radius-lg);
   padding: 2rem;
   box-shadow: var(--shadow-card);
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(12px);
   transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
   animation: page-fade-in-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  position: relative;
+  z-index: 1;
 }
 
 .glass-card:hover {
-  border-color: rgba(249, 115, 22, 0.4);
-  box-shadow: 0 14px 45px rgba(0, 0, 0, 0.75), 0 0 25px rgba(249, 115, 22, 0.18);
+  border-color: rgba(0, 217, 255, 0.45);
+  box-shadow: 0 14px 45px rgba(0, 0, 0, 0.9), 0 0 25px rgba(0, 217, 255, 0.2);
 }
 
 .admin-grid {
@@ -697,15 +703,15 @@ body.player-input-locked { overflow: hidden; }
 }
 
 .step-node.completed {
-  background: linear-gradient(135deg, #F97316, #FBBF24);
-  border-color: var(--primary-gold);
-  color: #0B0B0F;
+  background: linear-gradient(135deg, #FF6B00, #FF8A33);
+  border-color: #FF6B00;
+  color: #080A0A;
 }
 
 .step-node.active {
-  border-color: var(--primary-gold);
-  color: var(--primary-gold);
-  box-shadow: 0 0 18px rgba(249, 115, 22, 0.45);
+  border-color: #00D9FF;
+  color: #00D9FF;
+  box-shadow: 0 0 18px rgba(0, 217, 255, 0.45);
 }
 
 /* ---------- Challenge header ---------- */
