@@ -59,33 +59,43 @@ html, body {
    ========================================================= */
 
 :root {
-  /* Core palette — Dark x Orange Competitive */
-  --bg-black:        #0B0B0F;
-  --bg-black-soft:   #121218;
-  --bg-panel:        #17171D;
-  --bg-panel-2:      #1f1f26;
+  /* Core palette — Dark Purple & Cyberpunk Orange Palette */
+  --bg-black:        #0F0F14;  /* Main background (Almost Black) */
+  --bg-black-soft:   #171421;  /* Secondary background (Dark Purple) */
+  --bg-panel:        #1E1A29;  /* Cards (Dark Gray/Purple) */
+  --bg-panel-2:      #282337;  /* Hover Panel Card */
 
-  /* Primary Accent Family — Orange & Amber */
-  --primary-gold:    #F97316;  /* Orange */
-  --primary-amber:   #FBBF24;  /* Amber */
-  --gold-bright:     #FDBA74;  /* Bright Orange/Amber */
-  --gold-dim:        #C2410C;  /* Deep Orange */
-  --text-gold:       #FB923C;  /* Glowing Orange */
+  /* Primary Family — Purple */
+  --primary-purple:  #A855F7;  /* Primary Purple */
+  --purple-hover:    #C084FC;  /* Primary Hover Light Purple */
 
-  /* Text */
-  --text-main:       #FAFAFA;  /* Bright White */
-  --text-muted:      #A1A1AA;  /* Zinc Grey */
-  --text-dim:        #71717A;  /* Dim Zinc */
+  /* Main Accent Family — Orange */
+  --primary-orange:  #F97316;  /* Main Accent Orange */
+  --orange-hover:   #FB923C;  /* Orange Hover Light Orange */
 
-  /* Functional accents */
-  --accent-green:    #22C55E;  /* Success Green */
-  --accent-red:      #EF4444;  /* Secondary Red */
-  --accent-purple:   #A855F7;  /* Competition Purple */
-  --accent-pink:     #F43F5E;  /* Rose Pink */
-  --primary-cyan:    #F97316;
+  /* Theme variable bindings */
+  --primary-gold:    #A855F7;  /* Primary Action -> Purple */
+  --primary-amber:   #F97316;  /* Main Accent -> Orange */
+  --gold-bright:     #C084FC;  /* Light Purple */
+  --gold-dim:        #7E22CE;  /* Deep Purple */
+  --text-gold:       #FB923C;  /* Accent Text -> Light Orange */
 
-  /* Structure */
-  --code-border:     rgba(249, 115, 22, 0.22);
+  /* Text Palette */
+  --text-main:       #F8FAFC;  /* Main Text (White) */
+  --text-muted:      #A1A1AA;  /* Secondary Text (Gray) */
+  --text-dim:        #71717A;  /* Dim Gray */
+
+  /* Functional Accents */
+  --accent-green:    #22C55E;  /* Correct (Green) */
+  --accent-red:      #EF4444;  /* Wrong (Red) */
+  --accent-yellow:   #FACC15;  /* Warning / Timer (Yellow) */
+  --accent-purple:   #A855F7;  /* Primary Purple */
+  --accent-pink:     #F43F5E;  /* Accent Pink */
+  --primary-cyan:    #A855F7;  /* Accent Purple */
+
+  /* Structure & Borders */
+  --code-border:     rgba(168, 85, 247, 0.25);
+  --bg-card-border:  rgba(168, 85, 247, 0.18);
   --radius-sm:        6px;
   --radius-md:        12px;
   --radius-lg:        20px;
@@ -96,9 +106,9 @@ html, body {
   --transition-fast: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-med:  all 0.32s cubic-bezier(0.4, 0, 0.2, 1);
 
-  --shadow-glow-gold:   0 0 30px rgba(249, 115, 22, 0.3);
-  --shadow-glow-purple: 0 0 30px rgba(168, 85, 247, 0.25);
-  --shadow-card:        0 10px 40px rgba(0, 0, 0, 0.7);
+  --shadow-glow-purple: 0 0 30px rgba(168, 85, 247, 0.35);
+  --shadow-glow-gold:   0 0 30px rgba(249, 115, 22, 0.35);
+  --shadow-card:        0 10px 40px rgba(0, 0, 0, 0.8);
 }
 
 /* ---------- Page Entrance & Ambient Animations ---------- */
@@ -197,9 +207,9 @@ code {
   border-radius: 10px;
   font-weight: 800;
   font-size: 0.95rem;
-  color: #0B0B0F;
-  background: linear-gradient(135deg, #F97316, #FBBF24);
-  box-shadow: 0 0 20px rgba(249, 115, 22, 0.45);
+  color: #FFFFFF;
+  background: linear-gradient(135deg, #A855F7, #C084FC);
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.45);
   letter-spacing: -0.5px;
   transition: transform 0.25s ease;
 }
@@ -225,7 +235,7 @@ code {
   font-weight: 600;
   font-size: 0.9rem;
   color: var(--text-gold);
-  background: rgba(249, 115, 22, 0.1);
+  background: rgba(249, 115, 22, 0.12);
   border: 1px solid var(--code-border);
   padding: 0.4rem 0.9rem;
   border-radius: 20px;
@@ -235,12 +245,12 @@ code {
   font-family: var(--font-code);
   font-weight: 700;
   font-size: 0.9rem;
-  color: var(--primary-gold);
-  background: rgba(11, 11, 15, 0.7);
-  border: 1px solid var(--primary-gold);
+  color: var(--accent-yellow);
+  background: rgba(23, 20, 33, 0.85);
+  border: 1px solid var(--accent-yellow);
   padding: 0.35rem 0.9rem;
   border-radius: 20px;
-  box-shadow: 0 0 14px rgba(249, 115, 22, 0.25);
+  box-shadow: 0 0 14px rgba(250, 204, 21, 0.3);
 }
 
 /* ---------- Buttons ---------- */
@@ -280,14 +290,14 @@ code {
 }
 
 .btn-cyber {
-  color: #0B0B0F;
-  background: linear-gradient(135deg, #F97316, #FBBF24);
-  box-shadow: 0 4px 20px rgba(249, 115, 22, 0.35);
+  color: #FFFFFF;
+  background: linear-gradient(135deg, #A855F7, #C084FC);
+  box-shadow: 0 4px 20px rgba(168, 85, 247, 0.4);
 }
 
 .btn-cyber:hover {
   transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 8px 30px rgba(249, 115, 22, 0.55);
+  box-shadow: 0 8px 30px rgba(192, 132, 252, 0.6);
   filter: brightness(1.12);
 }
 
