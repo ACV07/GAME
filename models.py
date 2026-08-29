@@ -315,6 +315,17 @@ class TeamModel:
         conn.commit()
         conn.close()
 
+    @staticmethod
+    def delete_team(team_id):
+        """Permanently deletes a team and its submissions and sessions from the database."""
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM submissions WHERE team_id = ?", (team_id,))
+        cursor.execute("DELETE FROM sessions WHERE team_id = ?", (team_id,))
+        cursor.execute("DELETE FROM teams WHERE id = ?", (team_id,))
+        conn.commit()
+        conn.close()
+
 
 class SessionModel:
     @staticmethod

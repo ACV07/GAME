@@ -46,6 +46,14 @@ document.addEventListener('DOMContentLoaded', () => {
         ? '5/5 (Finish)'
         : `${row.current_challenge - 1}/5`;
 
+      const actionCell = window.isAdmin ? `
+        <td>
+          <button class="btn-sm-action btn-reset" onclick="deleteTeam(${row.id}, '${escapeHtml(row.team_name)}')" title="Delete team permanently from leaderboard" style="background: rgba(239, 68, 68, 0.25); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.5);">
+            🗑️ Delete
+          </button>
+        </td>
+      ` : '';
+
       tr.innerHTML = `
         <td class="${rankClass}">${rankDisplay}</td>
         <td><strong>${escapeHtml(row.team_name)}</strong> <small style="color: var(--text-dim);">(${escapeHtml(row.team_code)})</small></td>
@@ -53,6 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <td>${progress}</td>
         <td style="font-family: var(--font-code);">${escapeHtml(row.formatted_time)}</td>
         <td>${statusBadge}</td>
+        ${actionCell}
       `;
       leaderboardBody.appendChild(tr);
     });

@@ -31,6 +31,9 @@
           <th>Progress</th>
           <th>Time Taken</th>
           <th>Status</th>
+          {% if session.get('is_admin') %}
+            <th>Actions</th>
+          {% endif %}
         </tr>
       </thead>
       <tbody id="leaderboard-tbody">
@@ -65,6 +68,13 @@
                 <span class="badge-status status-waiting">Waiting</span>
               {% endif %}
             </td>
+            {% if session.get('is_admin') %}
+              <td>
+                <button class="btn-sm-action btn-reset" onclick="deleteTeam({{ row.id }}, '{{ row.team_name }}')" title="Delete team permanently from leaderboard" style="background: rgba(239, 68, 68, 0.25); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.5);">
+                  🗑️ Delete
+                </button>
+              </td>
+            {% endif %}
           </tr>
         {% endfor %}
       </tbody>
@@ -75,5 +85,23 @@
 {% endblock %}
 
 {% block extra_js %}
+<script>
+  window.isAdmin = {{ 'true' if session.get('is_admin') else 'false' }};
+  async function deleteTeam(teamId, teamName) {
+    if (!confirm(`Are you sure you want to PERMANENTLY delete team "${teamName}" from the database and leaderboard?\n\nThis will delete all their scores, submissions, and active sessions.`)) return;
+    try {
+      const res = await fetch(`/api/admin/delete-team/${teamId}`, { method: 'POST' });
+      const data = await res.json();
+      if (data.success) {
+        alert(data.message);
+        window.location.reload();
+      } else {
+        alert(data.message || 'Failed to delete team.');
+      }
+    } catch (e) {
+      alert('Network error while deleting team.');
+    }
+  }
+</script>
 <script src="{{ url_for('static', filename='js/leaderboard.js') }}"></script>
 {% endblock %}

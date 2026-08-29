@@ -314,5 +314,19 @@ class Round2ArenaTestCase(unittest.TestCase):
         self.assertEqual(t3['current_challenge'], 3) # Active challenge remains 3
         self.assertEqual(t3['total_score'], 20.0) # Score updated from 15.0 to 20.0!
 
+    def test_14_delete_team_api(self):
+        """Verify admin can delete a team permanently from the leaderboard and database."""
+        self.client.post('/admin/login', data={'admin_id': 'admin', 'password': 'admin2026'})
+        team = TeamModel.get_by_code('CW2026')
+        self.assertIsNotNone(team)
+        
+        res = self.client.post(f'/api/admin/delete-team/{team["id"]}')
+        self.assertEqual(res.status_code, 200)
+        data = json.loads(res.data)
+        self.assertTrue(data['success'])
+        
+        deleted_team = TeamModel.get_by_id(team['id'])
+        self.assertIsNone(deleted_team)
+
 if __name__ == '__main__':
     unittest.main()
