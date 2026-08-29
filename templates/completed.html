@@ -9,41 +9,41 @@
   <div id="confetti-container" style="position: absolute; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;"></div>
 
   <div style="position: relative; z-index: 1;">
-    <div class="victory-title-anim" style="font-size: 4.5rem; margin-bottom: 0.5rem; text-shadow: 0 0 30px rgba(118, 146, 255, 0.6);">🏆</div>
+    <div class="victory-title-anim" style="font-size: 4.5rem; margin-bottom: 0.5rem; text-shadow: 0 0 30px rgba(231, 123, 73, 0.6);">🏆</div>
 
-    <h1 class="victory-title-anim" style="font-size: clamp(2rem, 6vw, 3.2rem); font-weight: 900; letter-spacing: 1px; color: #F0F6FF; text-shadow: 0 0 25px rgba(118, 146, 255, 0.7); margin: 0;">
+    <h1 class="victory-title-anim" style="font-size: clamp(2rem, 6vw, 3.2rem); font-weight: 900; letter-spacing: 1px; color: #FFF7F3; text-shadow: 0 0 25px rgba(231, 123, 73, 0.7); margin: 0;">
       ALL CHALLENGES COMPLETE!
     </h1>
 
     <p style="color: var(--text-muted); font-size: 1.15rem; margin-top: 0.75rem; margin-bottom: 2rem;">
-      Outstanding execution, <strong style="color: #7692FF;">{{ team.team_name }}</strong>! All 5 challenges have been evaluated.
+      Outstanding execution, <strong style="color: #E77B49;">{{ team.team_name }}</strong>! All 5 challenges have been evaluated.
     </p>
 
     <!-- Animated Score Counter -->
-    <div style="background: rgba(17, 32, 88, 0.92); border: 2px solid #7692FF; border-radius: 20px; padding: 2rem; max-width: 480px; margin: 0 auto 2.5rem auto; box-shadow: 0 0 35px rgba(118, 146, 255, 0.4);">
+    <div style="background: rgba(96, 36, 30, 0.92); border: 2px solid #E77B49; border-radius: 20px; padding: 2rem; max-width: 480px; margin: 0 auto 2.5rem auto; box-shadow: 0 0 35px rgba(231, 123, 73, 0.4);">
       <div style="color: var(--text-muted); font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px;">
         TOTAL SCORE EARNED
       </div>
-      <div id="victory-score-counter" style="font-size: 3.8rem; font-weight: 900; color: #7692FF; font-family: var(--font-code); line-height: 1.1; margin-top: 0.4rem; text-shadow: 0 0 20px rgba(118, 146, 255, 0.7);">
+      <div id="victory-score-counter" style="font-size: 3.8rem; font-weight: 900; color: #E77B49; font-family: var(--font-code); line-height: 1.1; margin-top: 0.4rem; text-shadow: 0 0 20px rgba(231, 123, 73, 0.7);">
         0
       </div>
-      <div style="color: #ABD2FA; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; margin-top: 0.5rem;">
+      <div style="color: #E77B49; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; margin-top: 0.5rem;">
         POINTS ACCUMULATED
       </div>
     </div>
 
     <!-- Summary Stats Cards -->
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2.5rem;">
-      <div style="background: rgba(17, 32, 88, 0.85); border: 1px solid rgba(34, 197, 94, 0.4); padding: 1.5rem; border-radius: var(--radius-md);">
+      <div style="background: rgba(96, 36, 30, 0.85); border: 1px solid rgba(34, 197, 94, 0.4); padding: 1.5rem; border-radius: var(--radius-md);">
         <div style="color: var(--text-muted); font-size: 0.85rem; font-weight: 700; text-transform: uppercase;">Challenges Solved</div>
         <div style="font-size: 2.2rem; font-weight: 800; color: #22C55E; font-family: var(--font-code); margin-top: 0.25rem;">
           5 / 5 ✓
         </div>
       </div>
 
-      <div style="background: rgba(17, 32, 88, 0.85); border: 1px solid rgba(118, 146, 255, 0.4); padding: 1.5rem; border-radius: var(--radius-md);">
+      <div style="background: rgba(96, 36, 30, 0.85); border: 1px solid rgba(231, 123, 73, 0.4); padding: 1.5rem; border-radius: var(--radius-md);">
         <div style="color: var(--text-muted); font-size: 0.85rem; font-weight: 700; text-transform: uppercase;">Total Time</div>
-        <div style="font-size: 2.2rem; font-weight: 800; color: #ABD2FA; font-family: var(--font-code); margin-top: 0.25rem;">
+        <div style="font-size: 2.2rem; font-weight: 800; color: #E77B49; font-family: var(--font-code); margin-top: 0.25rem;">
           {{ formatted_time }}
         </div>
       </div>
@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Cyan & Orange Cyberpunk Floating Particle Burst
   const container = document.getElementById('confetti-container');
   if (container) {
-    const colors = ['#7692FF', '#ABD2FA', '#1B2CC1', '#98ACFF', '#22C55E'];
+    const colors = ['#E77B49', '#F09265', '#B34A44', '#95271D', '#22C55E'];
     for (let i = 0; i < 35; i++) {
       const p = document.createElement('div');
       const size = Math.random() * 8 + 4;

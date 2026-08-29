@@ -36,7 +36,7 @@
         <div class="team-badge" id="nav-team-score-badge" style="position: relative;">
           ⚡ {{ session.get('team_name') }}
           {% if team and team.total_score is defined %}
-            <span style="color: #7692FF; margin-left: 6px; font-weight: 800;" id="team-live-score-val">{{ team.total_score }}</span>
+            <span style="color: #E77B49; margin-left: 6px; font-weight: 800;" id="team-live-score-val">{{ team.total_score }}</span>
           {% endif %}
         </div>
         <a href="{{ url_for('auth.logout') }}" class="btn-secondary btn-nav">Logout</a>
