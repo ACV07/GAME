@@ -14,21 +14,30 @@
     </div>
   {% endif %}
 
-  <div class="challenge-header">
+  <!-- Mobile Compact Progress Dot Bar -->
+  <div class="progress-dot-bar stagger-1">
+    <span style="color: var(--text-muted); font-size: 0.85rem; font-weight: 700; margin-right: 6px;">CHALLENGE {{ challenge.id }} / 5</span>
+    {% for i in range(1, 6) %}
+      <span class="progress-dot {% if i < challenge.id %}completed{% elif i == challenge.id %}active{% else %}upcoming{% endif %}"></span>
+      {% if i < 5 %}<span class="progress-dot-line {% if i < challenge.id %}completed{% endif %}"></span>{% endif %}
+    {% endfor %}
+  </div>
+
+  <div class="challenge-header stagger-1">
     <div class="challenge-title-group">
       <h2>
-        <span style="color: var(--accent-pink); font-family: var(--font-code);">FINAL CHALLENGE 5</span>
+        <span style="color: #00D9FF; font-family: var(--font-code);">FINAL CHALLENGE 5</span>
         <span>— {{ challenge.title }}</span>
       </h2>
     </div>
   </div>
 
-  <p style="color: var(--text-muted); font-size: 1rem; margin-bottom: 1.5rem;">
+  <p class="stagger-2" style="color: var(--text-muted); font-size: 1rem; margin-bottom: 1.5rem;">
     {{ challenge.description }}
   </p>
 
   <!-- Problem Specification Card -->
-  <div style="background: rgba(13, 17, 23, 0.8); border: 1px solid var(--code-border); border-radius: var(--radius-md); padding: 1.75rem; margin-bottom: 2rem;">
+  <div class="stagger-3" style="background: rgba(24, 28, 28, 0.8); border: 1px solid var(--code-border); border-radius: var(--radius-md); padding: 1.75rem; margin-bottom: 2rem;">
     <h3 style="color: var(--primary-cyan); font-size: 1.1rem; margin-bottom: 1rem; font-family: var(--font-code);">
       📋 Problem Statement
     </h3>
@@ -120,7 +129,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const answerVal = document.getElementById('problem-answer').value.trim();
       if (!answerVal) {
-        showFeedback('Please enter an answer.', 'warning');
+        if (window.ArenaFeedback) {
+          window.ArenaFeedback.shake(problemForm);
+          window.ArenaFeedback.show(feedbackBox, 'Please enter an answer before submitting.', 'warning');
+        }
         return;
       }
 
@@ -129,9 +141,9 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      const challengeId = parseInt(problemForm.dataset.challengeId);
+      const challengeId = parseInt(problemForm.dataset.challengeId, 10);
       btnSubmit.disabled = true;
-      btnSubmit.innerHTML = 'Evaluating...';
+      btnSubmit.innerHTML = 'Evaluating Final Answer...';
 
       try {
         const response = await fetch('/api/submit-challenge', {
@@ -146,7 +158,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const resData = await response.json();
 
         if (resData.success) {
-          showFeedback('✅ Submitted. Advancing...', 'info');
+          if (window.ArenaFeedback) {
+            window.ArenaFeedback.popScore(100);
+            window.ArenaFeedback.show(feedbackBox, '<span class="correct-toast-inline">✓ CORRECT! +100</span>', 'success');
+          }
+
+          const mainCard = document.querySelector('.glass-card');
+          if (mainCard) mainCard.classList.add('challenge-slide-out');
+
           setTimeout(() => {
             window.location.href = resData.redirect_url;
           }, 1200);
@@ -156,14 +175,18 @@ document.addEventListener('DOMContentLoaded', () => {
         if (resData.stopped || resData.message === 'GAME_STOPPED') {
           if (window.checkBroadcast) window.checkBroadcast();
         } else {
-          showFeedback(resData.message || 'Failed to submit solution.', 'danger');
+          if (window.ArenaFeedback) {
+            window.ArenaFeedback.shake(problemForm);
+            window.ArenaFeedback.show(feedbackBox, resData.message || '❌ Incorrect answer. Try again!', 'danger');
+          }
         }
         btnSubmit.disabled = false;
-        btnSubmit.innerHTML = 'Submit final solution';
+        btnSubmit.innerHTML = '🏁 Submit Final Solution ➔';
       } catch (err) {
+        if (window.ArenaFeedback) window.ArenaFeedback.shake(problemForm);
         if (window.checkBroadcast) window.checkBroadcast();
         btnSubmit.disabled = false;
-        btnSubmit.innerHTML = 'Submit final solution';
+        btnSubmit.innerHTML = '🏁 Submit Final Solution ➔';
       }
     });
   }

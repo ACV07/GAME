@@ -14,8 +14,17 @@
     </div>
   {% endif %}
 
+  <!-- Mobile Compact Progress Dot Bar -->
+  <div class="progress-dot-bar stagger-1">
+    <span style="color: var(--text-muted); font-size: 0.85rem; font-weight: 700; margin-right: 6px;">CHALLENGE {{ challenge.id }} / 5</span>
+    {% for i in range(1, 6) %}
+      <span class="progress-dot {% if i < challenge.id %}completed{% elif i == challenge.id %}active{% else %}upcoming{% endif %}"></span>
+      {% if i < 5 %}<span class="progress-dot-line {% if i < challenge.id %}completed{% endif %}"></span>{% endif %}
+    {% endfor %}
+  </div>
+
   <!-- Challenge Navigation & Title -->
-  <div class="challenge-header">
+  <div class="challenge-header stagger-1">
     <div class="challenge-title-group">
       <h2>
         <span style="color: var(--primary-cyan); font-family: var(--font-code);">CHALLENGE {{ challenge.id }}</span>
@@ -24,12 +33,12 @@
     </div>
   </div>
 
-  <p style="color: var(--text-muted); font-size: 1rem; margin-bottom: 1.5rem;">
+  <p class="stagger-2" style="color: var(--text-muted); font-size: 1rem; margin-bottom: 1.5rem;">
     {{ challenge.description }}
   </p>
 
   <!-- Interactive Code Editor Panel -->
-  <div class="code-editor-frame">
+  <div class="code-editor-frame stagger-3">
     <div class="editor-titlebar">
       <div class="window-dots">
         <span class="dot dot-red"></span>
@@ -49,7 +58,7 @@
   </div>
 
   <!-- Keyword Options Bank -->
-  <div class="options-bank-container">
+  <div class="options-bank-container stagger-4">
     <div class="bank-label">🔤 Keyword Bank (Drag or Tap to fill blank)</div>
     <div class="options-bank">
       {% for option in challenge.data.options %}

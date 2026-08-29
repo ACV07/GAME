@@ -1,6 +1,6 @@
 /**
  * drag_drop.js
- * Drag-and-Drop / Tap-to-Fill Logic for Challenges 1 & 2.
+ * Mobile-Optimized Drag-and-Drop & Tap-to-Fill Logic with Staggered Animations.
  * Depends on ui-feedback.js (window.ArenaFeedback) and drafts.js (window.ArenaDraft).
  */
 
@@ -13,11 +13,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnSubmit = document.getElementById('btn-submit');
 
   const SUCCESS_REDIRECT_DELAY_MS = 1200;
-  const SUBMIT_LABEL_DEFAULT = 'Submit Code Answer';
+  const SUBMIT_LABEL_DEFAULT = 'Submit Code Answer ➔';
   const SUBMIT_LABEL_EVALUATING = 'Evaluating...';
   const EMPTY_SLOT_TEXT = '___';
 
-  // --- Drag and drop ---
+  // --- HTML5 Desktop Drag and Drop ---
   optionChips.forEach(chip => {
     chip.addEventListener('dragstart', (e) => {
       if (chip.classList.contains('used')) return;
@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
       chip.classList.remove('dragging');
     });
 
-    // Tap / click to fill support (desktop & mobile).
+    // Tap / click to fill support (desktop & mobile)
     chip.addEventListener('click', () => {
       if (chip.classList.contains('used')) return;
       const firstEmpty = Array.from(blankSlots).find(slot => !slot.dataset.value);
@@ -37,6 +37,71 @@ document.addEventListener('DOMContentLoaded', () => {
         fillSlot(firstEmpty, chip.dataset.value, chip);
       }
     });
+  });
+
+  // --- Mobile Finger Touch Drag & Drop Handler ---
+  let activeTouchChip = null;
+  let touchGhost = null;
+
+  optionChips.forEach(chip => {
+    chip.addEventListener('touchstart', (e) => {
+      if (chip.classList.contains('used')) return;
+      activeTouchChip = chip;
+      chip.classList.add('is-dragging-touch');
+
+      const rect = chip.getBoundingClientRect();
+      touchGhost = chip.cloneNode(true);
+      touchGhost.style.position = 'fixed';
+      touchGhost.style.left = `${rect.left}px`;
+      touchGhost.style.top = `${rect.top}px`;
+      touchGhost.style.width = `${rect.width}px`;
+      touchGhost.style.height = `${rect.height}px`;
+      touchGhost.style.pointerEvents = 'none';
+      touchGhost.style.opacity = '0.92';
+      touchGhost.style.zIndex = '9999';
+      touchGhost.style.boxShadow = '0 0 24px rgba(0, 217, 255, 0.8)';
+      document.body.appendChild(touchGhost);
+    }, { passive: true });
+
+    chip.addEventListener('touchmove', (e) => {
+      if (!activeTouchChip || !touchGhost) return;
+      const touch = e.touches[0];
+      touchGhost.style.left = `${touch.clientX - touchGhost.offsetWidth / 2}px`;
+      touchGhost.style.top = `${touch.clientY - touchGhost.offsetHeight / 2}px`;
+
+      const elemBelow = document.elementFromPoint(touch.clientX, touch.clientY);
+      blankSlots.forEach(slot => {
+        if (slot.contains(elemBelow) || slot === elemBelow) {
+          slot.classList.add('drag-over');
+        } else {
+          slot.classList.remove('drag-over');
+        }
+      });
+    }, { passive: true });
+
+    chip.addEventListener('touchend', (e) => {
+      if (!activeTouchChip) return;
+      if (touchGhost) {
+        touchGhost.remove();
+        touchGhost = null;
+      }
+
+      const touch = e.changedTouches[0];
+      const elemBelow = document.elementFromPoint(touch.clientX, touch.clientY);
+      let targetSlot = null;
+      blankSlots.forEach(slot => {
+        if (slot.contains(elemBelow) || slot === elemBelow) {
+          targetSlot = slot;
+        }
+        slot.classList.remove('drag-over');
+      });
+
+      if (targetSlot) {
+        fillSlot(targetSlot, activeTouchChip.dataset.value, activeTouchChip);
+      }
+      activeTouchChip.classList.remove('is-dragging-touch');
+      activeTouchChip = null;
+    }, { passive: true });
   });
 
   blankSlots.forEach(slot => {
@@ -58,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
       fillSlot(slot, val, matchingChip);
     });
 
-    // Clicking a filled blank clears it.
+    // Clicking a filled blank clears it
     slot.addEventListener('click', () => {
       if (slot.dataset.value) clearSlot(slot);
     });
@@ -97,7 +162,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.ArenaDraft.save(parseInt(submitForm.dataset.challengeId, 10), values);
   }
 
-  // Restore any previously saved draft (e.g. after a pause/resume).
+  // Restore saved draft
   if (Array.isArray(window.savedDraft)) {
     window.savedDraft.forEach((value, index) => {
       if (!value) return;
@@ -114,7 +179,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // --- Submit challenge ---
+  // --- Submit Challenge ---
   if (submitForm) {
     submitForm.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -122,6 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const submittedAnswers = Array.from(blankSlots).map(s => s.dataset.value || '');
 
       if (submittedAnswers.some(ans => ans === '')) {
+        ArenaFeedback.shake(submitForm);
         ArenaFeedback.show(feedbackBox, 'Please fill in all blank spaces before submitting.', 'warning');
         return;
       }
@@ -148,7 +214,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const resData = await response.json();
 
         if (resData.success) {
-          ArenaFeedback.show(feedbackBox, '✅ Submitted. Advancing to next challenge...', 'info');
+          ArenaFeedback.popScore(50);
+          ArenaFeedback.show(feedbackBox, '<span class="correct-toast-inline">✓ CORRECT! +50</span>', 'success');
+          
+          // Smooth 300ms level transition slide
+          const mainCard = document.querySelector('.glass-card');
+          if (mainCard) mainCard.classList.add('challenge-slide-out');
+
           setTimeout(() => {
             window.location.href = resData.redirect_url;
           }, SUCCESS_REDIRECT_DELAY_MS);
@@ -158,17 +230,17 @@ document.addEventListener('DOMContentLoaded', () => {
         if (resData.stopped || resData.message === 'GAME_STOPPED') {
           if (window.checkBroadcast) window.checkBroadcast();
         } else {
-          ArenaFeedback.show(feedbackBox, resData.message || 'Failed to submit challenge.', 'danger');
+          ArenaFeedback.shake(submitForm);
+          ArenaFeedback.show(feedbackBox, resData.message || '❌ Incorrect solution. Try again!', 'danger');
         }
         btnSubmit.disabled = false;
         btnSubmit.innerHTML = SUBMIT_LABEL_DEFAULT;
       } catch (err) {
-        console.error('Failed to submit challenge:', err);
+        ArenaFeedback.shake(submitForm);
         if (window.checkBroadcast) window.checkBroadcast();
         btnSubmit.disabled = false;
         btnSubmit.innerHTML = SUBMIT_LABEL_DEFAULT;
       }
     });
   }
-
 });

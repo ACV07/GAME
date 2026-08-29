@@ -1,5 +1,6 @@
 /**
- * Line Selector Logic for Find-the-Error Challenges (Challenges 3 & 4)
+ * line_selector.js
+ * Line Selector Logic for Find-the-Error Challenges with Staggered Animations.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -20,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     line.addEventListener('click', () => {
       codeLines.forEach(l => l.classList.remove('selected-error-line'));
       line.classList.add('selected-error-line');
-      selectedLineNumber = parseInt(line.dataset.lineNumber);
+      selectedLineNumber = parseInt(line.dataset.lineNumber, 10);
       persistDraft();
     });
   });
@@ -39,7 +40,10 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
 
       if (!selectedLineNumber) {
-        showFeedback('Please select a line number containing the error before submitting.', 'warning');
+        if (window.ArenaFeedback) {
+          window.ArenaFeedback.shake(submitForm);
+          window.ArenaFeedback.show(feedbackBox, 'Please tap or click a line number containing the error.', 'warning');
+        }
         return;
       }
 
@@ -48,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      const challengeId = parseInt(submitForm.dataset.challengeId);
+      const challengeId = parseInt(submitForm.dataset.challengeId, 10);
       btnSubmit.disabled = true;
       btnSubmit.innerHTML = 'Evaluating Line...';
 
@@ -65,7 +69,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const resData = await response.json();
 
         if (resData.success) {
-          showFeedback('✅ Submitted. Advancing to next challenge...', 'info');
+          if (window.ArenaFeedback) {
+            window.ArenaFeedback.popScore(50);
+            window.ArenaFeedback.show(feedbackBox, '<span class="correct-toast-inline">✓ CORRECT! +50</span>', 'success');
+          }
+
+          const mainCard = document.querySelector('.glass-card');
+          if (mainCard) mainCard.classList.add('challenge-slide-out');
+
           setTimeout(() => {
             window.location.href = resData.redirect_url;
           }, 1200);
@@ -75,22 +86,19 @@ document.addEventListener('DOMContentLoaded', () => {
         if (resData.stopped || resData.message === 'GAME_STOPPED') {
           if (window.checkBroadcast) window.checkBroadcast();
         } else {
-          showFeedback(resData.message || 'Failed to submit challenge.', 'danger');
+          if (window.ArenaFeedback) {
+            window.ArenaFeedback.shake(submitForm);
+            window.ArenaFeedback.show(feedbackBox, resData.message || '❌ Incorrect line selected. Try again!', 'danger');
+          }
         }
         btnSubmit.disabled = false;
-        btnSubmit.innerHTML = 'Submit Error Line';
+        btnSubmit.innerHTML = 'Submit Selected Error Line ➔';
       } catch (err) {
+        if (window.ArenaFeedback) window.ArenaFeedback.shake(submitForm);
         if (window.checkBroadcast) window.checkBroadcast();
         btnSubmit.disabled = false;
-        btnSubmit.innerHTML = 'Submit Error Line';
+        btnSubmit.innerHTML = 'Submit Selected Error Line ➔';
       }
     });
-  }
-
-  function showFeedback(msg, type) {
-    if (!feedbackBox) return;
-    feedbackBox.className = `alert-banner alert-${type}`;
-    feedbackBox.innerHTML = msg;
-    feedbackBox.style.display = 'flex';
   }
 });

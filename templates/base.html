@@ -28,12 +28,17 @@
 
       {% if not is_auth_page and not is_admin_page %}
         <div id="contestant-timer-widget" class="timer-chip" style="display: none;">
-          <span id="contestant-timer-clock">00:00</span>
+          ⏱ <span id="contestant-timer-clock">00:00</span>
         </div>
       {% endif %}
 
       {% if session.get('team_name') and not is_admin_page and not is_auth_page %}
-        <div class="team-badge">{{ session.get('team_name') }}</div>
+        <div class="team-badge" id="nav-team-score-badge" style="position: relative;">
+          ⚡ {{ session.get('team_name') }}
+          {% if team and team.total_score is defined %}
+            <span style="color: #00D9FF; margin-left: 6px; font-weight: 800;" id="team-live-score-val">{{ team.total_score }}</span>
+          {% endif %}
+        </div>
         <a href="{{ url_for('auth.logout') }}" class="btn-secondary btn-nav">Logout</a>
       {% elif is_admin_page and session.get('is_admin') %}
         <span class="badge-status status-active">Organizer</span>
@@ -179,6 +184,18 @@
       } catch (e) {}
     }
 
+    window.triggerFloatingScore = function(pts = 50) {
+      const badge = document.getElementById('nav-team-score-badge');
+      if (!badge) return;
+      const el = document.createElement('div');
+      el.className = 'floating-score-pop';
+      el.textContent = `+${pts}`;
+      el.style.top = '-20px';
+      el.style.right = '10px';
+      badge.appendChild(el);
+      setTimeout(() => el.remove(), 600);
+    };
+
     function renderContestantTimerClock() {
       const clockSpan = document.getElementById('contestant-timer-clock');
       const timerWidget = document.getElementById('contestant-timer-widget');
@@ -190,14 +207,20 @@
 
       clockSpan.textContent = timeStr;
 
-      if (contestantRoundStatus === 'PAUSED') {
-        if (timerWidget) timerWidget.style.borderColor = '#f59e0b';
-      } else if (contestantRoundStatus === 'STOPPED') {
-        if (timerWidget) timerWidget.style.borderColor = '#ef4444';
-      } else if (contestantRoundStatus === 'ENDED') {
-        if (timerWidget) timerWidget.style.borderColor = '#ef4444';
-      } else {
-        if (timerWidget) timerWidget.style.borderColor = 'var(--primary-gold)';
+      if (timerWidget) {
+        timerWidget.classList.remove('timer-yellow', 'timer-red');
+        if (contestantRoundStatus === 'PAUSED') {
+          timerWidget.style.borderColor = '#f59e0b';
+        } else if (contestantRoundStatus === 'STOPPED' || contestantRoundStatus === 'ENDED') {
+          timerWidget.style.borderColor = '#ef4444';
+        } else {
+          timerWidget.style.borderColor = '';
+          if (contestantRemainingSeconds <= 10 && contestantRemainingSeconds > 0) {
+            timerWidget.classList.add('timer-red');
+          } else if (contestantRemainingSeconds <= 30 && contestantRemainingSeconds > 0) {
+            timerWidget.classList.add('timer-yellow');
+          }
+        }
       }
     }
 

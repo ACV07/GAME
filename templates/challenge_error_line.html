@@ -7,19 +7,30 @@
   .code-line-item {
     display: flex;
     align-items: center;
-    padding: 0.4rem 1rem;
+    padding: 0.5rem 1rem;
     border-radius: var(--radius-sm);
     cursor: pointer;
     transition: var(--transition-fast);
     user-select: none;
+    position: relative;
+    border: 1px solid transparent;
   }
   .code-line-item:hover {
-    background: rgba(0, 242, 254, 0.1);
+    background: rgba(0, 217, 255, 0.08);
   }
   .code-line-item.selected-error-line {
-    background: rgba(255, 23, 68, 0.25);
-    border-left: 4px solid var(--accent-red);
-    box-shadow: 0 0 15px rgba(255, 23, 68, 0.3);
+    background: rgba(0, 217, 255, 0.16) !important;
+    border: 1px solid #00D9FF !important;
+    box-shadow: 0 0 18px rgba(0, 217, 255, 0.45) !important;
+  }
+  .code-line-item.selected-error-line::after {
+    content: '◀';
+    position: absolute;
+    right: 14px;
+    color: #00D9FF;
+    font-weight: 800;
+    font-size: 1.1rem;
+    text-shadow: 0 0 10px rgba(0, 217, 255, 0.8);
   }
   .line-num {
     width: 40px;
@@ -46,7 +57,16 @@
     </div>
   {% endif %}
 
-  <div class="challenge-header">
+  <!-- Mobile Compact Progress Dot Bar -->
+  <div class="progress-dot-bar stagger-1">
+    <span style="color: var(--text-muted); font-size: 0.85rem; font-weight: 700; margin-right: 6px;">CHALLENGE {{ challenge.id }} / 5</span>
+    {% for i in range(1, 6) %}
+      <span class="progress-dot {% if i < challenge.id %}completed{% elif i == challenge.id %}active{% else %}upcoming{% endif %}"></span>
+      {% if i < 5 %}<span class="progress-dot-line {% if i < challenge.id %}completed{% endif %}"></span>{% endif %}
+    {% endfor %}
+  </div>
+
+  <div class="challenge-header stagger-1">
     <div class="challenge-title-group">
       <h2>
         <span style="color: var(--primary-cyan); font-family: var(--font-code);">CHALLENGE {{ challenge.id }}</span>
@@ -55,8 +75,8 @@
     </div>
   </div>
 
-  <p style="color: var(--text-muted); font-size: 1rem; margin-bottom: 1.5rem;">
-    {{ challenge.description }} <strong>Click on the specific line number that contains the error.</strong>
+  <p class="stagger-2" style="color: var(--text-muted); font-size: 1rem; margin-bottom: 1.5rem;">
+    {{ challenge.description }} <strong>Click or tap on the line that contains the error.</strong>
   </p>
 
   <!-- Interactive Line Selector Code Frame -->

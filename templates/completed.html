@@ -1,44 +1,116 @@
 {% extends 'base.html' %}
 
-{% block title %}Round Completed! — Round 2 Challenge Arena{% endblock %}
+{% block title %}All Challenges Complete! — Round 2 Challenge Arena{% endblock %}
 
 {% block content %}
-<div class="glass-card" style="max-width: 850px; margin: 2rem auto; text-align: center;">
+<div class="glass-card victory-card-anim" style="max-width: 850px; margin: 2rem auto; text-align: center; position: relative; overflow: hidden;">
   
-  <div style="font-size: 4rem; margin-bottom: 1rem;">🏆</div>
+  <!-- Cyan & Orange Ambient Glow & Floating Particles Container -->
+  <div id="confetti-container" style="position: absolute; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;"></div>
 
-  <h1 style="font-size: 2.5rem; font-weight: 800; background: linear-gradient(135deg, var(--accent-green), var(--primary-cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
-    ROUND 2 COMPLETED!
-  </h1>
+  <div style="position: relative; z-index: 1;">
+    <div class="victory-title-anim" style="font-size: 4.5rem; margin-bottom: 0.5rem; text-shadow: 0 0 30px rgba(0, 217, 255, 0.6);">🏆</div>
 
-  <p style="color: var(--text-muted); font-size: 1.1rem; margin-top: 0.5rem;">
-    Great performance, <strong>{{ team.team_name }}</strong>! All 5 challenges have been evaluated and recorded.
-  </p>
+    <h1 class="victory-title-anim" style="font-size: clamp(2rem, 6vw, 3.2rem); font-weight: 900; letter-spacing: 1px; color: #FFFFFF; text-shadow: 0 0 25px rgba(0, 217, 255, 0.7); margin: 0;">
+      ALL CHALLENGES COMPLETE!
+    </h1>
 
-  <!-- Summary Stats Cards -->
-  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin: 2.5rem 0;">
-    <div style="background: rgba(18, 18, 18, 0.7); border: 1px solid rgba(16, 185, 129, 0.35); padding: 1.5rem; border-radius: var(--radius-md);">
-      <div style="color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase;">Challenges Completed</div>
-      <div style="font-size: 2.5rem; font-weight: 800; color: var(--accent-green); font-family: var(--font-code); margin-top: 0.25rem;">
-        5 / 5
+    <p style="color: var(--text-muted); font-size: 1.15rem; margin-top: 0.75rem; margin-bottom: 2rem;">
+      Outstanding execution, <strong style="color: #00D9FF;">{{ team.team_name }}</strong>! All 5 challenges have been evaluated.
+    </p>
+
+    <!-- Animated Score Counter -->
+    <div style="background: rgba(24, 28, 28, 0.9); border: 2px solid #00D9FF; border-radius: 20px; padding: 2rem; max-width: 480px; margin: 0 auto 2.5rem auto; box-shadow: 0 0 35px rgba(0, 217, 255, 0.3);">
+      <div style="color: var(--text-muted); font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px;">
+        TOTAL SCORE EARNED
+      </div>
+      <div id="victory-score-counter" style="font-size: 3.8rem; font-weight: 900; color: #FF6B00; font-family: var(--font-code); line-height: 1.1; margin-top: 0.4rem; text-shadow: 0 0 20px rgba(255, 107, 0, 0.6);">
+        0
+      </div>
+      <div style="color: #00D9FF; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; margin-top: 0.5rem;">
+        POINTS ACCUMULATED
       </div>
     </div>
 
-    <div style="background: rgba(18, 18, 18, 0.7); border: 1px solid rgba(255, 208, 0, 0.35); padding: 1.5rem; border-radius: var(--radius-md);">
-      <div style="color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase;">Total Completion Time</div>
-      <div style="font-size: 2.5rem; font-weight: 800; color: var(--primary-gold); font-family: var(--font-code); margin-top: 0.25rem;">
-        {{ formatted_time }}
+    <!-- Summary Stats Cards -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2.5rem;">
+      <div style="background: rgba(24, 28, 28, 0.8); border: 1px solid rgba(34, 197, 94, 0.4); padding: 1.5rem; border-radius: var(--radius-md);">
+        <div style="color: var(--text-muted); font-size: 0.85rem; font-weight: 700; text-transform: uppercase;">Challenges Solved</div>
+        <div style="font-size: 2.2rem; font-weight: 800; color: #22C55E; font-family: var(--font-code); margin-top: 0.25rem;">
+          5 / 5 ✓
+        </div>
+      </div>
+
+      <div style="background: rgba(24, 28, 28, 0.8); border: 1px solid rgba(0, 217, 255, 0.4); padding: 1.5rem; border-radius: var(--radius-md);">
+        <div style="color: var(--text-muted); font-size: 0.85rem; font-weight: 700; text-transform: uppercase;">Total Time</div>
+        <div style="font-size: 2.2rem; font-weight: 800; color: #00D9FF; font-family: var(--font-code); margin-top: 0.25rem;">
+          {{ formatted_time }}
+        </div>
       </div>
     </div>
-  </div>
 
-
-
-  <div>
-    <a href="{{ url_for('auth.lobby') }}" class="btn-cyber" style="padding: 1rem 3rem; font-size: 1.1rem;">
-      🏠 Return to Team Lobby ➔
-    </a>
+    <div>
+      <a href="{{ url_for('auth.lobby') }}" class="btn-cyber" style="padding: 1rem 3rem; font-size: 1.1rem; text-decoration: none;">
+        🏠 Return to Team Lobby ➔
+      </a>
+    </div>
   </div>
 
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // Score Count-Up Animation
+  const targetScore = parseInt("{{ team.total_score or 0 }}", 10);
+  const scoreEl = document.getElementById('victory-score-counter');
+  if (scoreEl && targetScore > 0) {
+    let currentScore = 0;
+    const duration = 1200; // ms
+    const startTime = performance.now();
+    
+    function animateScore(now) {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const easeProgress = 1 - Math.pow(1 - progress, 3);
+      currentScore = Math.floor(easeProgress * targetScore);
+      scoreEl.textContent = currentScore;
+      if (progress < 1) {
+        requestAnimationFrame(animateScore);
+      } else {
+        scoreEl.textContent = targetScore;
+      }
+    }
+    setTimeout(() => requestAnimationFrame(animateScore), 300);
+  }
+
+  // Cyan & Orange Cyberpunk Floating Particle Burst
+  const container = document.getElementById('confetti-container');
+  if (container) {
+    const colors = ['#00D9FF', '#FF6B00', '#5CEBFF', '#FF8A33', '#22C55E'];
+    for (let i = 0; i < 35; i++) {
+      const p = document.createElement('div');
+      const size = Math.random() * 8 + 4;
+      p.style.position = 'absolute';
+      p.style.width = `${size}px`;
+      p.style.height = `${size}px`;
+      p.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+      p.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+      p.style.left = `${Math.random() * 100}%`;
+      p.style.top = `${Math.random() * 100}%`;
+      p.style.opacity = (Math.random() * 0.7 + 0.3).toString();
+      p.style.boxShadow = `0 0 10px ${p.style.backgroundColor}`;
+      
+      const speed = Math.random() * 2 + 1;
+      let pos = Math.random() * 100;
+      setInterval(() => {
+        pos -= speed;
+        if (pos < -10) pos = 110;
+        p.style.top = `${pos}%`;
+      }, 50);
+      
+      container.appendChild(p);
+    }
+  }
+});
+</script>
 {% endblock %}
