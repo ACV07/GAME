@@ -36,6 +36,11 @@ def create_app():
     def page_not_found(e):
         return render_template('base.html'), 404
 
+    @app.route('/health')
+    @app.route('/ping')
+    def health_ping():
+        return {"status": "ok", "service": "SYNCHROTECH ARENA", "round_status": EventConfigModel.get_round_status()}, 200
+
     return app
 
 app = create_app()
