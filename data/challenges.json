@@ -67,21 +67,22 @@
   },
   {
     "id": 5,
-    "title": "Problem Solving — Cryptographic Prime Checksum",
+    "title": "Case Study — Blockchain Certificate Verification",
     "type": "problem_solving",
     "points": 10,
-    "description": "Calculate the block validator control checksum by completing the algorithmic scenario below.",
-    "problem_statement": "To verify block validity, the system requires a prime checksum value:\n\n1) Find all prime numbers in the range [10, 50] inclusive.\n2) Compute the sum of these prime numbers.\n3) Multiply the total sum by 3.\n\nEnter the final calculated integer checksum below.",
-    "sample_cases": [
-      {
-        "input": "Range [1, 10]",
-        "explanation": "Primes: 2, 3, 5, 7. Sum = 17. Result: 17 * 3 = 51"
-      }
-    ],
+    "description": "Read the case study scenario below and select the correct outcome when verifying a tampered certificate.",
+    "problem_statement": "CASE STUDY\n\nEduVerify University issues thousands of digital certificates to students every year. These certificates are used by students when applying for jobs, internships, and higher studies.\n\nThe university faces a problem: some people have started editing digital certificates using image-editing software. For example, a student might change their grade from B to A or change the course name before submitting the certificate to a company.\n\nTo solve this problem, the university introduces a blockchain-based certificate verification system.\n\nWhen a genuine certificate is issued:\n• The university creates the digital certificate.\n• A unique hash is generated for the certificate.\n• This hash is stored on the university's blockchain.\n• The student receives the certificate along with a QR code.\n\nWhen a company scans the QR code, the system checks the certificate against the information stored on the blockchain.\n\nOne day, Rahul receives a certificate showing that he received a B grade.\n\nBefore applying for a job, Rahul edits the digital certificate and changes his grade from B to A. He does not have access to the university's blockchain system. He submits the modified certificate to a company.\n\nWhat is most likely to happen when the company verifies Rahul's modified certificate?",
+    "sample_cases": [],
     "data": {
-      "correct_answer": "933",
-      "acceptable_answers": ["933"],
-      "explanation": "Primes between 10 and 50 are: 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47. Sum = 311. 311 * 3 = 933."
+      "options": [
+        "A. The certificate will be accepted because Rahul's certificate number and name are still correct.",
+        "B. The certificate will be rejected because changing the grade changes the certificate's hash, which will no longer match the original hash stored on the blockchain.",
+        "C. The blockchain will automatically update the stored certificate and change Rahul's original grade from B to A.",
+        "D. The certificate will be accepted because blockchain only stores information and cannot detect changes made to digital documents."
+      ],
+      "correct_answer": "B",
+      "acceptable_answers": ["B", "b", "Option B", "option b", "B.", "The certificate will be rejected because changing the grade changes the certificate's hash, which will no longer match the original hash stored on the blockchain."],
+      "explanation": "Option B is correct. Blockchain verification relies on cryptographic hashes. Any modification to the digital document (like changing a grade from B to A) alters its hash completely. The newly calculated hash will not match the original hash stored immutably on the blockchain, causing verification to fail and reject the certificate."
     }
   }
 ]

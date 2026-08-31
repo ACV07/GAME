@@ -62,12 +62,32 @@
 
   <!-- Solution Answer Input Form -->
   <form id="problem-form" data-challenge-id="{{ challenge.id }}">
-    <div style="margin-bottom: 1.5rem;">
-      <label style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-muted); font-size: 0.9rem; text-transform: uppercase;">
-        Enter Final Calculated Answer
-      </label>
-      <input type="text" id="problem-answer" class="input-cyber" placeholder="e.g. 933" required autocomplete="off" value="{{ saved_draft or '' }}">
-    </div>
+    {% if challenge.data.options %}
+      <div style="margin-bottom: 1.75rem;">
+        <label style="display: block; font-weight: 700; margin-bottom: 1rem; color: #00D9FF; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 1px;">
+          Select Your Answer Choice (Click an Option Below):
+        </label>
+        <div style="display: flex; flex-direction: column; gap: 0.85rem;">
+          {% for opt in challenge.data.options %}
+            {% set opt_letter = opt[:1] %}
+            <label class="case-option-card" style="background: rgba(13, 22, 48, 0.9); border: 2px solid {% if saved_draft and saved_draft.strip().upper() == opt_letter %}#00D9FF{% else %}var(--code-border){% endif %}; padding: 1.1rem 1.25rem; border-radius: var(--radius-md); cursor: pointer; display: flex; align-items: flex-start; gap: 12px; transition: all 0.2s ease; box-shadow: {% if saved_draft and saved_draft.strip().upper() == opt_letter %}0 0 15px rgba(0, 217, 255, 0.35){% else %}none{% endif %};" onclick="document.querySelectorAll('.case-option-card').forEach(c => { c.style.borderColor='var(--code-border)'; c.style.boxShadow='none'; }); this.style.borderColor='#00D9FF'; this.style.boxShadow='0 0 15px rgba(0, 217, 255, 0.35)';">
+              <input type="radio" name="case_choice" value="{{ opt_letter }}" style="margin-top: 3px; accent-color: #00D9FF; transform: scale(1.35);" {% if saved_draft and saved_draft.strip().upper() == opt_letter %}checked{% endif %} onchange="document.getElementById('problem-answer').value = this.value; if(window.ArenaDraft) window.ArenaDraft.save({{ challenge.id }}, this.value);">
+              <span style="font-family: var(--font-body); font-size: 0.98rem; color: #F5F7FF; line-height: 1.5;">
+                <strong style="color: #00D9FF;">{{ opt[:2] }}</strong> {{ opt[3:] if opt[2:3] == ' ' else opt[2:] }}
+              </span>
+            </label>
+          {% endfor %}
+        </div>
+        <input type="hidden" id="problem-answer" required value="{{ saved_draft or '' }}">
+      </div>
+    {% else %}
+      <div style="margin-bottom: 1.5rem;">
+        <label style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-muted); font-size: 0.9rem; text-transform: uppercase;">
+          Enter Final Calculated Answer
+        </label>
+        <input type="text" id="problem-answer" class="input-cyber" placeholder="e.g. 933" required autocomplete="off" value="{{ saved_draft or '' }}">
+      </div>
+    {% endif %}
 
     <!-- Feedback Banner -->
     <div id="feedback-box" class="alert-banner" style="display: none; margin-bottom: 1.5rem;"></div>
