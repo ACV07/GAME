@@ -21,9 +21,12 @@
     <div class="cyber-loader-container">
       <div class="cyber-spinner-ring"></div>
       <h2 class="cyber-loading-brand">SYNCHROTECH ARENA</h2>
-      <div class="cyber-loading-status" id="cyber-loading-status-text">&gt; INITIALIZING SYSTEM CORE ...</div>
-      <div class="cyber-progress-track">
-        <div class="cyber-progress-fill" id="cyber-progress-fill-bar"></div>
+      <div class="cyber-loading-status" id="cyber-loading-status-text">&gt; INITIALIZING SYSTEM CORE (5s) ...</div>
+
+      <!-- Rectangular Block Loader Box with LOADING Text Inside -->
+      <div class="cyber-block-loader-box">
+        <div class="cyber-block-loader-fill" id="cyber-progress-fill-bar"></div>
+        <div class="cyber-block-loader-text" id="cyber-block-loader-text">LOADING 0%</div>
       </div>
     </div>
   </div>
@@ -306,11 +309,12 @@
       }
     });
 
-    // App Cyberpunk Loading Overlay Dismissal & 6-Second Progress Bar Countdown Animation
+    // App Cyberpunk Loading Overlay Dismissal & 5-Second Rectangular Block Countdown Animation
     (() => {
       const loaderEl = document.getElementById('app-cyber-loading-screen');
       const barEl = document.getElementById('cyber-progress-fill-bar');
       const statusEl = document.getElementById('cyber-loading-status-text');
+      const blockTextEl = document.getElementById('cyber-block-loader-text');
 
       if (loaderEl && barEl) {
         const totalDuration = 5000; // 5 seconds
@@ -320,8 +324,17 @@
           const elapsed = now - startTime;
           const progress = Math.min(elapsed / totalDuration, 1);
           const remainingSecs = Math.max(0, Math.ceil((totalDuration - elapsed) / 1000));
+          const pct = Math.floor(progress * 100);
 
-          barEl.style.width = (progress * 100) + '%';
+          barEl.style.width = pct + '%';
+
+          if (blockTextEl) {
+            if (progress < 1) {
+              blockTextEl.textContent = `LOADING ${pct}%`;
+            } else {
+              blockTextEl.textContent = `SYSTEM LOADED 100%`;
+            }
+          }
 
           if (statusEl) {
             if (progress < 1) {
