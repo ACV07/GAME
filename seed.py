@@ -16,9 +16,22 @@ def seed_database():
             challenges = json.load(f)
             
         for ch in challenges:
+            ch_data = ch.get('data', {})
+            if 'problem_statement' in ch:
+                ch_data['problem_statement'] = ch['problem_statement']
+            if 'sample_cases' in ch:
+                ch_data['sample_cases'] = ch['sample_cases']
+
             cursor.execute("""
-                INSERT OR REPLACE INTO challenges (id, title, type, points, description, code, data_json)
+                INSERT INTO challenges (id, title, type, points, description, code, data_json)
                 VALUES (?, ?, ?, ?, ?, ?, ?)
+                ON CONFLICT(id) DO UPDATE SET
+                    title=excluded.title,
+                    type=excluded.type,
+                    points=excluded.points,
+                    description=excluded.description,
+                    code=excluded.code,
+                    data_json=excluded.data_json
             """, (
                 ch['id'],
                 ch['title'],
@@ -26,7 +39,7 @@ def seed_database():
                 ch['points'],
                 ch.get('description', ''),
                 ch.get('code', '\n'.join(ch.get('lines', []))),
-                json.dumps(ch['data'])
+                json.dumps(ch_data)
             ))
         print(f"Loaded {len(challenges)} challenges into database.")
 

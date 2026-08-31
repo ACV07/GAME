@@ -42,7 +42,7 @@
       📋 Problem Statement
     </h3>
     <div style="font-family: var(--font-code); color: #e6edf3; font-size: 1rem; line-height: 1.8; white-space: pre-wrap; margin-bottom: 1.5rem;">
-{{ challenge.data.problem_statement }}
+{{ challenge.data.problem_statement if challenge.data and challenge.data.problem_statement else (challenge.problem_statement or '') }}
     </div>
 
     {% if challenge.data.sample_cases %}
