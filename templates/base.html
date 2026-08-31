@@ -306,36 +306,41 @@
       }
     });
 
-    // App Cyberpunk Loading Overlay Dismissal & Progress Bar Animation
+    // App Cyberpunk Loading Overlay Dismissal & 6-Second Progress Bar Countdown Animation
     (() => {
       const loaderEl = document.getElementById('app-cyber-loading-screen');
       const barEl = document.getElementById('cyber-progress-fill-bar');
       const statusEl = document.getElementById('cyber-loading-status-text');
 
       if (loaderEl && barEl) {
-        let pct = 15;
-        barEl.style.width = pct + '%';
-        const interval = setInterval(() => {
-          pct += Math.floor(Math.random() * 20) + 10;
-          if (pct > 90) pct = 90;
-          barEl.style.width = pct + '%';
-        }, 50);
+        const totalDuration = 6000; // 6 seconds
+        const startTime = performance.now();
 
-        const finishLoading = () => {
-          clearInterval(interval);
-          barEl.style.width = '100%';
-          if (statusEl) statusEl.textContent = '> SYSTEM ONLINE ✓';
-          setTimeout(() => {
-            loaderEl.classList.add('fade-out');
-          }, 180);
+        const updateAnimation = (now) => {
+          const elapsed = now - startTime;
+          const progress = Math.min(elapsed / totalDuration, 1);
+          const remainingSecs = Math.max(0, Math.ceil((totalDuration - elapsed) / 1000));
+
+          barEl.style.width = (progress * 100) + '%';
+
+          if (statusEl) {
+            if (progress < 1) {
+              statusEl.textContent = `> INITIALIZING SYSTEM CORE (${remainingSecs}s) ...`;
+            } else {
+              statusEl.textContent = '> SYSTEM ONLINE ✓';
+            }
+          }
+
+          if (progress < 1) {
+            requestAnimationFrame(updateAnimation);
+          } else {
+            setTimeout(() => {
+              loaderEl.classList.add('fade-out');
+            }, 300);
+          }
         };
 
-        if (document.readyState === 'complete') {
-          finishLoading();
-        } else {
-          window.addEventListener('load', finishLoading, { once: true });
-          setTimeout(finishLoading, 600); // Safety fallback
-        }
+        requestAnimationFrame(updateAnimation);
       }
     })();
   </script>
