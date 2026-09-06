@@ -108,10 +108,10 @@ class Round2ArenaTestCase(unittest.TestCase):
         d4 = json.loads(res4.data)
         self.assertTrue(d4['is_correct'])
 
-        # 5. Challenge 5 (Case Study: "B")
+        # 5. Challenge 5 (Case Study: "A")
         res5 = self.client.post('/api/submit-challenge', json={
             'challenge_id': 5,
-            'answer': 'B'
+            'answer': 'A'
         })
         d5 = json.loads(res5.data)
         self.assertTrue(d5['is_correct'])
