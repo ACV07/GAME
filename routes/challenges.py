@@ -23,6 +23,7 @@ def view_challenge(challenge_id):
         return redirect(url_for('auth.login'))
 
     session['team_name'] = team['team_name']
+    session['team_code'] = team['team_code']
 
     # If team has completed all challenges (current_challenge > 5), redirect to completion page
     if team['current_challenge'] > 5:

@@ -52,6 +52,7 @@ def team_login():
     session['session_token'] = session_token
     session['team_id'] = team['id']
     session['team_name'] = team['team_name']
+    session['team_code'] = team['team_code']
 
     if is_new:
         flash(f"🎉 Team registered successfully! Your Unique Passcode is: {team['team_code']}. Save this passcode to log back in if needed!", "success")

@@ -33,8 +33,11 @@
       {% endif %}
 
       {% if session.get('team_name') and not is_admin_page and not is_auth_page %}
-        <div class="team-badge" id="nav-team-score-badge" style="position: relative;">
-          ⚡ {{ session.get('team_name') }}
+        <div class="team-badge" id="nav-team-score-badge" style="position: relative; display: inline-flex; align-items: center; gap: 8px;">
+          <span>⚡ {{ session.get('team_name') }}</span>
+          {% if session.get('team_code') %}
+            <span style="background: rgba(0, 217, 255, 0.15); border: 1px solid rgba(0, 217, 255, 0.4); color: #00D9FF; padding: 0.15rem 0.5rem; border-radius: 4px; font-family: var(--font-code); font-weight: 700; font-size: 0.85rem;" title="Your Re-login Team Passcode">🔑 Code: {{ session.get('team_code') }}</span>
+          {% endif %}
         </div>
         <a href="{{ url_for('auth.logout') }}" class="btn-secondary btn-nav">Logout</a>
       {% elif is_admin_page and session.get('is_admin') %}
