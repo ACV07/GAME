@@ -14,15 +14,15 @@
   },
   {
     "id": 2,
-    "title": "Complete the Code — Blockchain Balance Guard",
+    "title": "Complete the Code — Students Passing Counter",
     "type": "drag_drop",
     "points": 10,
-    "description": "Fill in the missing operators and control statements to complete the smart contract balance validation logic.",
-    "code": "def verify_transaction(balance, amount):\n    if balance ________ amount:\n        ________(\"Insufficient funds for transaction\")\n        return False\n    ________ balance - amount",
+    "description": "Drag or tap the correct Python keywords into the blank slots to complete the program that counts students passing with marks >= 60.",
+    "code": "marks = [78, 65, 90, 55]\npassed = 0\n\n________ mark ________ marks:\n    ________ mark >= 60:\n        passed ________ passed + 1\n\n________(\"Students passed:\", passed)",
     "data": {
-      "blanks": ["<", "print", "return"],
-      "options": [">", "<", "==", "print", "return", "raise", "break", "pass"],
-      "code_template": "def verify_transaction(balance, amount):\n    if balance {0} amount:\n        {1}(\"Insufficient funds for transaction\")\n        return False\n    {2} balance - amount"
+      "blanks": ["for", "in", "if", "=", "print"],
+      "options": ["for", "in", "if", "=", "print", "else", "while", "def"],
+      "code_template": "marks = [78, 65, 90, 55]\npassed = 0\n\n{0} mark {1} marks:\n    {2} mark >= 60:\n        passed {3} passed + 1\n\n{4}(\"Students passed:\", passed)"
     }
   },
   {

@@ -84,10 +84,10 @@ class Round2ArenaTestCase(unittest.TestCase):
         self.assertIn('is_correct', d1, msg=f"Unexpected response: {d1}")
         self.assertTrue(d1['is_correct'])
 
-        # 2. Challenge 2 (Drag & Drop: ["<", "print", "return"])
+        # 2. Challenge 2 (Drag & Drop: ["for", "in", "if", "=", "print"])
         res2 = self.client.post('/api/submit-challenge', json={
             'challenge_id': 2,
-            'answer': ['<', 'print', 'return']
+            'answer': ['for', 'in', 'if', '=', 'print']
         })
         d2 = json.loads(res2.data)
         self.assertTrue(d2['is_correct'])
@@ -222,14 +222,14 @@ class Round2ArenaTestCase(unittest.TestCase):
         self.assertTrue(json.loads(first.data)['is_correct'])
         self.assertEqual(TeamModel.get_by_id(team['id'])['current_challenge'], 2)
 
-        draft_res = self.client.post('/api/save-draft', json={'challenge_id': 2, 'draft': ['<', 'print', '']})
+        draft_res = self.client.post('/api/save-draft', json={'challenge_id': 2, 'draft': ['for', 'in', '']})
         self.assertEqual(draft_res.status_code, 200)
 
         EventConfigModel.set_round_status('PAUSED')
-        paused = self.client.post('/api/submit-challenge', json={'challenge_id': 2, 'answer': ['<', 'print', 'return']})
+        paused = self.client.post('/api/submit-challenge', json={'challenge_id': 2, 'answer': ['for', 'in', 'if', '=', 'print']})
         self.assertEqual(paused.status_code, 403)
         self.assertEqual(TeamModel.get_by_id(team['id'])['current_challenge'], 2)
-        self.assertEqual(TeamModel.get_draft(team['id'])['draft'], ['<', 'print', ''])
+        self.assertEqual(TeamModel.get_draft(team['id'])['draft'], ['for', 'in', ''])
 
         status = json.loads(self.client.get('/api/event-status').data)
         self.assertEqual(status['round_status'], 'PAUSED')
@@ -242,7 +242,7 @@ class Round2ArenaTestCase(unittest.TestCase):
         self.assertEqual(TeamModel.get_by_id(team['id'])['current_challenge'], 2)
 
         EventConfigModel.set_round_status('ACTIVE')
-        resumed = self.client.post('/api/submit-challenge', json={'challenge_id': 2, 'answer': ['<', 'print', 'return']})
+        resumed = self.client.post('/api/submit-challenge', json={'challenge_id': 2, 'answer': ['for', 'in', 'if', '=', 'print']})
         self.assertEqual(resumed.status_code, 200)
         self.assertTrue(json.loads(resumed.data)['is_correct'])
         self.assertEqual(TeamModel.get_by_id(team['id'])['current_challenge'], 3)
@@ -300,7 +300,7 @@ class Round2ArenaTestCase(unittest.TestCase):
         self.assertEqual(t1['total_score'], 6.0)
 
         # 2. Advance to Challenge 3 by submitting Challenge 2 (10.0 pts)
-        self.client.post('/api/submit-challenge', json={'challenge_id': 2, 'answer': ['<', 'print', 'return']})
+        self.client.post('/api/submit-challenge', json={'challenge_id': 2, 'answer': ['for', 'in', 'if', '=', 'print']})
         t2 = TeamModel.get_by_id(team['id'])
         self.assertEqual(t2['current_challenge'], 3)
         self.assertEqual(t2['total_score'], 16.0)
