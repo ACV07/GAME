@@ -27,21 +27,26 @@
   },
   {
     "id": 3,
-    "title": "Find the Error — Data Hash Syntax Bug",
+    "title": "Find the Error — Student Marks Grade Syntax Bug",
     "type": "error_line",
     "points": 10,
-    "description": "Review the code snippet below and click on the specific line number that contains the syntax error.",
+    "description": "Review the Python code snippet below for calculating student grades and click on the line containing the syntax error.",
     "lines": [
-      "def calculate_hash(data):",
-      "    import hashlib",
-      "    encoded = data.encode('utf-8')",
-      "    result = hashlib.sha256(encoded).hexdigest()",
-      "    return result",
-      "print(calculate_hash(\"Round2\""
+      "name = input(\"Enter your name: \")",
+      "marks = int(input(\"Enter your marks: \"))",
+      "",
+      "if marks >= 90:",
+      "    grade = \"A\"",
+      "elif marks >= 75",
+      "    grade = \"B\"",
+      "else:",
+      "    grade = \"C\"",
+      "",
+      "print(name, \"got grade\", grade)"
     ],
     "data": {
       "correct_line": 6,
-      "explanation": "Line 6 is missing a closing parenthesis ')' at the end of print(calculate_hash(\"Round2\"))."
+      "explanation": "Line 6 contains a syntax error because it is missing a colon ':' at the end of the elif statement ('elif marks >= 75:')."
     }
   },
   {
