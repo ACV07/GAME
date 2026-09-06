@@ -3,36 +3,36 @@
 {% block title %}Team Login — Round 2 Challenge Arena{% endblock %}
 
 {% block content %}
-<div style="max-width: 520px; margin: 3rem auto;">
+<div style="max-width: 480px; margin: 3.5rem auto;">
   <div class="glass-card">
     <div style="text-align: center; margin-bottom: 2rem;">
-      <h1 style="font-size: 2rem; font-weight: 800; background: linear-gradient(135deg, #fff, var(--primary-gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
-        ENTER ARENA
+      <h1 style="font-size: 1.8rem; font-weight: 800; color: var(--text-main); margin: 0; letter-spacing: -0.5px;">
+        Contestant Arena Access
       </h1>
-      <p style="color: var(--text-muted); margin-top: 0.5rem; font-size: 0.95rem;">
-        Enter your <strong>Team Name</strong> to register automatically, or enter your <strong>Unique Team Passcode</strong> to resume an active round.
+      <p style="color: var(--text-muted); margin-top: 0.5rem; font-size: 0.95rem; line-height: 1.5;">
+        Enter your <strong>Team Name</strong> to register, or enter your <strong>Passcode</strong> to resume your active session.
       </p>
     </div>
 
     <!-- Team Login & Registration Form -->
     <form action="{{ url_for('auth.team_login') }}" method="POST" id="login-form">
       <div style="margin-bottom: 1.5rem;">
-        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.9rem; color: var(--text-gold); text-transform: uppercase; letter-spacing: 0.5px;">
-          Team Name OR Unique Passcode
+        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.85rem; color: #00D9FF; text-transform: uppercase; letter-spacing: 0.5px;">
+          Team Name or Passcode
         </label>
         <input type="text" name="team_identifier" class="input-cyber" placeholder="e.g. Cyber Wolves or CW-8492" required autofocus autocomplete="off">
       </div>
 
-      <button type="submit" class="btn-cyber" style="width: 100%;">
-        🚀 Launch Arena Session
+      <button type="submit" class="btn-cyber" style="width: 100%; font-size: 0.95rem;">
+        Enter Contestant Arena ➔
       </button>
     </form>
 
     <!-- Info Box -->
-    <div style="background: rgba(249, 115, 22, 0.05); border: 1px dashed rgba(249, 115, 22, 0.25); border-radius: var(--radius-sm); padding: 1rem; margin-top: 1.5rem; font-size: 0.85rem; color: var(--text-muted);">
-      💡 <strong>How Login Works:</strong><br>
-      • <strong>New Teams:</strong> Enter any Team Name (e.g. <code>Quantum Bytes</code>). The system will automatically register your team and generate a unique passcode.<br>
-      • <strong>Returning Teams:</strong> Enter your Team Name or assigned Passcode to log back in.
+    <div style="background: rgba(0, 217, 255, 0.05); border: 1px solid var(--code-border); border-radius: var(--radius-sm); padding: 1rem; margin-top: 1.75rem; font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;">
+      <strong style="color: var(--text-main);">📌 How Access Works:</strong><br>
+      • <strong>New Teams:</strong> Type any Team Name (e.g. <code>Quantum Bytes</code>). The system will register your team and create a unique passcode.<br>
+      • <strong>Returning Teams:</strong> Type your Team Name or Passcode to resume your session.
     </div>
   </div>
 </div>

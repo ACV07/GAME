@@ -6,28 +6,28 @@
 <div class="glass-card" style="max-width: 1200px; margin: 1.5rem auto;">
   
   <!-- Header Bar -->
-  <div class="admin-header-bar">
+  <div class="admin-header-bar" style="display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 1.75rem; flex-wrap: wrap; gap: 1rem;">
     <div>
-      <span class="badge-status status-active" style="background: rgba(255, 208, 0, 0.15); color: var(--primary-gold); border-color: rgba(255, 208, 0, 0.4);">
-        🎛️ MASTER EVENT CONTROL CENTER
+      <span class="badge-status status-active" style="margin-bottom: 0.35rem;">
+        Master Event Control
       </span>
-      <h1 class="admin-header-title">
-        ROUND 2 ORGANIZER COMMAND POST
+      <h1 class="admin-header-title" style="font-size: 1.8rem; font-weight: 800; color: #F5F7FF; margin: 0; letter-spacing: -0.5px;">
+        Organizer Command Center
       </h1>
     </div>
     
-    <div class="admin-header-actions">
-      <a href="{{ url_for('admin.dashboard') }}" class="btn-secondary" style="font-size: 0.85rem;">
-        👥 Team Monitor
+    <div class="admin-header-actions" style="display: flex; gap: 0.6rem;">
+      <a href="{{ url_for('admin.dashboard') }}" class="btn-secondary" style="font-size: 0.85rem; padding: 0.5rem 1rem;">
+        Team Monitor
       </a>
       <a href="{{ url_for('leaderboard.view_leaderboard') }}" class="btn-cyber" style="font-size: 0.85rem; padding: 0.5rem 1rem;">
-        🏆 Live Scoreboard
+        Live Scoreboard ➔
       </a>
     </div>
   </div>
 
   <!-- Master Round Status & Time Control Panel (Admin Only) -->
-  <div style="background: rgba(10, 10, 10, 0.95); border: 2px solid var(--primary-gold); border-radius: var(--radius-md); padding: 1.75rem; margin-bottom: 2rem; box-shadow: 0 0 25px rgba(255, 208, 0, 0.15);">
+  <div style="background: #070B1A; border: 1px solid var(--code-border); border-radius: var(--radius-sm); padding: 1.5rem; margin-bottom: 2rem;">
     <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; border-bottom: 1px dashed var(--code-border); padding-bottom: 1.25rem; margin-bottom: 1.25rem;">
       <div>
         <span style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">Current Global State</span>

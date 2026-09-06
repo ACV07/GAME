@@ -9,36 +9,36 @@
   <div id="confetti-container" style="position: absolute; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;"></div>
 
   <div style="position: relative; z-index: 1;">
-    <div class="victory-title-anim" style="font-size: 4.5rem; margin-bottom: 0.5rem; text-shadow: 0 0 30px rgba(0, 217, 255, 0.6);">🏆</div>
+    <div style="font-size: 3.5rem; margin-bottom: 0.5rem;">🏆</div>
 
-    <h1 class="victory-title-anim" style="font-size: clamp(2rem, 6vw, 3.2rem); font-weight: 900; letter-spacing: 1px; color: #F5F7FF; text-shadow: 0 0 25px rgba(0, 217, 255, 0.7); margin: 0;">
-      ALL CHALLENGES COMPLETE!
+    <h1 style="font-size: clamp(1.8rem, 5vw, 2.6rem); font-weight: 800; color: #F5F7FF; margin: 0;">
+      All Challenges Complete!
     </h1>
 
-    <p style="color: var(--text-muted); font-size: 1.15rem; margin-top: 0.75rem; margin-bottom: 2rem;">
-      Outstanding execution, <strong style="color: #00D9FF;">{{ team.team_name }}</strong>! All 5 challenges have been evaluated.
+    <p style="color: var(--text-muted); font-size: 1.05rem; margin-top: 0.5rem; margin-bottom: 2rem;">
+      Outstanding work, <strong style="color: #00D9FF;">{{ team.team_name }}</strong>! All 5 challenges have been evaluated.
     </p>
 
     <!-- Summary Stats Cards -->
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2.5rem;">
-      <div style="background: rgba(13, 22, 48, 0.85); border: 1px solid rgba(57, 255, 136, 0.4); padding: 1.5rem; border-radius: var(--radius-md);">
-        <div style="color: var(--text-muted); font-size: 0.85rem; font-weight: 700; text-transform: uppercase;">Challenges Solved</div>
-        <div style="font-size: 2.2rem; font-weight: 800; color: #39FF88; font-family: var(--font-code); margin-top: 0.25rem;">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 2.25rem;">
+      <div style="background: rgba(7, 11, 26, 0.6); border: 1px solid rgba(57, 255, 136, 0.3); padding: 1.25rem; border-radius: var(--radius-sm);">
+        <div style="color: var(--text-muted); font-size: 0.8rem; font-weight: 600; text-transform: uppercase;">Challenges Solved</div>
+        <div style="font-size: 2rem; font-weight: 800; color: #39FF88; font-family: var(--font-code); margin-top: 0.25rem;">
           5 / 5 ✓
         </div>
       </div>
 
-      <div style="background: rgba(13, 22, 48, 0.85); border: 1px solid rgba(0, 217, 255, 0.4); padding: 1.5rem; border-radius: var(--radius-md);">
-        <div style="color: var(--text-muted); font-size: 0.85rem; font-weight: 700; text-transform: uppercase;">Total Time</div>
-        <div style="font-size: 2.2rem; font-weight: 800; color: #00D9FF; font-family: var(--font-code); margin-top: 0.25rem;">
+      <div style="background: rgba(7, 11, 26, 0.6); border: 1px solid rgba(0, 217, 255, 0.3); padding: 1.25rem; border-radius: var(--radius-sm);">
+        <div style="color: var(--text-muted); font-size: 0.8rem; font-weight: 600; text-transform: uppercase;">Total Time</div>
+        <div style="font-size: 2rem; font-weight: 800; color: #00D9FF; font-family: var(--font-code); margin-top: 0.25rem;">
           {{ formatted_time }}
         </div>
       </div>
     </div>
 
     <div>
-      <a href="{{ url_for('auth.lobby') }}" class="btn-cyber" style="padding: 1rem 3rem; font-size: 1.1rem; text-decoration: none;">
-        🏠 Return to Team Lobby ➔
+      <a href="{{ url_for('auth.lobby') }}" class="btn-cyber" style="padding: 0.85rem 2.5rem; font-size: 1rem; text-decoration: none;">
+        Return to Team Lobby ➔
       </a>
     </div>
   </div>

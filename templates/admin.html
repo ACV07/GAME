@@ -5,22 +5,22 @@
 {% block content %}
 <div class="glass-card" style="max-width: 1150px; margin: 1.5rem auto;">
   
-  <div class="admin-header-bar">
+  <div class="admin-header-bar" style="display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 1.75rem; flex-wrap: wrap; gap: 1rem;">
     <div>
-      <span class="badge-status status-active" style="background: rgba(121, 40, 202, 0.2); color: #d670ff; border-color: rgba(121, 40, 202, 0.4);">
-        ORGANIZER CONTROL ROOM
+      <span class="badge-status status-active" style="margin-bottom: 0.35rem;">
+        Organizer Control Room
       </span>
-      <h1 class="admin-header-title">
-        EVENT ADMIN DASHBOARD
+      <h1 class="admin-header-title" style="font-size: 1.8rem; font-weight: 800; color: #F5F7FF; margin: 0; letter-spacing: -0.5px;">
+        Event Admin Dashboard
       </h1>
     </div>
     
-    <div class="admin-header-actions">
-      <a href="{{ url_for('admin.control_center') }}" class="btn-cyber" style="padding: 0.6rem 1.2rem; font-size: 0.9rem; background: linear-gradient(135deg, var(--primary-gold), var(--primary-amber));">
-        🎛️ Master Control Center
+    <div class="admin-header-actions" style="display: flex; gap: 0.6rem;">
+      <a href="{{ url_for('admin.control_center') }}" class="btn-cyber" style="padding: 0.5rem 1.1rem; font-size: 0.85rem;">
+        Master Control Center ➔
       </a>
-      <a href="{{ url_for('leaderboard.view_leaderboard') }}" class="btn-secondary" style="padding: 0.6rem 1.2rem; font-size: 0.9rem;">
-        🏆 Live Leaderboard
+      <a href="{{ url_for('leaderboard.view_leaderboard') }}" class="btn-secondary" style="padding: 0.5rem 1.1rem; font-size: 0.85rem;">
+        Live Leaderboard
       </a>
     </div>
   </div>
