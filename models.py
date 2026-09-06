@@ -510,9 +510,18 @@ class ChallengeModel:
 
         elif ch_type == 'error_line':
             try:
-                selected_line = int(submitted_answer)
-                correct_line = int(ch_data.get('correct_line', -1))
-                is_correct = (selected_line == correct_line)
+                target_lines = ch_data.get('correct_lines')
+                if not target_lines and 'correct_line' in ch_data:
+                    target_lines = [ch_data.get('correct_line')]
+                
+                target_set = set(int(x) for x in (target_lines or []) if x is not None)
+                
+                if isinstance(submitted_answer, list):
+                    sub_set = set(int(x) for x in submitted_answer)
+                else:
+                    sub_set = set([int(submitted_answer)])
+                
+                is_correct = bool(sub_set and (sub_set & target_set))
                 points = 10.0 if is_correct else 0.0
             except (ValueError, TypeError):
                 is_correct = False

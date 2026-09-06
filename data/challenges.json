@@ -51,23 +51,26 @@
   },
   {
     "id": 4,
-    "title": "Find the Error — Cryptographic Nonce Flaw",
+    "title": "Find the Bugs — Password Strength Checker",
     "type": "error_line",
     "points": 10,
-    "description": "Analyze this Proof-of-Work block validation function. Click on the line with the critical logical vulnerability.",
+    "description": "Review the Python password validation code below. There are 2 syntax bugs in the code. Click or tap on any line containing a syntax bug.",
     "lines": [
-      "def validate_block_nonce(block_header, nonce, target_difficulty):",
-      "    combined_payload = f\"{block_header}:{nonce}\"",
-      "    hash_digest = sha256(combined_payload.encode()).hexdigest()",
-      "    # Check if leading zeroes match target difficulty",
-      "    prefix = \"0\" * target_difficulty",
-      "    if hash_digest.endswith(prefix):",
-      "        return True",
-      "    return False"
+      "password = input(\"Enter password: \")",
+      "",
+      "if len(password) >= 8:",
+      "    print(\"Password is strong\")",
+      "elif len(password) >= 5",
+      "    print(\"Password is medium\")",
+      "else",
+      "    print(\"Password is weak\")",
+      "",
+      "print(\"Check completed\")"
     ],
     "data": {
-      "correct_line": 6,
-      "explanation": "Line 6 incorrectly uses .endswith(prefix) instead of checking leading zeroes with .startswith(prefix)."
+      "correct_line": 5,
+      "correct_lines": [5, 7],
+      "explanation": "Bug 1: Line 5 is missing a colon ':' at the end of the elif condition ('elif len(password) >= 5:'). Bug 2: Line 7 is missing a colon ':' at the end of the else statement ('else:')."
     }
   },
   {
