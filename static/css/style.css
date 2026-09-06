@@ -261,6 +261,25 @@ body {
   flex-direction: column;
 }
 
+/* Contestant Copy/Paste & Text Selection Prevention */
+body.contestant-mode,
+.no-copy-select,
+.no-copy-select * {
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  user-select: none !important;
+}
+
+/* Allow text selection specifically for passcode displays */
+.allow-select,
+#lobby-passcode-display {
+  -webkit-user-select: all !important;
+  -moz-user-select: all !important;
+  -ms-user-select: all !important;
+  user-select: all !important;
+}
+
 a { color: var(--primary-cyan); text-decoration: none; }
 a:hover { text-decoration: underline; }
 

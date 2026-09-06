@@ -9,13 +9,13 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=5.0">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/drag_drop.css') }}?v=5.0">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}?v=5.0">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=6.0">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/drag_drop.css') }}?v=6.0">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}?v=6.0">
 
   {% block extra_css %}{% endblock %}
 </head>
-<body>
+<body class="{% if not request.path.startswith('/admin') %}contestant-mode{% endif %}">
   <nav class="navbar">
     <a href="/" class="brand-logo">
       <span class="brand-mark">R2</span>
@@ -292,6 +292,49 @@
           }
         });
       }
+    });
+  </script>
+
+  <!-- Client-Side Copy/Paste & Context Menu Restriction -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const path = window.location.pathname || '';
+      const isAdminRoute = path.startsWith ? path.startsWith('/admin') : path.indexOf('/admin') === 0;
+      if (isAdminRoute) return;
+
+      // 1. Intercept copy and cut events on contestant pages
+      document.addEventListener('copy', (e) => {
+        e.preventDefault();
+        return false;
+      });
+      document.addEventListener('cut', (e) => {
+        e.preventDefault();
+        return false;
+      });
+
+      // 2. Intercept paste events into input fields
+      document.addEventListener('paste', (e) => {
+        e.preventDefault();
+        return false;
+      });
+
+      // 3. Block right-click context menu on challenge containers
+      document.addEventListener('contextmenu', (e) => {
+        const isCard = e.target.closest('.glass-card') || e.target.closest('.main-container');
+        if (isCard) {
+          e.preventDefault();
+          return false;
+        }
+      });
+
+      // 4. Block copy/paste key combinations (Ctrl+C, Ctrl+V, Ctrl+X, Ctrl+U, Ctrl+S, Cmd+C, Cmd+V, Cmd+X)
+      document.addEventListener('keydown', (e) => {
+        const isCmdOrCtrl = e.ctrlKey || e.metaKey;
+        if (isCmdOrCtrl && ['c', 'v', 'x', 'u', 's', 'p'].includes(e.key.toLowerCase())) {
+          e.preventDefault();
+          return false;
+        }
+      });
     });
   </script>
 
