@@ -1,7 +1,7 @@
 /**
  * drag_drop.js
- * Mobile-Optimized Drag-and-Drop & Tap-to-Fill Logic with Staggered Animations.
- * Depends on ui-feedback.js (window.ArenaFeedback) and drafts.js (window.ArenaDraft).
+ * Mobile-Optimized Drag-and-Drop & Any-Order Tap-to-Fill Logic.
+ * Enables contestants to select ANY blank slot directly and fill keywords out-of-order.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -17,7 +17,48 @@ document.addEventListener('DOMContentLoaded', () => {
   const SUBMIT_LABEL_EVALUATING = 'Evaluating...';
   const EMPTY_SLOT_TEXT = '___';
 
-  // --- HTML5 Desktop Drag and Drop ---
+  let activeTargetSlot = null;
+
+  function setActiveTarget(slot) {
+    blankSlots.forEach(s => s.classList.remove('active-target-slot'));
+    if (slot) {
+      activeTargetSlot = slot;
+      slot.classList.add('active-target-slot');
+    } else {
+      activeTargetSlot = null;
+    }
+  }
+
+  // --- Blank Slot Click Handler: Select slot or clear slot ---
+  blankSlots.forEach(slot => {
+    slot.addEventListener('click', () => {
+      if (slot.dataset.value) {
+        clearSlot(slot);
+      }
+      setActiveTarget(slot);
+    });
+
+    slot.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      slot.classList.add('drag-over');
+    });
+
+    slot.addEventListener('dragleave', () => {
+      slot.classList.remove('drag-over');
+    });
+
+    slot.addEventListener('drop', (e) => {
+      e.preventDefault();
+      slot.classList.remove('drag-over');
+      const val = e.dataTransfer.getData('text/plain');
+      if (!val) return;
+      const matchingChip = Array.from(optionChips).find(c => c.dataset.value === val && !c.classList.contains('used'));
+      fillSlot(slot, val, matchingChip);
+      setActiveTarget(null);
+    });
+  });
+
+  // --- Option Chips Click & Drag Handlers ---
   optionChips.forEach(chip => {
     chip.addEventListener('dragstart', (e) => {
       if (chip.classList.contains('used')) return;
@@ -29,12 +70,21 @@ document.addEventListener('DOMContentLoaded', () => {
       chip.classList.remove('dragging');
     });
 
-    // Tap / click to fill support (desktop & mobile)
+    // Tap / click to fill any selected slot or first available slot
     chip.addEventListener('click', () => {
       if (chip.classList.contains('used')) return;
-      const firstEmpty = Array.from(blankSlots).find(slot => !slot.dataset.value);
-      if (firstEmpty) {
-        fillSlot(firstEmpty, chip.dataset.value, chip);
+
+      let target = activeTargetSlot;
+      // If no active target slot or active target slot is already filled, pick first empty slot
+      if (!target || target.dataset.value) {
+        target = Array.from(blankSlots).find(slot => !slot.dataset.value);
+      }
+
+      if (target) {
+        fillSlot(target, chip.dataset.value, chip);
+        // Automatically select the next empty slot if available
+        const nextEmpty = Array.from(blankSlots).find(slot => !slot.dataset.value);
+        setActiveTarget(nextEmpty || null);
       }
     });
   });
@@ -98,35 +148,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (targetSlot) {
         fillSlot(targetSlot, activeTouchChip.dataset.value, activeTouchChip);
+        setActiveTarget(null);
       }
       activeTouchChip.classList.remove('is-dragging-touch');
       activeTouchChip = null;
     }, { passive: true });
-  });
-
-  blankSlots.forEach(slot => {
-    slot.addEventListener('dragover', (e) => {
-      e.preventDefault();
-      slot.classList.add('drag-over');
-    });
-
-    slot.addEventListener('dragleave', () => {
-      slot.classList.remove('drag-over');
-    });
-
-    slot.addEventListener('drop', (e) => {
-      e.preventDefault();
-      slot.classList.remove('drag-over');
-      const val = e.dataTransfer.getData('text/plain');
-      if (!val) return;
-      const matchingChip = Array.from(optionChips).find(c => c.dataset.value === val && !c.classList.contains('used'));
-      fillSlot(slot, val, matchingChip);
-    });
-
-    // Clicking a filled blank clears it
-    slot.addEventListener('click', () => {
-      if (slot.dataset.value) clearSlot(slot);
-    });
   });
 
   function fillSlot(slot, value, chipElement) {
@@ -175,7 +201,8 @@ document.addEventListener('DOMContentLoaded', () => {
   if (btnReset) {
     btnReset.addEventListener('click', () => {
       blankSlots.forEach(slot => clearSlot(slot));
-      ArenaFeedback.hide(feedbackBox);
+      setActiveTarget(null);
+      if (window.ArenaFeedback) window.ArenaFeedback.hide(feedbackBox);
     });
   }
 
@@ -187,8 +214,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const submittedAnswers = Array.from(blankSlots).map(s => s.dataset.value || '');
 
       if (submittedAnswers.some(ans => ans === '')) {
-        ArenaFeedback.shake(submitForm);
-        ArenaFeedback.show(feedbackBox, 'Please fill in all blank spaces before submitting.', 'warning');
+        if (window.ArenaFeedback) {
+          window.ArenaFeedback.shake(submitForm);
+          window.ArenaFeedback.show(feedbackBox, 'Please fill in all blank spaces before submitting.', 'warning');
+        }
         return;
       }
 
@@ -214,8 +243,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const resData = await response.json();
 
         if (resData.success) {
-          ArenaFeedback.popScore(50);
-          ArenaFeedback.show(feedbackBox, '<span class="correct-toast-inline">✓ CORRECT! +50</span>', 'success');
+          if (window.ArenaFeedback) {
+            window.ArenaFeedback.popScore(50);
+            window.ArenaFeedback.show(feedbackBox, '<span class="correct-toast-inline">✓ CORRECT! +50</span>', 'success');
+          }
           
           if (window.triggerSlideNav) {
             window.triggerSlideNav(resData.redirect_url, false);
@@ -230,13 +261,15 @@ document.addEventListener('DOMContentLoaded', () => {
         if (resData.stopped || resData.message === 'GAME_STOPPED') {
           if (window.checkBroadcast) window.checkBroadcast();
         } else {
-          ArenaFeedback.shake(submitForm);
-          ArenaFeedback.show(feedbackBox, resData.message || '❌ Incorrect solution. Try again!', 'danger');
+          if (window.ArenaFeedback) {
+            window.ArenaFeedback.shake(submitForm);
+            window.ArenaFeedback.show(feedbackBox, resData.message || '❌ Incorrect solution. Try again!', 'danger');
+          }
         }
         btnSubmit.disabled = false;
         btnSubmit.innerHTML = SUBMIT_LABEL_DEFAULT;
       } catch (err) {
-        ArenaFeedback.shake(submitForm);
+        if (window.ArenaFeedback) window.ArenaFeedback.shake(submitForm);
         if (window.checkBroadcast) window.checkBroadcast();
         btnSubmit.disabled = false;
         btnSubmit.innerHTML = SUBMIT_LABEL_DEFAULT;
