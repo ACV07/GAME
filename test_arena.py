@@ -75,10 +75,10 @@ class Round2ArenaTestCase(unittest.TestCase):
         response = self.client.post('/login', data={'team_code': 'BM2026'}, follow_redirects=True)
         self.assertEqual(response.status_code, 200)
 
-        # 1. Challenge 1 (Drag & Drop: ["main", "print"])
+        # 1. Challenge 1 (Drag & Drop: ["for", "in", "if", "=", "print"])
         res1 = self.client.post('/api/submit-challenge', json={
             'challenge_id': 1,
-            'answer': ['main', 'print']
+            'answer': ['for', 'in', 'if', '=', 'print']
         })
         d1 = json.loads(res1.data)
         self.assertIn('is_correct', d1, msg=f"Unexpected response: {d1}")
@@ -218,7 +218,7 @@ class Round2ArenaTestCase(unittest.TestCase):
         SessionModel.force_unlock_team(team['id'])
         self.client.post('/login', data={'team_code': 'CW2026'}, follow_redirects=True)
 
-        first = self.client.post('/api/submit-challenge', json={'challenge_id': 1, 'answer': ['main', 'print']})
+        first = self.client.post('/api/submit-challenge', json={'challenge_id': 1, 'answer': ['for', 'in', 'if', '=', 'print']})
         self.assertTrue(json.loads(first.data)['is_correct'])
         self.assertEqual(TeamModel.get_by_id(team['id'])['current_challenge'], 2)
 
@@ -293,20 +293,20 @@ class Round2ArenaTestCase(unittest.TestCase):
         self.client.get('/logout')
         self.client.post('/login', data={'team_code': 'CW2026'}, follow_redirects=True)
 
-        # 1. Submit partial answer for Challenge 1 (1 out of 2 correct = 5.0 pts)
-        self.client.post('/api/submit-challenge', json={'challenge_id': 1, 'answer': ['main', 'wrong_word']})
+        # 1. Submit partial answer for Challenge 1 (3 out of 5 correct = 6.0 pts)
+        self.client.post('/api/submit-challenge', json={'challenge_id': 1, 'answer': ['for', 'in', 'if', 'wrong', 'wrong']})
         t1 = TeamModel.get_by_id(team['id'])
         self.assertEqual(t1['current_challenge'], 2)
-        self.assertEqual(t1['total_score'], 5.0)
+        self.assertEqual(t1['total_score'], 6.0)
 
         # 2. Advance to Challenge 3 by submitting Challenge 2 (10.0 pts)
         self.client.post('/api/submit-challenge', json={'challenge_id': 2, 'answer': ['<', 'print', 'return']})
         t2 = TeamModel.get_by_id(team['id'])
         self.assertEqual(t2['current_challenge'], 3)
-        self.assertEqual(t2['total_score'], 15.0)
+        self.assertEqual(t2['total_score'], 16.0)
 
         # 3. Go back to Challenge 1, edit answer to 100% correct (10.0 pts), and resubmit
-        res_resub = self.client.post('/api/submit-challenge', json={'challenge_id': 1, 'answer': ['main', 'print']})
+        res_resub = self.client.post('/api/submit-challenge', json={'challenge_id': 1, 'answer': ['for', 'in', 'if', '=', 'print']})
         self.assertEqual(res_resub.status_code, 200)
 
         # 4. Verify points updated from 15.0 to 20.0 (5.0 -> 10.0 for Ch 1, + 10.0 for Ch 2)

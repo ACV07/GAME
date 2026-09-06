@@ -1,15 +1,15 @@
 [
   {
     "id": 1,
-    "title": "Complete the Code — Basic Syntax",
+    "title": "Complete the Code — Sum Numbers Greater Than 10",
     "type": "drag_drop",
     "points": 10,
-    "description": "Drag the correct keywords into the blanks to make the Python program valid and output the greeting.",
-    "code": "def ________():\n    ________(\"Welcome to Round 2 Arena\")\n\nif __name__ == \"__main__\":\n    main()",
+    "description": "Drag or tap the correct Python keywords into the blank slots to complete the program that sums numbers greater than 10.",
+    "code": "numbers = [5, 12, 8, 20, 15]\ntotal = 0\n\n________ number ________ numbers:\n    ________ number > 10:\n        total ________ total + number\n\n________ \"Total of numbers greater than 10:\", total",
     "data": {
-      "blanks": ["main", "print"],
-      "options": ["main", "print", "return", "class", "display", "console"],
-      "code_template": "def {0}():\n    {1}(\"Welcome to Round 2 Arena\")\n\nif __name__ == \"__main__\":\n    main()"
+      "blanks": ["for", "in", "if", "=", "print"],
+      "options": ["for", "in", "if", "=", "print", "while", "def", "return"],
+      "code_template": "numbers = [5, 12, 8, 20, 15]\ntotal = 0\n\n{0} number {1} numbers:\n    {2} number > 10:\n        total {3} total + number\n\n{4} \"Total of numbers greater than 10:\", total"
     }
   },
   {
