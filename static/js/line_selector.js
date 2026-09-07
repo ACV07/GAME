@@ -1,6 +1,7 @@
 /**
  * line_selector.js
  * Multi-line Selector Logic for Find-the-Error Challenges with Staggered Animations.
+ * Enforces maximum line selection limit based on data-max-select.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -9,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const feedbackBox = document.getElementById('feedback-box');
   const btnSubmit = document.getElementById('btn-submit-line');
 
+  const maxSelect = parseInt(submitForm?.dataset?.maxSelect || '1', 10);
   let selectedLineNumbers = [];
 
   function persistDraft() {
@@ -23,11 +25,24 @@ document.addEventListener('DOMContentLoaded', () => {
       if (line.classList.contains('selected-error-line')) {
         line.classList.remove('selected-error-line');
         selectedLineNumbers = selectedLineNumbers.filter(num => num !== lineNum);
+        if (window.ArenaFeedback) window.ArenaFeedback.hide(feedbackBox);
       } else {
+        if (selectedLineNumbers.length >= maxSelect) {
+          if (window.ArenaFeedback) {
+            window.ArenaFeedback.shake(submitForm);
+            window.ArenaFeedback.show(
+              feedbackBox,
+              `⚠️ You can only select up to ${maxSelect} line${maxSelect > 1 ? 's' : ''} for this challenge. Tap a selected line to deselect it first.`,
+              'warning'
+            );
+          }
+          return;
+        }
         line.classList.add('selected-error-line');
         if (!selectedLineNumbers.includes(lineNum)) {
           selectedLineNumbers.push(lineNum);
         }
+        if (window.ArenaFeedback) window.ArenaFeedback.hide(feedbackBox);
       }
       persistDraft();
     });
@@ -45,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
     if (Array.isArray(saved)) {
-      selectedLineNumbers = saved.map(x => parseInt(x, 10)).filter(x => !isNaN(x));
+      selectedLineNumbers = saved.map(x => parseInt(x, 10)).filter(x => !isNaN(x)).slice(0, maxSelect);
       codeLines.forEach(line => {
         const lineNum = parseInt(line.dataset.lineNumber, 10);
         if (selectedLineNumbers.includes(lineNum)) {

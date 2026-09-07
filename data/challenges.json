@@ -54,7 +54,7 @@
     "title": "Find the Bugs — Bill Calculation Function",
     "type": "error_line",
     "points": 10,
-    "description": "Review the Python bill calculation program below. There are 2 bugs in the code. Click or tap on the lines containing the bugs to select them (you can select multiple lines).",
+    "description": "Review the Python bill calculation program below. There are 2 bugs in the code. Click or tap on the lines containing bugs to select them (maximum 2 lines allowed).",
     "lines": [
       "def calculate_bill(price, quantity):",
       "    subtotal == price * quantity",
