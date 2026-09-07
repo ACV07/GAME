@@ -100,3 +100,8 @@
   border-color: #00D9FF;
   background: #1E204A;
 }
+
+/* Hide used option chips from bank until cleared/changed */
+.option-chip.used {
+  display: none !important;
+}
