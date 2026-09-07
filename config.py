@@ -12,4 +12,4 @@ class Config:
     
     # Admin Credentials for organizer portal
     ADMIN_USERNAME = os.environ.get('ADMIN_USERNAME') or 'admin'
-    ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD') or 'admin2026'
+    ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD') or 'enthamone14'

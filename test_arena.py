@@ -140,7 +140,7 @@ class Round2ArenaTestCase(unittest.TestCase):
         # Login as Admin
         admin_res = self.client.post('/admin/login', data={
             'admin_id': 'admin',
-            'password': 'admin2026'
+            'password': 'enthamone14'
         }, follow_redirects=True)
         self.assertEqual(admin_res.status_code, 200)
 
@@ -199,7 +199,7 @@ class Round2ArenaTestCase(unittest.TestCase):
     def test_09_reset_entire_game(self):
         """Verify Admin can reset entire game for all teams back to Challenge 1."""
         # 1. Log in admin and execute reset entire game API
-        self.client.post('/admin/login', data={'admin_id': 'admin', 'password': 'admin2026'})
+        self.client.post('/admin/login', data={'admin_id': 'admin', 'password': 'enthamone14'})
         res = self.client.post('/api/admin/reset-entire-game')
         self.assertEqual(res.status_code, 200)
         d = json.loads(res.data)
@@ -258,7 +258,7 @@ class Round2ArenaTestCase(unittest.TestCase):
         self.assertEqual(res1.status_code, 302)
 
         # 3. Log in as admin and delete team
-        self.client.post('/admin/login', data={'admin_id': 'admin', 'password': 'admin2026'})
+        self.client.post('/admin/login', data={'admin_id': 'admin', 'password': 'enthamone14'})
         res2 = self.client.post(f'/api/admin/delete-team/{team_id}')
         self.assertEqual(res2.status_code, 200)
         self.assertTrue(json.loads(res2.data)['success'])
@@ -316,7 +316,7 @@ class Round2ArenaTestCase(unittest.TestCase):
 
     def test_14_delete_team_api(self):
         """Verify admin can delete a team permanently from the leaderboard and database."""
-        self.client.post('/admin/login', data={'admin_id': 'admin', 'password': 'admin2026'})
+        self.client.post('/admin/login', data={'admin_id': 'admin', 'password': 'enthamone14'})
         team = TeamModel.get_by_code('CW2026')
         self.assertIsNotNone(team)
         
@@ -330,7 +330,7 @@ class Round2ArenaTestCase(unittest.TestCase):
 
     def test_15_leaderboard_filter_sorting(self):
         """Verify leaderboard filter endpoints for sorting by points vs sorting by time."""
-        self.client.post('/admin/login', data={'admin_id': 'admin', 'password': 'admin2026'})
+        self.client.post('/admin/login', data={'admin_id': 'admin', 'password': 'enthamone14'})
         
         res_pts = self.client.get('/api/leaderboard?sort=points')
         self.assertEqual(res_pts.status_code, 200)
