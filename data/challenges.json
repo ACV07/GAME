@@ -1,15 +1,15 @@
 [
   {
     "id": 1,
-    "title": "Complete the Code — Sum Numbers Greater Than 10",
+    "title": "Complete the Code — Pass/Fail Evaluation",
     "type": "drag_drop",
     "points": 10,
-    "description": "Drag or tap the correct Python keywords into the blank slots to complete the program that sums numbers greater than 10.",
-    "code": "numbers = [5, 12, 8, 20, 15]\ntotal = 0\n\n________ number ________ numbers:\n    ________ number > 10:\n        total ________ total + number\n\n________ \"Total of numbers greater than 10:\", total",
+    "description": "Drag or tap the correct Python keywords/variables into the blank slots to complete the pass/fail score evaluation program.",
+    "code": "score = 75\npassing_mark = 40\n\n________ score >= ________:\n    print(\"________\")\n________:\n    print(\"________\")",
     "data": {
-      "blanks": ["for", "in", "if", "=", "print"],
-      "options": ["for", "in", "if", "=", "print", "while", "def", "return"],
-      "code_template": "numbers = [5, 12, 8, 20, 15]\ntotal = 0\n\n{0} number {1} numbers:\n    {2} number > 10:\n        total {3} total + number\n\n{4} \"Total of numbers greater than 10:\", total"
+      "blanks": ["if", "passing_mark", "Pass", "else", "Fail"],
+      "options": ["if", "passing_mark", "Pass", "else", "Fail", "when", "then", "score"],
+      "code_template": "score = 75\npassing_mark = 40\n\n{0} score >= {1}:\n    print(\"{2}\")\n{3}:\n    print(\"{4}\")"
     }
   },
   {
