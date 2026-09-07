@@ -51,26 +51,27 @@
   },
   {
     "id": 4,
-    "title": "Find the Bugs — Password Strength Checker",
+    "title": "Find the Bugs — Bill Calculation Function",
     "type": "error_line",
     "points": 10,
-    "description": "Review the Python password validation code below. There are 2 syntax bugs in the code. Click or tap on any line containing a syntax bug.",
+    "description": "Review the Python bill calculation program below. There are 2 bugs in the code. Click or tap on any line containing a bug.",
     "lines": [
-      "password = input(\"Enter password: \")",
+      "def calculate_bill(price, quantity):",
+      "    subtotal == price * quantity",
+      "    tax = subtotal * 0.05",
+      "    total = subtotal + tax",
+      "    return total",
       "",
-      "if len(password) >= 8:",
-      "    print(\"Password is strong\")",
-      "elif len(password) >= 5",
-      "    print(\"Password is medium\")",
-      "else",
-      "    print(\"Password is weak\")",
+      "price = 500",
+      "quantity = 3",
       "",
-      "print(\"Check completed\")"
+      "bill = calculate_bill(price, quantity)",
+      "print(Total bill:, bill)"
     ],
     "data": {
-      "correct_line": 5,
-      "correct_lines": [5, 7],
-      "explanation": "Bug 1: Line 5 is missing a colon ':' at the end of the elif condition ('elif len(password) >= 5:'). Bug 2: Line 7 is missing a colon ':' at the end of the else statement ('else:')."
+      "correct_line": 2,
+      "correct_lines": [2, 11],
+      "explanation": "Bug 1: Line 2 uses '==' (comparison) instead of '=' (assignment). Bug 2: Line 11 is missing quotation marks around the string 'Total bill:'."
     }
   },
   {
