@@ -204,10 +204,13 @@ def completed():
 
     submissions = SubmissionModel.get_team_submissions(team['id'])
     
+    # Count solved challenges: answered correctly and NOT skipped
+    solved_count = sum(1 for s in submissions if s.get('is_correct') and str(s.get('submitted_answer', '')).strip() != '[SKIPPED]')
+
     # Calculate formatted time
     sec = team.get('total_time_seconds', 0)
     minutes = sec // 60
     seconds = sec % 60
     formatted_time = f"{minutes:02d}:{seconds:02d}"
 
-    return render_template('completed.html', team=team, submissions=submissions, formatted_time=formatted_time)
+    return render_template('completed.html', team=team, submissions=submissions, solved_count=solved_count, formatted_time=formatted_time)

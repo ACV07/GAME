@@ -648,6 +648,7 @@ class LeaderboardModel:
         query = f"""
             SELECT 
                 id, team_code, team_name, current_challenge, total_score, status, start_time, completion_time,
+                (SELECT COUNT(*) FROM submissions s WHERE s.team_id = teams.id AND s.is_correct = 1 AND s.submitted_answer != '[SKIPPED]') AS solved_count,
                 CASE 
                     WHEN status = 'COMPLETED' THEN total_time_seconds
                     WHEN start_time IS NOT NULL THEN CAST((strftime('%s', 'now') - strftime('%s', start_time)) AS INTEGER)

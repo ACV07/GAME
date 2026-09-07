@@ -16,7 +16,7 @@
     </h1>
 
     <p style="color: var(--text-muted); font-size: 1.05rem; margin-top: 0.5rem; margin-bottom: 2rem;">
-      Outstanding work, <strong style="color: #00D9FF;">{{ team.team_name }}</strong>! All 5 challenges have been evaluated.
+      Outstanding work, <strong style="color: #00D9FF;">{{ team.team_name }}</strong>! {{ solved_count }} of 5 challenges solved.
     </p>
 
     <!-- Summary Stats Cards -->
@@ -24,7 +24,7 @@
       <div style="background: rgba(7, 11, 26, 0.6); border: 1px solid rgba(57, 255, 136, 0.3); padding: 1.25rem; border-radius: var(--radius-sm);">
         <div style="color: var(--text-muted); font-size: 0.8rem; font-weight: 600; text-transform: uppercase;">Challenges Solved</div>
         <div style="font-size: 2rem; font-weight: 800; color: #39FF88; font-family: var(--font-code); margin-top: 0.25rem;">
-          5 / 5 ✓
+          {{ solved_count }} / 5 {% if solved_count == 5 %}✓{% endif %}
         </div>
       </div>
 
