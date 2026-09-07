@@ -30,7 +30,7 @@
     "title": "Find the Error — Student Marks Grade Syntax Bug",
     "type": "error_line",
     "points": 10,
-    "description": "Review the Python code snippet below for calculating student grades and click on the line containing the syntax error.",
+    "description": "Review the Python student marks program below. There is 1 syntax bug in the code. Click or tap on the line containing the bug to select or deselect it.",
     "lines": [
       "name = input(\"Enter your name: \")",
       "marks = int(input(\"Enter your marks: \"))",
@@ -54,7 +54,7 @@
     "title": "Find the Bugs — Bill Calculation Function",
     "type": "error_line",
     "points": 10,
-    "description": "Review the Python bill calculation program below. There are 2 bugs in the code. Click or tap on the lines containing bugs to select them (maximum 2 lines allowed).",
+    "description": "Review the Python bill calculation program below. There are 2 bugs in the code. Click or tap on the 2 lines containing bugs to select or deselect them.",
     "lines": [
       "def calculate_bill(price, quantity):",
       "    subtotal == price * quantity",

@@ -7,39 +7,54 @@
   .code-line-item {
     display: flex;
     align-items: center;
-    padding: 0.5rem 1rem;
+    padding: 0.6rem 0.85rem;
     border-radius: var(--radius-sm);
     cursor: pointer;
     transition: var(--transition-fast);
     user-select: none;
     position: relative;
     border: 1px solid transparent;
+    gap: 8px;
   }
   .code-line-item:hover {
     background: rgba(0, 217, 255, 0.08);
   }
   .code-line-item.selected-error-line {
-    background: rgba(0, 217, 255, 0.12) !important;
+    background: rgba(0, 217, 255, 0.14) !important;
     border: 1px solid #00D9FF !important;
   }
-  .code-line-item.selected-error-line::after {
-    content: '◀ Selected Line';
-    position: absolute;
-    right: 14px;
-    color: #00D9FF;
-    font-weight: 700;
-    font-size: 0.82rem;
-    font-family: var(--font-code);
-  }
   .line-num {
-    width: 40px;
+    width: 32px;
     color: var(--text-dim);
     font-weight: 700;
-    font-size: 0.9rem;
+    font-size: 0.88rem;
+    flex-shrink: 0;
+  }
+  .code-line-item.selected-error-line .line-num {
+    color: #00D9FF !important;
   }
   .line-code {
     flex: 1;
     font-family: var(--font-code);
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-size: 0.92rem;
+  }
+  .line-badge {
+    display: none;
+    font-family: var(--font-code);
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #00D9FF;
+    background: rgba(0, 217, 255, 0.15);
+    border: 1px solid rgba(0, 217, 255, 0.4);
+    padding: 2px 7px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    margin-left: auto;
+  }
+  .code-line-item.selected-error-line .line-badge {
+    display: inline-block;
   }
 </style>
 {% endblock %}
@@ -101,14 +116,12 @@
     </div>
     
     <div class="code-content" style="padding: 1rem 0.5rem;">
-      {% for line in challenge.data_json | default('') | string %}
-      {% endfor %}
-      
       {% set lines = challenge.code.split('\n') %}
       {% for line in lines %}
         <div class="code-line-item" data-line-number="{{ loop.index }}">
           <span class="line-num">{{ "%02d" % loop.index }}</span>
           <span class="line-code">{{ line }}</span>
+          <span class="line-badge">✓ Selected</span>
         </div>
       {% endfor %}
     </div>

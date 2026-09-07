@@ -1,7 +1,7 @@
 /**
  * line_selector.js
- * Multi-line Selector Logic for Find-the-Error Challenges with Staggered Animations.
- * Enforces maximum line selection limit based on data-max-select.
+ * Line Selector Logic for Find-the-Error Challenges with Staggered Animations.
+ * Enforces smooth 1-line selection for Challenge 3 and max 2-line selection for Challenge 4.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -22,28 +22,33 @@ document.addEventListener('DOMContentLoaded', () => {
   codeLines.forEach(line => {
     line.addEventListener('click', () => {
       const lineNum = parseInt(line.dataset.lineNumber, 10);
+
       if (line.classList.contains('selected-error-line')) {
+        // Deselect clicked line
         line.classList.remove('selected-error-line');
         selectedLineNumbers = selectedLineNumbers.filter(num => num !== lineNum);
-        if (window.ArenaFeedback) window.ArenaFeedback.hide(feedbackBox);
       } else {
-        if (selectedLineNumbers.length >= maxSelect) {
-          if (window.ArenaFeedback) {
-            window.ArenaFeedback.shake(submitForm);
-            window.ArenaFeedback.show(
-              feedbackBox,
-              `⚠️ You can only select up to ${maxSelect} line${maxSelect > 1 ? 's' : ''} for this challenge. Tap a selected line to deselect it first.`,
-              'warning'
-            );
+        if (maxSelect === 1) {
+          // Challenge 3 (max 1 selection): clear all previous lines and select current line
+          codeLines.forEach(l => l.classList.remove('selected-error-line'));
+          line.classList.add('selected-error-line');
+          selectedLineNumbers = [lineNum];
+        } else {
+          // Challenge 4 (max 2 selections): if 2 already selected, remove oldest selection
+          if (selectedLineNumbers.length >= maxSelect) {
+            const oldestLineNum = selectedLineNumbers.shift();
+            codeLines.forEach(l => {
+              if (parseInt(l.dataset.lineNumber, 10) === oldestLineNum) {
+                l.classList.remove('selected-error-line');
+              }
+            });
           }
-          return;
-        }
-        line.classList.add('selected-error-line');
-        if (!selectedLineNumbers.includes(lineNum)) {
+          line.classList.add('selected-error-line');
           selectedLineNumbers.push(lineNum);
         }
-        if (window.ArenaFeedback) window.ArenaFeedback.hide(feedbackBox);
       }
+
+      if (window.ArenaFeedback) window.ArenaFeedback.hide(feedbackBox);
       persistDraft();
     });
   });
