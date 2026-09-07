@@ -1,6 +1,6 @@
 /**
  * line_selector.js
- * Line Selector Logic for Find-the-Error Challenges with Staggered Animations.
+ * Multi-line Selector Logic for Find-the-Error Challenges with Staggered Animations.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -9,40 +9,60 @@ document.addEventListener('DOMContentLoaded', () => {
   const feedbackBox = document.getElementById('feedback-box');
   const btnSubmit = document.getElementById('btn-submit-line');
 
-  let selectedLineNumber = null;
+  let selectedLineNumbers = [];
 
   function persistDraft() {
     const form = document.getElementById('line-challenge-form');
-    if (!window.ArenaDraft || !form || !selectedLineNumber) return;
-    window.ArenaDraft.save(parseInt(form.dataset.challengeId), selectedLineNumber);
+    if (!window.ArenaDraft || !form) return;
+    window.ArenaDraft.save(parseInt(form.dataset.challengeId, 10), selectedLineNumbers);
   }
 
   codeLines.forEach(line => {
     line.addEventListener('click', () => {
-      codeLines.forEach(l => l.classList.remove('selected-error-line'));
-      line.classList.add('selected-error-line');
-      selectedLineNumber = parseInt(line.dataset.lineNumber, 10);
+      const lineNum = parseInt(line.dataset.lineNumber, 10);
+      if (line.classList.contains('selected-error-line')) {
+        line.classList.remove('selected-error-line');
+        selectedLineNumbers = selectedLineNumbers.filter(num => num !== lineNum);
+      } else {
+        line.classList.add('selected-error-line');
+        if (!selectedLineNumbers.includes(lineNum)) {
+          selectedLineNumbers.push(lineNum);
+        }
+      }
       persistDraft();
     });
   });
 
   if (window.savedDraft) {
-    selectedLineNumber = parseInt(window.savedDraft, 10);
-    codeLines.forEach(line => {
-      if (parseInt(line.dataset.lineNumber, 10) === selectedLineNumber) {
-        line.classList.add('selected-error-line');
+    let saved = window.savedDraft;
+    if (typeof saved === 'number') {
+      saved = [saved];
+    } else if (typeof saved === 'string') {
+      try {
+        saved = JSON.parse(saved);
+      } catch(e) {
+        saved = [parseInt(saved, 10)];
       }
-    });
+    }
+    if (Array.isArray(saved)) {
+      selectedLineNumbers = saved.map(x => parseInt(x, 10)).filter(x => !isNaN(x));
+      codeLines.forEach(line => {
+        const lineNum = parseInt(line.dataset.lineNumber, 10);
+        if (selectedLineNumbers.includes(lineNum)) {
+          line.classList.add('selected-error-line');
+        }
+      });
+    }
   }
 
   if (submitForm) {
     submitForm.addEventListener('submit', async (e) => {
       e.preventDefault();
 
-      if (!selectedLineNumber) {
+      if (selectedLineNumbers.length === 0) {
         if (window.ArenaFeedback) {
           window.ArenaFeedback.shake(submitForm);
-          window.ArenaFeedback.show(feedbackBox, 'Please tap or click a line number containing the error.', 'warning');
+          window.ArenaFeedback.show(feedbackBox, 'Please tap or click line number(s) containing errors.', 'warning');
         }
         return;
       }
@@ -54,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const challengeId = parseInt(submitForm.dataset.challengeId, 10);
       btnSubmit.disabled = true;
-      btnSubmit.innerHTML = 'Evaluating Line...';
+      btnSubmit.innerHTML = 'Evaluating Line(s)...';
 
       try {
         const response = await fetch('/api/submit-challenge', {
@@ -62,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             challenge_id: challengeId,
-            answer: selectedLineNumber
+            answer: selectedLineNumbers.length === 1 ? selectedLineNumbers[0] : selectedLineNumbers
           })
         });
 
@@ -89,16 +109,16 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
           if (window.ArenaFeedback) {
             window.ArenaFeedback.shake(submitForm);
-            window.ArenaFeedback.show(feedbackBox, resData.message || '❌ Incorrect line selected. Try again!', 'danger');
+            window.ArenaFeedback.show(feedbackBox, resData.message || '❌ Incorrect line(s) selected. Try again!', 'danger');
           }
         }
         btnSubmit.disabled = false;
-        btnSubmit.innerHTML = 'Submit Selected Error Line ➔';
+        btnSubmit.innerHTML = 'Submit Selected Error Line(s) ➔';
       } catch (err) {
         if (window.ArenaFeedback) window.ArenaFeedback.shake(submitForm);
         if (window.checkBroadcast) window.checkBroadcast();
         btnSubmit.disabled = false;
-        btnSubmit.innerHTML = 'Submit Selected Error Line ➔';
+        btnSubmit.innerHTML = 'Submit Selected Error Line(s) ➔';
       }
     });
   }

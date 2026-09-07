@@ -521,7 +521,7 @@ class ChallengeModel:
                 else:
                     sub_set = set([int(submitted_answer)])
                 
-                is_correct = bool(sub_set and (sub_set & target_set))
+                is_correct = bool(sub_set and (sub_set & target_set) and sub_set.issubset(target_set))
                 points = 10.0 if is_correct else 0.0
             except (ValueError, TypeError):
                 is_correct = False

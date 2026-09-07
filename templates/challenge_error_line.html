@@ -85,7 +85,7 @@
   </div>
 
   <p class="stagger-2" style="color: var(--text-muted); font-size: 1rem; margin-bottom: 1.5rem;">
-    {{ challenge.description }} <strong>Click or tap on the line that contains the error.</strong>
+    {{ challenge.description }} <strong>Click or tap on the line(s) containing errors to select or deselect them.</strong>
   </p>
 
   <!-- Interactive Line Selector Code Frame -->
@@ -122,7 +122,7 @@
     {% if not is_read_only %}
       <form id="line-challenge-form" data-challenge-id="{{ challenge.id }}">
         <button type="submit" class="btn-cyber" id="btn-submit-line">
-          Submit Selected Error Line ➔
+          Submit Selected Error Line(s) ➔
         </button>
       </form>
     {% else %}
