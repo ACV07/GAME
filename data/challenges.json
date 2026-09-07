@@ -82,14 +82,14 @@
     "data": {
       "problem_statement": "Case Study: The Fake Certificate Problem\n\n📖 Case\nFutureTech University issues digital certificates to students after graduation. Companies often ask students to submit these certificates while applying for jobs.\n\nRecently, the university discovered that some students were editing their digital certificates using image-editing software. For example, a student who actually received a B grade changed the certificate to show an A grade.\n\nTo solve this problem, the university introduces a blockchain-based certificate verification system.\n\nWhen a genuine certificate is issued:\n• The university creates the certificate.\n• A unique hash is generated from the certificate.\n• The hash is recorded on a blockchain.\n• The original certificate is stored securely by the university.\n• The student receives a QR code on the certificate.\n\nWhen an employer scans the QR code, the system calculates the hash of the certificate being presented and compares it with the hash recorded on the blockchain.\n\n⚠️ The Situation\nA student named Rahul receives a certificate showing:\n• Course: BCA Cybersecurity\n• Grade: B\n• Certificate ID: FT2026-1045\n\nRahul edits his copy of the certificate and changes:\n• Grade: B → A\n\nHe does not have access to the university's blockchain or its private systems. He then submits the modified certificate to a company.\n\nThe company scans the QR code and starts the verification process.\n\n❓ QUESTION\nWhat will most likely happen when the company verifies Rahul's modified certificate?",
       "options": [
-        "A. The certificate will be rejected because changing the certificate changes its hash, causing it to differ from the hash recorded on the blockchain.",
-        "B. The certificate will be accepted because Rahul only changed the grade and not the certificate ID.",
-        "C. The blockchain will automatically change the recorded grade from B to A.",
-        "D. The certificate will be accepted because blockchain cannot detect changes made to digital files."
+        "A. The certificate will be rejected because any modification to the certificate alters its cryptographic hash, resulting in a mismatch with the original hash value immutably recorded on the blockchain.",
+        "B. The certificate will be accepted because Rahul modified only the grade information while preserving the original certificate ID, which remains consistent with the blockchain record.",
+        "C. The blockchain will automatically update the previously recorded grade from B to A, thereby synchronizing the modified certificate information with the existing blockchain record.",
+        "D. The certificate will be accepted because blockchain verification mechanisms are incapable of identifying modifications performed on the underlying digital certificate file."
       ],
       "correct_answer": "A",
-      "acceptable_answers": ["A", "a", "Option A", "option a", "A.", "The certificate will be rejected because changing the certificate changes its hash, causing it to differ from the hash recorded on the blockchain."],
-      "explanation": "Option A is correct. Blockchain verification relies on cryptographic hash comparison. Any alteration to the certificate (such as changing Grade B to A) generates a completely different cryptographic hash. When the company scans the QR code, the calculated hash will not match the original hash stored immutably on the blockchain, causing the system to reject the fake certificate."
+      "acceptable_answers": ["A", "a", "Option A", "option a", "A.", "The certificate will be rejected because any modification to the certificate alters its cryptographic hash, resulting in a mismatch with the original hash value immutably recorded on the blockchain."],
+      "explanation": "Option A is correct. Blockchain verification relies on cryptographic hash comparison. Any alteration to the digital certificate alters its cryptographic hash completely, resulting in a mismatch with the original hash value immutably recorded on the blockchain, causing the system to reject the tampered certificate."
     }
   }
 ]
